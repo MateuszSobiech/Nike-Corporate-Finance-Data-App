@@ -7,7 +7,7 @@
 //   const logoPath =
 //     theme === "dark" ? "/nike_logo_white.png" : "/nike_logo_black.png"
 
-//   return <Image src={logoPath} alt="Company Logo" width={150} height={50} />
+//   return <Image src={logoPath} alt="Company Logo" width={60} height={10} />
 // }
 
 // export default Logo
@@ -19,24 +19,31 @@ const Logo = () => {
   const [theme, setTheme] = useState<"light" | "dark">("light")
 
   useEffect(() => {
-    const currentTheme = window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-      ? "dark"
-      : "light"
+    const determineTheme = () => {
+      const currentTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light"
+      setTheme(currentTheme)
+    }
 
-    setTheme(currentTheme)
+    determineTheme()
 
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        setTheme(e.matches ? "dark" : "light")
-      })
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const themeChangeListener = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? "dark" : "light")
+    }
+    mediaQuery.addEventListener("change", themeChangeListener)
+
+    return () => {
+      mediaQuery.removeEventListener("change", themeChangeListener)
+    }
   }, [])
 
   const logoPath =
-    theme === "dark" ? "/nike_logo_white.png" : "/nike_logo_black.png"
+    theme === "light" ? "/nike_logo_black.png" : "/nike_logo_white.png"
 
-  return <Image src={logoPath} alt="Company Logo" width={150} height={50} />
+  return <Image src={logoPath} alt="Company Logo" width={60} height={10} />
 }
 
 export default Logo
