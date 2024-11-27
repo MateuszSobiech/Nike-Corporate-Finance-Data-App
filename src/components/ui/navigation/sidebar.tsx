@@ -1,12 +1,13 @@
 "use client"
 import { siteConfig } from "@/app/siteConfig"
 import { cx, focusRing } from "@/lib/utils"
-// import { IoCashOutline } from "react-icons/io5";
 import {
-  RiHome2Line,
+  // RiAlignItemBottomLine,
+  RiCalculatorLine,
+  RiExchangeDollarLine,
+  RiFileChartLine,
+  RiLineChartLine,
   RiLinkM,
-  RiListCheck,
-  RiSettings5Line,
 } from "@remixicon/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -19,22 +20,22 @@ const navigation = [
   {
     name: "Income Statement",
     href: siteConfig.baseLinks.overview,
-    icon: RiHome2Line,
+    icon: RiExchangeDollarLine,
   },
   {
     name: "Balance Sheet",
     href: siteConfig.baseLinks.details,
-    icon: RiListCheck,
+    icon: RiFileChartLine,
   },
   {
     name: "Cash Flow",
     href: siteConfig.baseLinks.settings,
-    icon: RiHome2Line,
+    icon: RiLineChartLine,
   },
   {
     name: "Investors",
     href: siteConfig.baseLinks.settings,
-    icon: RiSettings5Line,
+    icon: RiCalculatorLine,
   },
 ] as const
 
@@ -86,7 +87,7 @@ export function Sidebar() {
                     href={item.href}
                     className={cx(
                       isActive(item.href)
-                        ? "text-indigo-600 dark:text-indigo-400"
+                        ? "text-orange-600 dark:text-orange-400"
                         : "text-gray-700 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
                       "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-gray-100 hover:dark:bg-gray-900",
                       focusRing,
@@ -109,7 +110,7 @@ export function Sidebar() {
                       href={item.href}
                       className={cx(
                         pathname === item.href || pathname.startsWith(item.href)
-                          ? "text-indigo-600 dark:text-indigo-400"
+                          ? "text-orange-600 dark:text-orange-400"
                           : "text-gray-700 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
                         "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-gray-100 hover:dark:bg-gray-900",
                         focusRing,
