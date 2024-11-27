@@ -1,6 +1,7 @@
 "use client"
 import { siteConfig } from "@/app/siteConfig"
 import { cx, focusRing } from "@/lib/utils"
+// import { IoCashOutline } from "react-icons/io5";
 import {
   RiHome2Line,
   RiLinkM,
@@ -15,10 +16,23 @@ import { WorkspacesDropdownMobile } from "./SidebarWorkspacesDropdown"
 import { UserProfileDesktop, UserProfileMobile } from "./UserProfile"
 
 const navigation = [
-  { name: "Overview", href: siteConfig.baseLinks.overview, icon: RiHome2Line },
-  { name: "Details", href: siteConfig.baseLinks.details, icon: RiListCheck },
   {
-    name: "Settings",
+    name: "Income Statement",
+    href: siteConfig.baseLinks.overview,
+    icon: RiHome2Line,
+  },
+  {
+    name: "Balance Sheet",
+    href: siteConfig.baseLinks.details,
+    icon: RiListCheck,
+  },
+  {
+    name: "Cash Flow",
+    href: siteConfig.baseLinks.settings,
+    icon: RiHome2Line,
+  },
+  {
+    name: "Investors",
     href: siteConfig.baseLinks.settings,
     icon: RiSettings5Line,
   },
