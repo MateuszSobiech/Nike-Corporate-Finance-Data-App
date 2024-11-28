@@ -1,4 +1,5 @@
 "use client"
+import { TabNavigation, TabNavigationLink } from "@/components/TabNavigation"
 import { CategoryBarCard } from "@/components/ui/overview/DashboardCategoryBarCard"
 import { ChartCard } from "@/components/ui/overview/DashboardChartCard"
 import { Filterbar } from "@/components/ui/overview/DashboardFilterbar"
@@ -144,8 +145,18 @@ export default function Overview() {
           id="current-billing-cycle"
           className="scroll-mt-10 text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-50"
         >
-          Current billing cycle
+          Income Statement
         </h1>
+        <TabNavigation>
+          <TabNavigationLink href="#" active>
+            Executive Summary
+          </TabNavigationLink>
+          <TabNavigationLink href="#">Profit & Loss</TabNavigationLink>
+          <TabNavigationLink href="#">
+            Revenue & Cost of Revenues
+          </TabNavigationLink>
+          <TabNavigationLink href="#">Oparating Expences</TabNavigationLink>
+        </TabNavigation>
         <div className="mt-4 grid grid-cols-1 gap-14 sm:mt-8 sm:grid-cols-2 lg:mt-10 xl:grid-cols-3">
           <ProgressBarCard
             title="Usage"

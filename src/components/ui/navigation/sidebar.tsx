@@ -41,22 +41,22 @@ const navigation = [
 
 const shortcuts = [
   {
-    name: "Add new user",
+    name: "YoY Revenue Performance",
     href: "#",
     icon: RiLinkM,
   },
   {
-    name: "Workspace usage",
+    name: "Disaggregation of Revenues",
     href: "#",
     icon: RiLinkM,
   },
   {
-    name: "Cost spend control",
+    name: "Cost of Revenues",
     href: "#",
     icon: RiLinkM,
   },
   {
-    name: "Overview – Rows written",
+    name: "tbd",
     href: "#",
     icon: RiLinkM,
   },
