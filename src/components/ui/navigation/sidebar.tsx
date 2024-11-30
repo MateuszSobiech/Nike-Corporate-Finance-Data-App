@@ -19,22 +19,22 @@ import { UserProfileDesktop, UserProfileMobile } from "./UserProfile"
 const navigation = [
   {
     name: "Income Statement",
-    href: siteConfig.baseLinks.overview,
+    href: siteConfig.baseLinks.incomeStatement,
     icon: RiExchangeDollarLine,
   },
   {
     name: "Balance Sheet",
-    href: siteConfig.baseLinks.details,
+    href: siteConfig.baseLinks.balanceSheet,
     icon: RiFileChartLine,
   },
   {
     name: "Cash Flow",
-    href: siteConfig.baseLinks.settings,
+    href: siteConfig.baseLinks.cashFlow,
     icon: RiLineChartLine,
   },
   {
     name: "Investors",
-    href: siteConfig.baseLinks.settings,
+    href: siteConfig.baseLinks.investors,
     icon: RiCalculatorLine,
   },
 ] as const
@@ -65,7 +65,7 @@ const shortcuts = [
 export function Sidebar() {
   const pathname = usePathname()
   const isActive = (itemHref: string) => {
-    if (itemHref === siteConfig.baseLinks.settings) {
+    if (itemHref === siteConfig.baseLinks.incomeStatement) {
       return pathname.startsWith("/settings")
     }
     return pathname === itemHref || pathname.startsWith(itemHref)
@@ -75,7 +75,9 @@ export function Sidebar() {
       {/* sidebar (lg+) */}
       <nav className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <aside className="flex grow flex-col gap-y-6 overflow-y-auto border-r border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
-          <Logo />
+          <div className="ml-1">
+            <Logo />
+          </div>
           <nav
             aria-label="core navigation links"
             className="flex flex-1 flex-col space-y-10"

@@ -1,12 +1,13 @@
 export const siteConfig = {
   name: "Dashboard",
   url: "https://dashboard.tremor.so",
-  description: "The only dashboard you will ever need.",
+  description: "Nike Corporate Finance.",
   baseLinks: {
     home: "/",
-    overview: "/overview",
-    details: "/details",
-    settings: "/settings",
+    incomeStatement: "/income-statement/executive-summary",
+    balanceSheet: "/balance-sheet",
+    cashFlow: "/cash-flow",
+    investors: "/investors",
   },
   externalLink: {
     blocks: "https://blocks.tremor.so/templates#dashboard",
