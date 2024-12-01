@@ -1,5 +1,9 @@
+// page.jsx
+
 "use client"
+import SankeySegment from "@/components/SankeySegment"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
+import sankey_segment_data from "@/data/sankey_segment_data"
 
 export default function ExecutiveSummary() {
   return (
@@ -21,7 +25,13 @@ export default function ExecutiveSummary() {
                   value="tab1"
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
-                  <p>Sankey by Segment</p>
+                  <div>
+                    <SankeySegment
+                      data={sankey_segment_data}
+                      width={975}
+                      height={500}
+                    />
+                  </div>
                 </TabsContent>
                 <TabsContent
                   value="tab2"
