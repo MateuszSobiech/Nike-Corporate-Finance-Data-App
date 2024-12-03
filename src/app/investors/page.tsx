@@ -15,11 +15,10 @@ export default function Investors() {
             </h1>
             <TabNavigation>
               <TabNavigationLink href="#" active>
-                Market Coverage
+                Financial Highlights
               </TabNavigationLink>
-              <TabNavigationLink href="#">tbd</TabNavigationLink>
-              <TabNavigationLink href="#">tbd</TabNavigationLink>
-              <TabNavigationLink href="#">tbd</TabNavigationLink>
+              <TabNavigationLink href="#">Share Repurchases</TabNavigationLink>
+              <TabNavigationLink href="#">Market Coverage</TabNavigationLink>
             </TabNavigation>
             <div className="mt-4 grid grid-cols-1 gap-14 sm:mt-8 sm:grid-cols-2 lg:mt-10 xl:grid-cols-3">
               <h1>Test</h1>
