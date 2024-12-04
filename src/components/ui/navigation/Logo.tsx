@@ -7,7 +7,7 @@ const Logo = () => {
   const logoPath =
     resolvedTheme === "dark" ? "/nike_logo_white.png" : "/nike_logo_black.png"
 
-  return <Image src={logoPath} alt="Company Logo" width={60} height={10} />
+  return <Image src={logoPath} alt="Company Logo" width={80} height={20} />
 }
 
 export default Logo

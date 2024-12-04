@@ -1,6 +1,6 @@
 "use client"
 import * as d3 from "d3"
-import { sankey as d3Sankey } from "d3-sankey"
+import { sankey as d3Sankey, sankeyCenter } from "d3-sankey"
 import React, { useEffect, useRef } from "react"
 
 // Defining the types for the data
@@ -33,11 +33,14 @@ const SankeySegment: React.FC<SankeyProps> = ({ data, width, height }) => {
 
   useEffect(() => {
     const sankey = d3Sankey<Node, Link>()
+      .nodeId((d) => d.name)
+      .nodeAlign(sankeyCenter)
+      .nodeSort(() => 0) // nodeSort(null) throws errors
       .nodeWidth(15)
-      .nodePadding(10)
+      .nodePadding(24)
       .extent([
-        [1, 1],
-        [width - 1, height - 6],
+        [0, 5],
+        [width, height - 5],
       ])
 
     const { nodes, links } = sankey({

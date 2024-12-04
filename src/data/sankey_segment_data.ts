@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const sankey_segment_data = {
   nodes: [
     { name: "Footwear" },
@@ -109,6 +111,7 @@ const sankey_segment_data = {
     },
   ],
 }
+
 const validateNodes = (data) => {
   const expectedNodes = new Set(
     data.links.flatMap(({ source, target }) => [source, target]),

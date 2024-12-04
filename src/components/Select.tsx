@@ -1,12 +1,7 @@
 // Tremor Raw Select [v0.0.2]
 
 import * as SelectPrimitives from "@radix-ui/react-select"
-import {
-  RiArrowDownSLine,
-  RiArrowUpSLine,
-  RiCheckLine,
-  RiExpandUpDownLine,
-} from "@remixicon/react"
+import { RiArrowDownSLine, RiArrowUpSLine, RiCheckLine } from "@remixicon/react"
 import React from "react"
 
 import { cx, focusInput, hasErrorInput } from "@/lib/utils"
@@ -61,10 +56,10 @@ const SelectTrigger = React.forwardRef<
     >
       <span className="truncate">{children}</span>
       <SelectPrimitives.Icon asChild>
-        <RiExpandUpDownLine
+        <RiArrowDownSLine
           className={cx(
             // base
-            "size-4 shrink-0",
+            "size-5 shrink-0",
             // text color
             "text-gray-400 dark:text-gray-600",
             // disabled

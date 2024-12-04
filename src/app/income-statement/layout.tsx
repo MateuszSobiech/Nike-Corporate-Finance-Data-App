@@ -13,7 +13,7 @@ export default function IncomeStatement({
           <div aria-labelledby="current-billing-cycle">
             <h1
               id="current-billing-cycle"
-              className="lg: mb-12 scroll-mt-10 text-2xl font-semibold text-gray-900 sm:text-xl dark:text-gray-50"
+              className="mb-12 scroll-mt-10 text-3xl font-semibold text-gray-900 dark:text-gray-50"
             >
               Income Statement
             </h1>
