@@ -125,9 +125,12 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
       .append("path")
       .attr("d", sankeyLinkHorizontal())
       .attr("stroke-width", (d) => Math.max(1, d.width || 1))
-      .attr("stroke", isDarkMode ? "#d4d4d4" : "#d4d4d4")
+      .attr(
+        "stroke",
+        isDarkMode ? (d) => d.color || "#d4d4d4" : (d) => d.color || "#d4d4d4",
+      )
       // .attr("stroke", (d) => d.color || "#d4d4d4")
-      .attr("stroke-opacity", isDarkMode ? 0.6 : 0.3)
+      .attr("stroke-opacity", isDarkMode ? 0.3 : 0.3)
       // .attr("stroke-opacity", 0.3)
       .style("mix-blend-mode", "multiply")
     // .append("title") // Tooltips
