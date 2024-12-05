@@ -1,9 +1,14 @@
 "use client"
-import * as d3 from "d3"
-import { sankey as d3Sankey, sankeyCenter } from "d3-sankey"
-import React, { useEffect, useRef } from "react"
 
-// Defining the types for the data
+import * as d3 from "d3"
+import {
+  sankey as d3Sankey,
+  sankeyCenter,
+  sankeyLinkHorizontal,
+} from "d3-sankey"
+// import { useTheme } from "next-themes"
+import React, { useEffect, useRef, useState } from "react"
+
 type Node = {
   name: string
   value: number
@@ -19,28 +24,49 @@ type Link = {
   source: Node
   target: Node
   value: number
-  color: string
+  width?: number
+  color?: string
 }
 
 type SankeyProps = {
   data: { nodes: Node[]; links: Link[] }
-  width: number
-  height: number
 }
 
-const SankeySegment: React.FC<SankeyProps> = ({ data, width, height }) => {
+const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
+  // const { theme } = useTheme()
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   useEffect(() => {
+    // const isDarkMode = theme === "dark"
+    // const textColor = isDarkMode ? "#F9FAFB" : "#111827"
+
+    const updateTheme = () => {
+      const darkModeActive = document.documentElement.classList.contains("dark")
+      setIsDarkMode(darkModeActive)
+    }
+
+    updateTheme() // Initialize state
+    window.addEventListener("theme-change", updateTheme) // Custom theme-change event if supported
+    return () => {
+      window.removeEventListener("theme-change", updateTheme)
+    }
+  }, [])
+
+  useEffect(() => {
+    const svgElement = d3.select(svgRef.current)
+    const containerWidth = svgRef.current?.parentElement?.offsetWidth || 975
+    const containerHeight = 550
+
     const sankey = d3Sankey<Node, Link>()
       .nodeId((d) => d.name)
       .nodeAlign(sankeyCenter)
-      .nodeSort(() => 0) // nodeSort(null) throws errors
+      .nodeSort(() => 0)
       .nodeWidth(15)
       .nodePadding(24)
       .extent([
-        [0, 5],
-        [width, height - 5],
+        [0, 20],
+        [containerWidth, containerHeight - 30],
       ])
 
     const { nodes, links } = sankey({
@@ -48,136 +74,124 @@ const SankeySegment: React.FC<SankeyProps> = ({ data, width, height }) => {
       links: data.links.map((d) => Object.assign({}, d)),
     })
 
-    const svg = d3.select(svgRef.current).attr("viewBox", [0, 0, width, height])
+    svgElement.selectAll("*").remove()
+
+    const svg = svgElement
+      .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
 
     const levels = d3.group(nodes, (d) => d.x0)
-    const levelTotals = new Map()
+    const levelTotals = new Map<number, number>()
 
     levels.forEach((nodesAtLevel, level) => {
       const levelTotal = d3.sum(nodesAtLevel, (d) => d.value || 0)
-      levelTotals.set(level, levelTotal)
+      levelTotals.set(level as number, levelTotal)
     })
 
-    // Adding nodes
+    // Nodes
     svg
       .append("g")
       .selectAll("rect")
       .data(nodes)
       .join("rect")
-      .attr("stroke-opacity", 0.3)
-      .attr("x", (d) => (d.x0 as number) + 1)
-      .attr("y", (d) => d.y0 as number)
-      .attr("width", (d) => (d.x1 as number) - (d.x0 as number) - 2)
-      .attr("height", (d) => (d.y1 as number) - (d.y0 as number))
+      .attr("x", (d) => d.x0! + 1)
+      .attr("y", (d) => d.y0!)
+      .attr("width", (d) => d.x1! - d.x0! - 2)
+      .attr("height", (d) => d.y1! - d.y0!)
       .attr("fill", (d) => {
-        if (d.name === "Gross profit") return "#10B981"
-        if (d.name === "Other income") return "#10B981"
-        if (d.name === "Income before taxes") return "#10B981"
-        if (d.name === "Net income") return "#10B981"
-        if (d.name === "Cost of sales") return "#EF4444"
-        if (d.name === "Tax expense") return "#EF4444"
-        if (d.name === "Interest expense") return "#EF4444"
-        if (d.name === "Selling and administrative expense") return "#EF4444"
-        if (d.name === "Demand creation expense") return "#EF4444"
-        if (d.name === "Operating overhead expense") return "#EF4444"
-
-        let c
-
-        if (d.sourceLinks) {
-          for (const link of d.sourceLinks) {
-            if (c === undefined) c = link.color
-            else if (c !== link.color) c = null
-          }
-        }
-
-        const fallbackColor = d3.color("#ccc")
-        const color = d3.color(c ?? "#ccc")?.toString() || "#ccc"
-        return color
-          ? color.toString()
-          : fallbackColor
-            ? fallbackColor.toString()
-            : "#ccc"
+        if (d.name === "Gross profit") return "#16a34a"
+        if (d.name === "Other income") return "#16a34a"
+        if (d.name === "Income before taxes") return "#16a34a"
+        if (d.name === "Net income") return "#16a34a"
+        if (d.name === "Cost of sales") return "#ef4444"
+        if (d.name === "Tax expense") return "#ef4444"
+        if (d.name === "Interest expense") return "#ef4444"
+        if (d.name === "Selling and administrative expense") return "#ef4444"
+        if (d.name === "Demand creation expense") return "#ef4444"
+        if (d.name === "Operating overhead expense") return "#ef4444"
+        return isDarkMode ? "#d4d4d4" : "#d4d4d4"
       })
+      .attr("stroke-opacity", 0.3)
       .append("title")
       .text((d) => `${d.name}\n${d.value.toLocaleString()}M`)
 
-    // Adding links
-    const link = svg
+    // Links
+    svg
       .append("g")
       .attr("fill", "none")
       .selectAll("g")
-      .data(links.sort((a, b) => (b.width ?? 0) - (a.width ?? 0)))
+      .data(links.sort((a, b) => b.width! - a.width!))
       .join("g")
-      .attr("stroke", (d) => {
-        const color =
-          d3.color(d.color)?.toString() || d3.color("#ccc")?.toString()
-        return color || "#ccc"
-      })
-      .style("mix-blend-mode", "multiply")
-
-    const linkGenerator = d3.linkHorizontal()
-
-    link
       .append("path")
-      .attr("d", (d) =>
-        linkGenerator({
-          source: [d.source.x1 as number, d.source.y0 as number],
-          target: [d.target.x0 as number, d.target.y0 as number],
-        }),
-      )
-      .attr("stroke-opacity", 0.3)
-      .attr("stroke-width", (d) => Math.max(1, d.width ?? 1))
+      .attr("d", sankeyLinkHorizontal())
+      .attr("stroke-width", (d) => Math.max(1, d.width || 1))
+      .attr("stroke", isDarkMode ? "#d4d4d4" : "#d4d4d4")
+      // .attr("stroke", (d) => d.color || "#d4d4d4")
+      .attr("stroke-opacity", isDarkMode ? 0.6 : 0.3)
+      // .attr("stroke-opacity", 0.3)
+      .style("mix-blend-mode", "multiply")
+    // .append("title") // Tooltips
+    // .text(
+    //   (d) =>
+    //     `${d.source.name} → ${d.target.name}\n${d.value.toLocaleString()}M`,
+    // )
 
-    link
-      .append("title")
-      .attr("fill-opacity", 0.7)
-      .text(
-        (d) =>
-          `${d.source.name} → ${d.target.name}\n${d.value.toLocaleString()}M`,
-      )
-
-    // Adding labels
+    // Labels
     svg
       .append("g")
-      .style("font", "10px sans-serif")
-      .attr("pointer-events", "none")
+      .style("font", "12px Inter, sans-serif")
       .selectAll("text")
       .data(nodes)
       .join("text")
-      .style("font", "10px 'Inter', sans-serif")
       .attr("x", (d) =>
-        (d.x0 as number) < width / 2
+        (d.x0 as number) < containerWidth / 2
           ? (d.x1 as number) + 6
           : (d.x0 as number) - 6,
       )
       .attr("y", (d) => ((d.y1 as number) + (d.y0 as number)) / 2)
-      .attr("dy", "0.35em")
       .attr("text-anchor", (d) =>
-        (d.x0 as number) < width / 2 ? "start" : "end",
+        (d.x0 as number) < containerWidth / 2 ? "start" : "end",
       )
-      .text((d) => d.name)
+      .attr("fill", isDarkMode ? "#F9FAFB" : "#111827")
       .each(function (d) {
-        const levelTotal = levelTotals.get(d.x0) || 1
-        const percentage = (((d.value || 0) / levelTotal) * 100).toFixed(1)
-        const absoluteValue = (d.value || 0).toLocaleString()
+        const levelTotal = levelTotals.get(d.x0!) || 1 // Level total value
+        const percentage = ((d.value! / levelTotal) * 100).toFixed(1) // Percentage calculation
 
-        d3
-          .select(this)
+        const textElement = d3.select(this)
+
+        // Add node name as a block
+        textElement
           .append("tspan")
+          .text(d.name)
           .attr(
             "x",
-            (d.x0 as number) < width / 2
+            (d.x0 as number) < containerWidth / 2
               ? (d.x1 as number) + 6
               : (d.x0 as number) - 6,
           )
-          .attr("dy", "1.2em").html(`
-            <tspan font-weight="bold">${absoluteValue}M</tspan> 
-            <tspan> (${percentage}%)</tspan>
-          `)
-      })
-  }, [data, width, height])
+          .attr("dy", "-0.6em")
 
-  return <svg ref={svgRef} />
+        // Add absolute value and percentage on the next line
+        textElement
+          .append("tspan")
+          .html(
+            `<tspan style="font-weight:bold;">${d.value?.toLocaleString()}M</tspan> (${percentage}%)`,
+          )
+          .attr(
+            "x",
+            (d.x0 as number) < containerWidth / 2
+              ? (d.x1 as number) + 6
+              : (d.x0 as number) - 6,
+          )
+          .attr("dy", "1.2em")
+      })
+
+    return () => {
+      svgElement.selectAll("*").remove()
+    }
+  }, [data, isDarkMode])
+
+  return <svg ref={svgRef} style={{ width: "100%", height: "auto" }} />
 }
 
 export default SankeySegment

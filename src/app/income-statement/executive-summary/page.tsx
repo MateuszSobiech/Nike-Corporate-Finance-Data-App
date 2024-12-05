@@ -54,11 +54,7 @@ export default function ExecutiveSummary() {
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
                   <div>
-                    <SankeySegment
-                      data={updatedData}
-                      width={975}
-                      height={500}
-                    />
+                    <SankeySegment data={updatedData} />
                   </div>
                 </TabsContent>
                 <TabsContent
@@ -78,7 +74,7 @@ export default function ExecutiveSummary() {
           </div>
         </section>
         <section>
-          <h2 className="mb-4 mt-2 scroll-mt-8 text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-50">
+          <h2 className="mb-4 mt-16 scroll-mt-8 text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-50">
             Key Financial Measures
           </h2>
           <div className="sticky top-16 z-20 flex items-center justify-between border-b border-gray-200 bg-white pb-4 pt-4 sm:pt-4 lg:top-0 lg:mx-0 lg:px-0 lg:pt-4 dark:border-gray-800 dark:bg-gray-950">
