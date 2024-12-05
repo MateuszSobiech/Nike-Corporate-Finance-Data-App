@@ -1,12 +1,16 @@
 // @ts-nocheck
 
-const sankey_segment_data = {
+const sankey_segment_region_data = {
   nodes: [
     { name: "Footwear" },
+    { name: "North America" },
+    { name: "Europe, Middle East & Africa" },
+    { name: "Greater China" },
+    { name: "Asia Pacific & Latin America" },
     { name: "Apparel" },
     { name: "Equipment" },
-    { name: "Global Brand Divisions" },
     { name: "NIKE Brand" },
+    { name: "Global Brand Divisions" },
     { name: "Revenues" },
     { name: "Converse" },
     { name: "Corporate" },
@@ -24,15 +28,98 @@ const sankey_segment_data = {
   links: [
     {
       source: "Footwear",
-      target: "NIKE Brand",
-      value: 33427,
+      target: "North America",
+      value: 14537,
       color: "#dddddd",
     },
-    { source: "Apparel", target: "NIKE Brand", value: 13775, color: "#dddddd" },
+    {
+      source: "Footwear",
+      target: "Europe, Middle East & Africa",
+      value: 8473,
+      color: "#dddddd",
+    },
+    {
+      source: "Footwear",
+      target: "Greater China",
+      value: 5552,
+      color: "#dddddd",
+    },
+    {
+      source: "Footwear",
+      target: "Asia Pacific & Latin America",
+      value: 4865,
+      color: "#dddddd",
+    },
+    {
+      source: "Apparel",
+      target: "North America",
+      value: 5953,
+      color: "#dddddd",
+    },
+    {
+      source: "Apparel",
+      target: "Europe, Middle East & Africa",
+      value: 4380,
+      color: "#dddddd",
+    },
+    {
+      source: "Apparel",
+      target: "Greater China",
+      value: 1828,
+      color: "#dddddd",
+    },
+    {
+      source: "Apparel",
+      target: "Asia Pacific & Latin America",
+      value: 1614,
+      color: "#dddddd",
+    },
     {
       source: "Equipment",
+      target: "North America",
+      value: 906,
+      color: "#dddddd",
+    },
+    {
+      source: "Equipment",
+      target: "Europe, Middle East & Africa",
+      value: 754,
+      color: "#dddddd",
+    },
+    {
+      source: "Equipment",
+      target: "Greater China",
+      value: 165,
+      color: "#dddddd",
+    },
+    {
+      source: "Equipment",
+      target: "Asia Pacific & Latin America",
+      value: 250,
+      color: "#dddddd",
+    },
+    {
+      source: "North America",
       target: "NIKE Brand",
-      value: 2075,
+      value: 21396,
+      color: "#dddddd",
+    },
+    {
+      source: "Europe, Middle East & Africa",
+      target: "NIKE Brand",
+      value: 13607,
+      color: "#dddddd",
+    },
+    {
+      source: "Greater China",
+      target: "NIKE Brand",
+      value: 7545,
+      color: "#dddddd",
+    },
+    {
+      source: "Asia Pacific & Latin America",
+      target: "NIKE Brand",
+      value: 6729,
       color: "#dddddd",
     },
     {
@@ -53,61 +140,61 @@ const sankey_segment_data = {
       source: "Revenues",
       target: "Cost of sales",
       value: 28475,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Revenues",
       target: "Gross profit",
       value: 22887,
-      color: "#10B981",
+      color: "#dddddd",
     },
     {
       source: "Gross profit",
       target: "Selling and administrative expense",
       value: 16576,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Gross profit",
       target: "Interest expense",
       value: -161,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Gross profit",
       target: "Income before taxes",
       value: 6472,
-      color: "#10B981",
+      color: "#dddddd",
     },
     {
       source: "Other income",
       target: "Income before taxes",
       value: -228,
-      color: "#10B981",
+      color: "#dddddd",
     },
     {
       source: "Selling and administrative expense",
       target: "Demand creation expense",
       value: 4285,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Selling and administrative expense",
       target: "Operating overhead expense",
       value: 12291,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Income before taxes",
       target: "Tax expense",
       value: 1000,
-      color: "#EF4444",
+      color: "#dddddd",
     },
     {
       source: "Income before taxes",
       target: "Net income",
       value: 5700,
-      color: "#10B981",
+      color: "#dddddd",
     },
   ],
 }
@@ -146,6 +233,6 @@ const updateSankeyData = (data) => {
   return data
 }
 
-const sankeySegmentData = updateSankeyData(sankey_segment_data)
+const sankeySegmentRegionData = updateSankeyData(sankey_segment_region_data)
 
-export default sankeySegmentData
+export default sankeySegmentRegionData

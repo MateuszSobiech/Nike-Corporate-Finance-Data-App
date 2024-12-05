@@ -1,5 +1,7 @@
 "use client"
+import SankeyRegion from "@/components/SankeyRegion"
 import SankeySegment from "@/components/SankeySegment"
+import SankeySegmentRegion from "@/components/SankeySegmentRegion"
 import {
   Select,
   SelectContent,
@@ -9,7 +11,9 @@ import {
 } from "@/components/Select"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
-import updatedData from "@/data/sankey_segment_data"
+import sankeyRegionData from "@/data/sankey_region_data"
+import sankeySegmentData from "@/data/sankey_segment_data"
+import sankeySegmentRegionData from "@/data/sankey_segment_region_data"
 
 export default function ExecutiveSummary() {
   const dataYears = [
@@ -54,20 +58,24 @@ export default function ExecutiveSummary() {
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
                   <div>
-                    <SankeySegment data={updatedData} />
+                    <SankeySegment data={sankeySegmentData} />
                   </div>
                 </TabsContent>
                 <TabsContent
                   value="tab2"
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
-                  <p>Sankey by Region</p>
+                  <div>
+                    <SankeyRegion data={sankeyRegionData} />
+                  </div>
                 </TabsContent>
                 <TabsContent
                   value="tab3"
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
-                  <p>Sankey by Segment & Region</p>
+                  <div>
+                    <SankeySegmentRegion data={sankeySegmentRegionData} />
+                  </div>
                 </TabsContent>
               </div>
             </Tabs>

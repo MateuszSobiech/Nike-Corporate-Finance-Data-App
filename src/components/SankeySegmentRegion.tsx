@@ -32,7 +32,7 @@ type SankeyProps = {
   data: { nodes: Node[]; links: Link[] }
 }
 
-const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
+const SankeySegmentRegion: React.FC<SankeyProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   // const { theme } = useTheme()
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -197,4 +197,4 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
   return <svg ref={svgRef} style={{ width: "100%", height: "auto" }} />
 }
 
-export default SankeySegment
+export default SankeySegmentRegion
