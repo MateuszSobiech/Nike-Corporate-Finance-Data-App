@@ -88,6 +88,23 @@ const SankeySegmentRegion: React.FC<SankeyProps> = ({ data }) => {
       levelTotals.set(level as number, levelTotal)
     })
 
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("pointer-events", "none")
+      .style("background-color", isDarkMode ? "#1f2937" : "#ffffff")
+      .style("color", isDarkMode ? "#f9fafb" : "#111827")
+      .style("padding", "8px 12px")
+      .style("border-radius", "6px")
+      .style("font-size", "0.875rem")
+      .style("line-height", "1.25rem")
+      .style("box-shadow", "0 2px 10px rgba(0, 0, 0, 0.1)")
+      .style("opacity", 0)
+      .style("transform", "translateY(10px)")
+      .style("z-index", 1000)
+      .style("transition", "opacity 0.2s ease, transform 0.2s ease")
+
     // Nodes
     svg
       .append("g")
@@ -133,11 +150,25 @@ const SankeySegmentRegion: React.FC<SankeyProps> = ({ data }) => {
       .attr("stroke-opacity", isDarkMode ? 0.3 : 0.3)
       // .attr("stroke-opacity", 0.3)
       .style("mix-blend-mode", "multiply")
-    // .append("title") // Tooltips
-    // .text(
-    //   (d) =>
-    //     `${d.source.name} → ${d.target.name}\n${d.value.toLocaleString()}M`,
-    // )
+      .on("mouseover", (event: MouseEvent, d: Link) => {
+        tooltip
+          .html(
+            `<div>${d.source.name} → ${d.target.name}</div>
+             <div><strong>$${d.value.toLocaleString()}M<strong></div>`,
+          )
+          .style("background-color", isDarkMode ? "#1f2937" : "#ffffff")
+          .style("color", isDarkMode ? "#f9fafb" : "#111827")
+          .style("opacity", 1)
+          .style("transform", "translateY(0)")
+      })
+      .on("mousemove", (event: MouseEvent) => {
+        tooltip
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY + 10}px`)
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0).style("transform", "translateY(10px)")
+      })
 
     // Labels
     svg
@@ -178,7 +209,7 @@ const SankeySegmentRegion: React.FC<SankeyProps> = ({ data }) => {
         textElement
           .append("tspan")
           .html(
-            `<tspan style="font-weight:bold;">${d.value?.toLocaleString()}M</tspan> (${percentage}%)`,
+            `<tspan style="font-weight:bold;">$${d.value?.toLocaleString()}M</tspan> (${percentage}%)`,
           )
           .attr(
             "x",
