@@ -9,11 +9,11 @@ export default function IncomeStatement({
   return (
     <main className="lg:pl-1">
       <div className="relative">
-        <div className="p-4 sm:px-6 sm:pb-10 sm:pt-10 lg:px-10 lg:pt-7">
+        <div className="p-4 lg:px-10 lg:pt-7">
           <div aria-labelledby="current-billing-cycle">
             <h1
               id="current-billing-cycle"
-              className="mb-12 scroll-mt-10 text-3xl font-semibold text-gray-900 dark:text-gray-50"
+              className="mb-12 scroll-mt-10 text-2xl font-semibold text-gray-900 dark:text-gray-50"
             >
               Income Statement
             </h1>

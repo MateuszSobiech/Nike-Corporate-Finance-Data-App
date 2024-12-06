@@ -18,7 +18,7 @@ SelectValue.displayName = "SelectValue"
 const selectTriggerStyles = [
   cx(
     // base
-    "group/trigger flex w-full select-none items-center justify-between gap-2 truncate rounded-md border px-3 py-2 shadow-sm outline-none transition sm:text-sm",
+    "group/trigger flex w-full select-none items-center justify-between gap-2 truncate rounded-md border px-3 py-2 text-sm shadow-sm outline-none transition",
     // border color
     "border-gray-300 dark:border-gray-800",
     // text color
@@ -197,7 +197,7 @@ const SelectItem = React.forwardRef<
       ref={forwardedRef}
       className={cx(
         // base
-        "grid cursor-pointer grid-cols-[1fr_20px] gap-x-2 rounded px-3 py-2 outline-none transition-colors data-[state=checked]:font-semibold sm:text-sm",
+        "grid cursor-pointer grid-cols-[1fr_20px] gap-x-2 rounded px-3 py-2 text-sm outline-none transition-colors data-[state=checked]:font-semibold",
         // text color
         "text-gray-900 dark:text-gray-50",
         // disabled
