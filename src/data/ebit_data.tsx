@@ -102,6 +102,86 @@ export const EbitRevenues: {
   },
 ]
 
+export const EbitNARevenues: {
+  fiscal_year: number
+  footwear_value: number
+  footwear_previous: number
+  apparel_value: number
+  apparel_previous: number
+  equipment_value: number
+  equipment_previous: number
+  total_value: number
+  total_previous: number
+  title: string
+  metric_type: string
+}[] = [
+  {
+    fiscal_year: 2020,
+    footwear_value: 9329000,
+    footwear_previous: 10045000,
+    apparel_value: 4639000,
+    apparel_previous: 5260000,
+    equipment_value: 516000,
+    equipment_previous: 597000,
+    total_value: 14484000,
+    total_previous: 15902000,
+    title: "Revenues",
+    metric_type: "currency",
+  },
+  {
+    fiscal_year: 2021,
+    footwear_value: 11644000,
+    footwear_previous: 9329000,
+    apparel_value: 5028000,
+    apparel_previous: 4639000,
+    equipment_value: 507000,
+    equipment_previous: 516000,
+    total_value: 17179000,
+    total_previous: 14484000,
+    title: "Revenues",
+    metric_type: "currency",
+  },
+  {
+    fiscal_year: 2022,
+    footwear_value: 12228000,
+    footwear_previous: 11644000,
+    apparel_value: 5492000,
+    apparel_previous: 5028000,
+    equipment_value: 633000,
+    equipment_previous: 507000,
+    total_value: 18353000,
+    total_previous: 17179000,
+    title: "Revenues",
+    metric_type: "currency",
+  },
+  {
+    fiscal_year: 2023,
+    footwear_value: 14897000,
+    footwear_previous: 12228000,
+    apparel_value: 5947000,
+    apparel_previous: 5492000,
+    equipment_value: 764000,
+    equipment_previous: 633000,
+    total_value: 21608000,
+    total_previous: 18353000,
+    title: "Revenues",
+    metric_type: "currency",
+  },
+  {
+    fiscal_year: 2024,
+    footwear_value: 14537000,
+    footwear_previous: 14897000,
+    apparel_value: 5953000,
+    apparel_previous: 5947000,
+    equipment_value: 906000,
+    equipment_previous: 764000,
+    total_value: 21396000,
+    total_previous: 21608000,
+    title: "Revenues",
+    metric_type: "currency",
+  },
+]
+
 export const EbitOpEx: {
   title: string
   fiscal_year: number
