@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/Badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
-import { EbitNARevenues } from "@/data/ebit_data"
+import { EbitBrand, EbitRegion } from "@/data/ebit_data"
 import { AreaChart, BarList } from "@tremor/react"
 
 type EbitCardProps = {
@@ -76,54 +76,83 @@ export default function EbitCard({
       return current < previous ? "success" : "error"
     }
 
-    // Default logic
     return current >= previous ? "success" : "error"
   }
 
-  const getBarListData = (title: string, selectedYear: number) => {
-    // Only fetch data for Revenues
-    if (title !== "Revenues") return []
-
-    const yearData = EbitNARevenues.find(
+  const getBarListData = (
+    title: string,
+    selectedYear: number,
+    isRegion: boolean,
+  ) => {
+    const dataSource = isRegion ? EbitRegion : EbitBrand
+    const yearData = dataSource.find(
       (item) => item.fiscal_year === selectedYear,
     )
+
     if (!yearData) return []
 
-    return [
-      {
-        name: "Footwear",
-        value: yearData.footwear_value,
-        previousValue: yearData.footwear_previous,
-      },
-      {
-        name: "Apparel",
-        value: yearData.apparel_value,
-        previousValue: yearData.apparel_previous,
-      },
-      {
-        name: "Equipment",
-        value: yearData.equipment_value,
-        previousValue: yearData.equipment_previous,
-      },
-      {
-        name: "Total",
-        value: yearData.total_value,
-        previousValue: yearData.total_previous,
-      },
-    ].map((segment) => ({
+    const segments = isRegion
+      ? [
+          {
+            name: "North America",
+            value: yearData.na_value,
+            previous: yearData.na_previous,
+          },
+          {
+            name: "Europe, Middle East & Africa",
+            value: yearData.emea_value,
+            previous: yearData.emea_previous,
+          },
+          {
+            name: "Greater China",
+            value: yearData.cn_value,
+            previous: yearData.cn_previous,
+          },
+          {
+            name: "Asia Pacific & Latin America",
+            value: yearData.apla_value,
+            previous: yearData.apla_previous,
+          },
+          {
+            name: "Global Brand Divisions",
+            value: yearData.global_value,
+            previous: yearData.global_previous,
+          },
+        ]
+      : [
+          {
+            name: "NIKE Brand",
+            value: yearData.nike_value,
+            previous: yearData.nike_previous,
+          },
+          {
+            name: "Converse",
+            value: yearData.converse_value,
+            previous: yearData.converse_previous,
+          },
+          {
+            name: "Corporate",
+            value: yearData.corporate_value,
+            previous: yearData.corporate_previous,
+          },
+        ]
+
+    return segments.map((segment) => ({
       name: segment.name,
-      value: formatNumber(segment.value, "currency"),
+      value: formatNumber(segment.value, metricType),
       percentageChange: calculateChange(
         segment.value,
-        segment.previousValue,
-        "currency",
+        segment.previous,
+        metricType,
       ),
     }))
   }
 
+  const barListRegionData = getBarListData(title, selectedYear, true)
+  const barListBrandData = getBarListData(title, selectedYear, false)
+
   const formattedValue = formatNumber(value, metricType)
   const formattedPrevious = formatNumber(previous, metricType)
-
   const changeLabel =
     typeof value === "number" && typeof previous === "number"
       ? calculateChange(value, previous, metricType)
@@ -135,15 +164,6 @@ export default function EbitCard({
       : "error"
 
   const filteredData = data.filter((item) => item.fiscal_year <= selectedYear)
-
-  const chartColor = badgeVariant === "success" ? "green-700" : "red-700"
-  const areaChartClasses =
-    badgeVariant === "success"
-      ? "fill-green-500 stroke-green-700"
-      : "fill-red-500 stroke-red-700"
-
-  // Fetch bar list data for the "Revenues" card only
-  const barListData = getBarListData(title, selectedYear)
 
   return (
     <div className="grid-col-1 grid">
@@ -166,54 +186,31 @@ export default function EbitCard({
               data={filteredData}
               index="fiscal_year"
               categories={["value"]}
-              className={`h-48 ${areaChartClasses}`}
+              className="h-48"
             />
           </div>
           <div className="mt-4">
-            <Tabs defaultValue="tab1">
+            <Tabs defaultValue="byRegion">
               <TabsList>
-                <TabsTrigger value="tab1">NA</TabsTrigger>
-                <TabsTrigger value="tab2">EMEA</TabsTrigger>
-                <TabsTrigger value="tab3">CN</TabsTrigger>
-                <TabsTrigger value="tab4">APLA</TabsTrigger>
+                <TabsTrigger value="byRegion">By Region</TabsTrigger>
+                <TabsTrigger value="byBrand">By Brand Divisions</TabsTrigger>
               </TabsList>
-              <div className="ml-2 mt-4">
-                <TabsContent
-                  value="tab1"
-                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-                >
-                  {title === "Revenues" && (
-                    <BarList
-                      data={barListData.map((item) => ({
-                        name: item.name,
-                        value: item.value,
-                        change: item.percentageChange,
-                      }))}
-                      className="w-full"
-                      color="gray"
-                      showAnimation={true}
-                    />
-                  )}
-                </TabsContent>
-                <TabsContent
-                  value="tab2"
-                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-                >
-                  <p>bar chart</p>
-                </TabsContent>
-                <TabsContent
-                  value="tab3"
-                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-                >
-                  <p>bar chart</p>
-                </TabsContent>
-                <TabsContent
-                  value="tab4"
-                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-                >
-                  <p>bar chart</p>
-                </TabsContent>
-              </div>
+              <TabsContent value="byRegion">
+                <BarList
+                  data={barListRegionData}
+                  className="w-full"
+                  color="gray"
+                  showAnimation={true}
+                />
+              </TabsContent>
+              <TabsContent value="byBrand">
+                <BarList
+                  data={barListBrandData}
+                  className="w-full"
+                  color="gray"
+                  showAnimation={true}
+                />
+              </TabsContent>
             </Tabs>
           </div>
         </div>
