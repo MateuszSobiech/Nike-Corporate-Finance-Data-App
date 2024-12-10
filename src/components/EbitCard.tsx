@@ -1,8 +1,8 @@
 "use client"
 
 import { Badge } from "@/components/Badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
-import { EbitBrand, EbitRegion } from "@/data/ebit_data"
+import { Divider } from "@/components/Divider"
+import { EbitRegion } from "@/data/ebit_data"
 import { AreaChart, BarList } from "@tremor/react"
 
 type EbitCardProps = {
@@ -66,12 +66,10 @@ export default function EbitCard({
   ): "success" | "error" => {
     if (!previous || !current) return "error"
 
-    // EBIT, EBIT Margin, and Revenue: Positive if increasing
     if (["EBIT", "EBIT Margin", "Revenue"].includes(title)) {
       return current > previous ? "success" : "error"
     }
 
-    // OpEx and OpEx as % of Revenue: Positive if decreasing
     if (["Operating Expenses", "OpEx as % of Revenue"].includes(title)) {
       return current < previous ? "success" : "error"
     }
@@ -79,77 +77,111 @@ export default function EbitCard({
     return current >= previous ? "success" : "error"
   }
 
-  const getBarListData = (
-    title: string,
-    selectedYear: number,
-    isRegion: boolean,
-  ) => {
-    const dataSource = isRegion ? EbitRegion : EbitBrand
-    const yearData = dataSource.find(
-      (item) => item.fiscal_year === selectedYear,
+  const getBarListData = (title: string, selectedYear: number) => {
+    const yearData = EbitRegion.find(
+      (item) => item.fiscal_year === selectedYear && item.title === title,
     )
 
     if (!yearData) return []
 
-    const segments = isRegion
-      ? [
-          {
-            name: "North America",
-            value: yearData.na_value,
-            previous: yearData.na_previous,
-          },
-          {
-            name: "Europe, Middle East & Africa",
-            value: yearData.emea_value,
-            previous: yearData.emea_previous,
-          },
-          {
-            name: "Greater China",
-            value: yearData.cn_value,
-            previous: yearData.cn_previous,
-          },
-          {
-            name: "Asia Pacific & Latin America",
-            value: yearData.apla_value,
-            previous: yearData.apla_previous,
-          },
-          {
-            name: "Global Brand Divisions",
-            value: yearData.global_value,
-            previous: yearData.global_previous,
-          },
-        ]
-      : [
-          {
-            name: "NIKE Brand",
-            value: yearData.nike_value,
-            previous: yearData.nike_previous,
-          },
-          {
-            name: "Converse",
-            value: yearData.converse_value,
-            previous: yearData.converse_previous,
-          },
-          {
-            name: "Corporate",
-            value: yearData.corporate_value,
-            previous: yearData.corporate_previous,
-          },
-        ]
-
-    return segments.map((segment) => ({
-      name: segment.name,
-      value: formatNumber(segment.value, metricType),
-      percentageChange: calculateChange(
-        segment.value,
-        segment.previous,
-        metricType,
-      ),
-    }))
+    return [
+      {
+        name: "North America",
+        value: yearData.na_value,
+        previous: yearData.na_previous,
+      },
+      {
+        name: "Europe, Middle East & Africa",
+        value: yearData.emea_value,
+        previous: yearData.emea_previous,
+      },
+      {
+        name: "Greater China",
+        value: yearData.cn_value,
+        previous: yearData.cn_previous,
+      },
+      {
+        name: "Asia Pacific & Latin America",
+        value: yearData.apla_value,
+        previous: yearData.apla_previous,
+      },
+    ]
   }
 
-  const barListRegionData = getBarListData(title, selectedYear, true)
-  const barListBrandData = getBarListData(title, selectedYear, false)
+  // const getBarListData = (title: string, selectedYear: number) => {
+  //   const yearData = EbitRegion.find(
+  //     (item) => item.fiscal_year === selectedYear && item.title === title,
+  //   )
+
+  //   if (!yearData) return []
+
+  //   const formatPercentageChange = (current: number, previous: number) => {
+  //     if (current === null || previous === null) return "N/A"
+  //     const change = current - previous
+  //     const formattedChange =
+  //       change > 0 ? `+${change.toFixed(1)}` : change.toFixed(1)
+  //     return `${formattedChange} p.p.`
+  //   }
+
+  //   const formatPercentage = (value: number) => {
+  //     return value > 0 ? `+${value.toFixed(1)}%` : `${value.toFixed(1)}%`
+  //   }
+
+  //   return [
+  //     {
+  //       name: "North America",
+  //       value:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentage(yearData.na_value)
+  //           : formatNumber(yearData.na_value, yearData.metric_type),
+  //       previous:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentageChange(yearData.na_value, yearData.na_previous)
+  //           : formatNumber(yearData.na_previous, yearData.metric_type),
+  //     },
+  //     {
+  //       name: "Europe, Middle East & Africa",
+  //       value:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentage(yearData.emea_value)
+  //           : formatNumber(yearData.emea_value, yearData.metric_type),
+  //       previous:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentageChange(
+  //               yearData.emea_value,
+  //               yearData.emea_previous,
+  //             )
+  //           : formatNumber(yearData.emea_previous, yearData.metric_type),
+  //     },
+  //     {
+  //       name: "Greater China",
+  //       value:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentage(yearData.cn_value)
+  //           : formatNumber(yearData.cn_value, yearData.metric_type),
+  //       previous:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentageChange(yearData.cn_value, yearData.cn_previous)
+  //           : formatNumber(yearData.cn_previous, yearData.metric_type),
+  //     },
+  //     {
+  //       name: "Asia Pacific & Latin America",
+  //       value:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentage(yearData.apla_value)
+  //           : formatNumber(yearData.apla_value, yearData.metric_type),
+  //       previous:
+  //         yearData.metric_type === "percentage"
+  //           ? formatPercentageChange(
+  //               yearData.apla_value,
+  //               yearData.apla_previous,
+  //             )
+  //           : formatNumber(yearData.apla_previous, yearData.metric_type),
+  //     },
+  //   ]
+  // }
+
+  const barListRegionData = getBarListData(title, selectedYear)
 
   const formattedValue = formatNumber(value, metricType)
   const formattedPrevious = formatNumber(previous, metricType)
@@ -190,28 +222,19 @@ export default function EbitCard({
             />
           </div>
           <div className="mt-4">
-            <Tabs defaultValue="byRegion">
-              <TabsList>
-                <TabsTrigger value="byRegion">By Region</TabsTrigger>
-                <TabsTrigger value="byBrand">By Brand Divisions</TabsTrigger>
-              </TabsList>
-              <TabsContent value="byRegion">
-                <BarList
-                  data={barListRegionData}
-                  className="w-full"
-                  color="gray"
-                  showAnimation={true}
-                />
-              </TabsContent>
-              <TabsContent value="byBrand">
-                <BarList
-                  data={barListBrandData}
-                  className="w-full"
-                  color="gray"
-                  showAnimation={true}
-                />
-              </TabsContent>
-            </Tabs>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
+              Nike Brand by Region
+            </p>
+            <div className="mb-2 mt-2">
+              <Divider className="mb-0 mt-0" />
+            </div>
+
+            <BarList
+              data={barListRegionData}
+              className="w-full text-sm"
+              color="gray"
+              showAnimation={true}
+            />
           </div>
         </div>
       </div>
