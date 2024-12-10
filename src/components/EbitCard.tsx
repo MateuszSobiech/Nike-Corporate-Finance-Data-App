@@ -1,7 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/Badge"
-import { Divider } from "@/components/Divider"
+import CountUp from "@/components/CountUp"
 import { EbitRegion } from "@/data/ebit_data"
 import { AreaChart, BarList } from "@tremor/react"
 
@@ -137,7 +137,7 @@ export default function EbitCard({
 
   return (
     <div className="grid-col-1 grid">
-      <div className="bg-white dark:bg-gray-800">
+      <div>
         <div>
           <div className="flex items-center">
             <h1 className="mr-2 text-sm font-bold text-gray-900 dark:text-gray-50">
@@ -147,7 +147,9 @@ export default function EbitCard({
           </div>
           <div className="mt-2 flex items-baseline justify-between">
             <p className="text-xl font-medium text-gray-900 dark:text-gray-50">
-              {formattedValue}
+              <CountUp target={formattedValue} duration={3000}>
+                {formattedValue}
+              </CountUp>
             </p>
             <p className="text-sm text-gray-500">from {formattedPrevious}</p>
           </div>
@@ -156,6 +158,7 @@ export default function EbitCard({
               data={filteredData}
               index="fiscal_year"
               categories={["value"]}
+              showAnimation={true}
               className="h-48"
             />
           </div>
@@ -163,15 +166,13 @@ export default function EbitCard({
             <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
               Nike Brand by Region
             </p>
-            <div className="mb-2 mt-2">
-              <Divider className="mb-0 mt-0" />
-            </div>
 
             <BarList
               data={barListRegionData}
-              className="w-full text-xs"
-              color="gray-200"
+              className="mt-4 w-full text-xs"
+              color="gray-200 dark:gray-700"
               showAnimation={true}
+              sortOrder="none"
             />
           </div>
         </div>
