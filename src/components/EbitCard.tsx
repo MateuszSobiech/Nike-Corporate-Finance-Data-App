@@ -84,7 +84,14 @@ export default function EbitCard({
 
     if (!yearData) return []
 
-    return [
+    const regionOrder = [
+      "North America",
+      "Europe, Middle East & Africa",
+      "Greater China",
+      "Asia Pacific & Latin America",
+    ]
+
+    const regionsData = [
       {
         name: "North America",
         value: yearData.na_value,
@@ -106,80 +113,11 @@ export default function EbitCard({
         previous: yearData.apla_previous,
       },
     ]
+
+    return regionsData.sort((a, b) => {
+      return regionOrder.indexOf(a.name) - regionOrder.indexOf(b.name)
+    })
   }
-
-  // const getBarListData = (title: string, selectedYear: number) => {
-  //   const yearData = EbitRegion.find(
-  //     (item) => item.fiscal_year === selectedYear && item.title === title,
-  //   )
-
-  //   if (!yearData) return []
-
-  //   const formatPercentageChange = (current: number, previous: number) => {
-  //     if (current === null || previous === null) return "N/A"
-  //     const change = current - previous
-  //     const formattedChange =
-  //       change > 0 ? `+${change.toFixed(1)}` : change.toFixed(1)
-  //     return `${formattedChange} p.p.`
-  //   }
-
-  //   const formatPercentage = (value: number) => {
-  //     return value > 0 ? `+${value.toFixed(1)}%` : `${value.toFixed(1)}%`
-  //   }
-
-  //   return [
-  //     {
-  //       name: "North America",
-  //       value:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentage(yearData.na_value)
-  //           : formatNumber(yearData.na_value, yearData.metric_type),
-  //       previous:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentageChange(yearData.na_value, yearData.na_previous)
-  //           : formatNumber(yearData.na_previous, yearData.metric_type),
-  //     },
-  //     {
-  //       name: "Europe, Middle East & Africa",
-  //       value:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentage(yearData.emea_value)
-  //           : formatNumber(yearData.emea_value, yearData.metric_type),
-  //       previous:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentageChange(
-  //               yearData.emea_value,
-  //               yearData.emea_previous,
-  //             )
-  //           : formatNumber(yearData.emea_previous, yearData.metric_type),
-  //     },
-  //     {
-  //       name: "Greater China",
-  //       value:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentage(yearData.cn_value)
-  //           : formatNumber(yearData.cn_value, yearData.metric_type),
-  //       previous:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentageChange(yearData.cn_value, yearData.cn_previous)
-  //           : formatNumber(yearData.cn_previous, yearData.metric_type),
-  //     },
-  //     {
-  //       name: "Asia Pacific & Latin America",
-  //       value:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentage(yearData.apla_value)
-  //           : formatNumber(yearData.apla_value, yearData.metric_type),
-  //       previous:
-  //         yearData.metric_type === "percentage"
-  //           ? formatPercentageChange(
-  //               yearData.apla_value,
-  //               yearData.apla_previous,
-  //             )
-  //           : formatNumber(yearData.apla_previous, yearData.metric_type),
-  //     },
-  //   ]
-  // }
 
   const barListRegionData = getBarListData(title, selectedYear)
 
@@ -231,8 +169,8 @@ export default function EbitCard({
 
             <BarList
               data={barListRegionData}
-              className="w-full text-sm"
-              color="gray"
+              className="w-full text-xs"
+              color="gray-200"
               showAnimation={true}
             />
           </div>

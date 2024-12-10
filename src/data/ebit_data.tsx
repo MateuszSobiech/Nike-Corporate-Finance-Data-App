@@ -575,7 +575,7 @@ export const EbitRegion: {
     cn_previous: 3832000,
     apla_value: 4189000,
     apla_previous: 3832000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -588,7 +588,7 @@ export const EbitRegion: {
     cn_previous: 4189000,
     apla_value: 3813000,
     apla_previous: 4189000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -601,7 +601,7 @@ export const EbitRegion: {
     cn_previous: 5047000,
     apla_value: 4059000,
     apla_previous: 3813000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -614,7 +614,7 @@ export const EbitRegion: {
     cn_previous: 5182000,
     apla_value: 4499000,
     apla_previous: 4059000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -627,7 +627,7 @@ export const EbitRegion: {
     cn_previous: 4965000,
     apla_value: 4844000,
     apla_previous: 4499000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -883,7 +883,7 @@ export const EbitBrand: {
     nike_previous: 30762000,
     converse_value: 1549000,
     converse_previous: 1603000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -892,7 +892,7 @@ export const EbitBrand: {
     nike_previous: 31267000,
     converse_value: 1662000,
     converse_previous: 1549000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -901,7 +901,7 @@ export const EbitBrand: {
     nike_previous: 33652000,
     converse_value: 1677000,
     converse_previous: 1662000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -910,7 +910,7 @@ export const EbitBrand: {
     nike_previous: 36030000,
     converse_value: 1751000,
     converse_previous: 1677000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
@@ -919,7 +919,7 @@ export const EbitBrand: {
     nike_previous: 40404000,
     converse_value: 1608000,
     converse_previous: 1751000,
-    title: "Operating Expences",
+    title: "Operating Expenses",
     metric_type: "currency",
   },
   {
