@@ -154,7 +154,7 @@ const SankeySegmentRegion: React.FC<SankeyProps> = ({ data }) => {
         tooltip
           .html(
             `<div>${d.source.name} → ${d.target.name}</div>
-             <div><strong>$${d.value.toLocaleString()}M<strong></div>`,
+             <div><span style="font-weight: 600;">$${d.value.toLocaleString()}M</span></div>`,
           )
           .style("background-color", isDarkMode ? "#1f2937" : "#ffffff")
           .style("color", isDarkMode ? "#f9fafb" : "#111827")

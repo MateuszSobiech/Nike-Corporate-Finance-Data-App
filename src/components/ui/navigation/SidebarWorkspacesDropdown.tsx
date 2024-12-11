@@ -20,7 +20,7 @@ const workspaces = [
     name: "Retail analytics",
     initials: "RA",
     role: "Member",
-    color: "bg-indigo-600 dark:bg-indigo-500",
+    color: "bg-orange-600 dark:bg-orange-500",
   },
   // Add more workspaces...
 ]
@@ -57,7 +57,7 @@ export const WorkspacesDropdownDesktop = () => {
             )}
           >
             <span
-              className="flex aspect-square size-8 items-center justify-center rounded bg-indigo-600 p-2 text-xs font-medium text-white dark:bg-indigo-500"
+              className="flex aspect-square size-8 items-center justify-center rounded bg-orange-600 p-2 text-xs font-medium text-white dark:bg-orange-500"
               aria-hidden="true"
             >
               RA
@@ -156,7 +156,7 @@ export const WorkspacesDropdownMobile = () => {
           <button className="flex items-center gap-x-1.5 rounded-md p-2 hover:bg-gray-100 focus:outline-none hover:dark:bg-gray-900">
             <span
               className={cx(
-                "flex aspect-square size-7 items-center justify-center rounded bg-indigo-600 p-2 text-xs font-medium text-white dark:bg-indigo-500",
+                "flex aspect-square size-7 items-center justify-center rounded bg-orange-600 p-2 text-xs font-medium text-white dark:bg-orange-500",
               )}
               aria-hidden="true"
             >

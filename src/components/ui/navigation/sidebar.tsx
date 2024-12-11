@@ -46,17 +46,17 @@ const shortcuts = [
     icon: RiLinkM,
   },
   {
+    name: "EBIT Performance Overview",
+    href: "#",
+    icon: RiLinkM,
+  },
+  {
     name: "Disaggregation of Revenues",
     href: "#",
     icon: RiLinkM,
   },
   {
     name: "Cost of Revenues",
-    href: "#",
-    icon: RiLinkM,
-  },
-  {
-    name: "tbd",
     href: "#",
     icon: RiLinkM,
   },

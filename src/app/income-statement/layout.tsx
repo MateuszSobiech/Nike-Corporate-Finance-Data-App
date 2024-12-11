@@ -1,4 +1,5 @@
 "use client"
+
 import { TabNavigation, TabNavigationLink } from "@/components/TabNavigation"
 
 export default function IncomeStatement({
@@ -18,14 +19,42 @@ export default function IncomeStatement({
               Income Statement
             </h1>
             <TabNavigation>
-              <TabNavigationLink href="#" active>
+              <TabNavigationLink
+                href="/income-statement/executive-summary"
+                active={
+                  window.location.pathname ===
+                  "/income-statement/executive-summary"
+                }
+              >
                 Executive Summary
               </TabNavigationLink>
-              <TabNavigationLink href="#">Profit & Loss</TabNavigationLink>
-              <TabNavigationLink href="#">
+              <TabNavigationLink
+                href="/income-statement/profit-and-loss"
+                active={
+                  window.location.pathname ===
+                  "/income-statement/profit-and-loss"
+                }
+              >
+                Profit & Loss
+              </TabNavigationLink>
+              <TabNavigationLink
+                href="/income-statement/revenue-and-cor"
+                active={
+                  window.location.pathname ===
+                  "/income-statement/revenue-and-cor"
+                }
+              >
                 Revenue & Cost of Revenues
               </TabNavigationLink>
-              <TabNavigationLink href="#">Oparating Expences</TabNavigationLink>
+              <TabNavigationLink
+                href="/income-statement/operating-expenses"
+                active={
+                  window.location.pathname ===
+                  "/income-statement/operating-expenses"
+                }
+              >
+                Oparating Expences
+              </TabNavigationLink>
             </TabNavigation>
           </div>
           {children}

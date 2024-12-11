@@ -91,9 +91,7 @@ export default function ExecutiveSummary() {
                 aria-labelledby="radix-:R9jtt7qj6:-trigger-tab1"
                 id="radix-:R9jtt7qj6:-content-tab1"
                 className="mr-2 space-y-2 text-sm leading-7 text-gray-600 outline outline-0 outline-offset-2 outline-orange-500 focus-visible:outline-2 dark:text-gray-500 dark:outline-orange-500"
-              >
-                {/* <p>Select Fiscal Year</p> */}
-              </div>
+              ></div>
 
               <div className="w-40">
                 <Select value={selectedYear} onValueChange={setSelectedYear}>
