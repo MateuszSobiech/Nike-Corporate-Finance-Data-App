@@ -1,9 +1,10 @@
 "use client"
 
+import { AreaChart } from "@/components/AreaChart"
 import { Badge } from "@/components/Badge"
-import CountUp from "@/components/CountUp"
+import { BarList } from "@/components/BarList"
 import { EbitRegion } from "@/data/ebit_data"
-import { AreaChart, BarList } from "@tremor/react"
+import { AvailableChartColorsKeys } from "@/lib/chartUtils"
 
 type EbitCardProps = {
   title: string
@@ -135,46 +136,103 @@ export default function EbitCard({
 
   const filteredData = data.filter((item) => item.fiscal_year <= selectedYear)
 
-  return (
-    <div className="grid-col-1 grid">
-      <div>
-        <div>
-          <div className="flex items-center">
-            <h1 className="mr-2 text-sm font-bold text-gray-900 dark:text-gray-50">
-              {title}
-            </h1>
-            <Badge variant={badgeVariant}>{changeLabel}</Badge>
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <p className="text-xl font-medium text-gray-900 dark:text-gray-50">
-              <CountUp target={formattedValue} duration={3000}>
-                {formattedValue}
-              </CountUp>
-            </p>
-            <p className="text-sm text-gray-500">from {formattedPrevious}</p>
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            <AreaChart
-              data={filteredData}
-              index="fiscal_year"
-              categories={["value"]}
-              showAnimation={true}
-              className="h-48"
-            />
-          </div>
-          <div className="mt-4">
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              Nike Brand by Region
-            </p>
+  const chartColor: [AvailableChartColorsKeys] =
+    badgeVariant === "success" ? ["emerald"] : ["red"]
 
-            <BarList
-              data={barListRegionData}
-              className="mt-4 w-full text-xs"
-              color="gray-200 dark:gray-700"
-              showAnimation={true}
-              sortOrder="none"
-            />
+  const Tooltip = ({ payload, active, label, metricType }: any) => {
+    if (!active || !payload || payload.length === 0) return null
+
+    const formatNumber = (
+      num: number | string,
+      type: "currency" | "percentage",
+    ) => {
+      if (typeof num !== "number") return num
+
+      if (type === "currency") {
+        const formattedValue = (num / 1_000).toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        })
+        return `$${formattedValue}M`
+      }
+
+      return `${num.toFixed(1)}%`
+    }
+
+    const tooltipTitle = payload[0]?.payload?.title || "Details"
+
+    return (
+      <div className="rounded-lg border border-solid border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+        <h3 className="pl-2 pr-2 pt-2 text-sm font-semibold text-gray-900 dark:text-gray-50">
+          {tooltipTitle}
+        </h3>
+        <div className="my-2 border-t border-gray-200 dark:border-gray-700"></div>
+        {payload.map((item: any) => (
+          <div
+            key={item.name}
+            className="flex items-center justify-between space-x-2 pb-2 pl-2 pr-2 text-sm"
+          >
+            <span className="pl-0 pr-0 text-gray-500 dark:text-gray-400">
+              {item.name}
+            </span>
+            <span
+              className="block h-1 w-4 rounded-full"
+              style={{ backgroundColor: item.color }}
+            ></span>
+            <span className="pr-10">{label}</span>
+            <span className="font-medium text-gray-900 dark:text-gray-50">
+              {formatNumber(item.value, metricType)}
+            </span>
           </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid-col-1 grid p-4">
+      <div>
+        <div className="flex items-center">
+          <h1 className="mr-2 text-sm font-bold text-gray-900 dark:text-gray-50">
+            {title}
+          </h1>
+          <Badge variant={badgeVariant}>{changeLabel}</Badge>
+        </div>
+        <div className="mt-2 flex items-baseline justify-between">
+          <p className="text-xl font-medium text-gray-900 dark:text-gray-50">
+            {formattedValue}
+          </p>
+          <p className="text-sm text-gray-500">from {formattedPrevious}</p>
+        </div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">
+          <AreaChart
+            data={filteredData}
+            index="fiscal_year"
+            categories={["value"]}
+            showAnimation={true}
+            className="h-36"
+            showYAxis={false}
+            startEndOnly={true}
+            showLegend={false}
+            colors={chartColor}
+            autoMinValue={true}
+            customTooltip={(props) => (
+              <Tooltip {...props} metricType={metricType} />
+            )}
+          />
+        </div>
+        <div className="mt-4">
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
+            NIKE Brand by Region
+          </p>
+
+          <BarList
+            data={barListRegionData}
+            className="mt-4 w-full text-xs"
+            color="gray-200 dark:gray-700"
+            showAnimation={true}
+            sortOrder="none"
+          />
         </div>
       </div>
     </div>

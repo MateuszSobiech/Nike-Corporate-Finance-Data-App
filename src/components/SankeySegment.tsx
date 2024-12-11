@@ -6,8 +6,9 @@ import {
   sankeyCenter,
   sankeyLinkHorizontal,
 } from "d3-sankey"
+import { useTheme } from "next-themes"
 // import { useTheme } from "next-themes"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
 
 type Node = {
   name: string
@@ -34,24 +35,25 @@ type SankeyProps = {
 
 const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  // const { theme } = useTheme()
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const isDarkMode = resolvedTheme === "dark"
+  // const [isDarkMode, setIsDarkMode] = useState(false)
 
-  useEffect(() => {
-    // const isDarkMode = theme === "dark"
-    // const textColor = isDarkMode ? "#F9FAFB" : "#111827"
+  // useEffect(() => {
+  //   // const isDarkMode = theme === "dark"
+  //   // const textColor = isDarkMode ? "#F9FAFB" : "#111827"
 
-    const updateTheme = () => {
-      const darkModeActive = document.documentElement.classList.contains("dark")
-      setIsDarkMode(darkModeActive)
-    }
+  //   const updateTheme = () => {
+  //     const darkModeActive = document.documentElement.classList.contains("dark")
+  //     setIsDarkMode(darkModeActive)
+  //   }
 
-    updateTheme()
-    window.addEventListener("theme-change", updateTheme)
-    return () => {
-      window.removeEventListener("theme-change", updateTheme)
-    }
-  }, [])
+  //   updateTheme()
+  //   window.addEventListener("theme-change", updateTheme)
+  //   return () => {
+  //     window.removeEventListener("theme-change", updateTheme)
+  //   }
+  // }, [])
 
   useEffect(() => {
     const svgElement = d3.select(svgRef.current)
@@ -116,10 +118,10 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
       .attr("width", (d) => d.x1! - d.x0! - 2)
       .attr("height", (d) => d.y1! - d.y0!)
       .attr("fill", (d) => {
-        if (d.name === "Gross profit") return "#16a34a"
-        if (d.name === "Other income") return "#16a34a"
-        if (d.name === "Income before taxes") return "#16a34a"
-        if (d.name === "Net income") return "#16a34a"
+        if (d.name === "Gross profit") return "#059669"
+        if (d.name === "Other income") return "#059669"
+        if (d.name === "Income before taxes") return "#059669"
+        if (d.name === "Net income") return "#059669"
         if (d.name === "Cost of sales") return "#ef4444"
         if (d.name === "Tax expense") return "#ef4444"
         if (d.name === "Interest expense") return "#ef4444"
@@ -142,13 +144,13 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
       .append("path")
       .attr("d", sankeyLinkHorizontal())
       .attr("stroke-width", (d) => Math.max(1, d.width || 1))
-      .attr(
+      .style(
         "stroke",
         isDarkMode ? (d) => d.color || "#d4d4d4" : (d) => d.color || "#d4d4d4",
       )
       // .attr("stroke", (d) => d.color || "#d4d4d4")
-      .attr("stroke-opacity", isDarkMode ? 0.2 : 0.2)
-      // .attr("stroke-opacity", 0.3)
+      .style("stroke-opacity", isDarkMode ? 0.2 : 0.2)
+      // .attr("stroke-opacity", 0.2)
       .style("mix-blend-mode", "multiply")
       .on("mouseover", (event: MouseEvent, d: Link) => {
         tooltip

@@ -146,7 +146,7 @@ const sankey_segment_region_data = {
       source: "Revenues",
       target: "Gross profit",
       value: 22887,
-      color: "#16a34a",
+      color: "#059669",
     },
     {
       source: "Gross profit",
@@ -164,13 +164,13 @@ const sankey_segment_region_data = {
       source: "Gross profit",
       target: "Income before taxes",
       value: 6472,
-      color: "#16a34a",
+      color: "#059669",
     },
     {
       source: "Other income",
       target: "Income before taxes",
       value: -228,
-      color: "#16a34a",
+      color: "#059669",
     },
     {
       source: "Selling and administrative expense",
@@ -194,7 +194,7 @@ const sankey_segment_region_data = {
       source: "Income before taxes",
       target: "Net income",
       value: 5700,
-      color: "#16a34a",
+      color: "#059669",
     },
   ],
 }
