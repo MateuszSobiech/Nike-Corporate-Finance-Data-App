@@ -18,6 +18,7 @@ interface BarListProps<T = unknown>
   showAnimation?: boolean
   onValueChange?: (payload: Bar<T>) => void
   sortOrder?: "ascending" | "descending" | "none"
+  backgroundColor?: string
 }
 
 function BarListInner<T>(
@@ -27,6 +28,7 @@ function BarListInner<T>(
     showAnimation = false,
     onValueChange,
     sortOrder = "descending",
+    backgroundColor,
     className,
     ...props
   }: BarListProps<T>,
@@ -86,7 +88,7 @@ function BarListInner<T>(
                 "flex items-center rounded transition-all",
                 rowHeight,
                 // background color
-                "bg-gray-200 dark:bg-gray-900",
+                backgroundColor || "bg-gray-200 dark:bg-gray-900",
                 onValueChange
                   ? "group-hover:bg-gray-300 group-hover:dark:bg-gray-800"
                   : "",

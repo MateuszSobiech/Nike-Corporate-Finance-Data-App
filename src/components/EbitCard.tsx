@@ -139,6 +139,15 @@ export default function EbitCard({
   const chartColor: [AvailableChartColorsKeys] =
     badgeVariant === "success" ? ["emerald"] : ["red"]
 
+  const getTooltipLegendColor = (color: string) => {
+    switch (color) {
+      case "red":
+        return "red"
+      case "emerald":
+        return "#10b981"
+    }
+  }
+
   const Tooltip = ({ payload, active, label, metricType }: any) => {
     if (!active || !payload || payload.length === 0) return null
 
@@ -176,8 +185,8 @@ export default function EbitCard({
               {item.name}
             </span>
             <span
-              className="block h-1 w-4 rounded-full"
-              style={{ backgroundColor: item.color }}
+              className="!ml-0 block h-1 w-4 rounded-full"
+              style={{ backgroundColor: getTooltipLegendColor(item.color) }}
             ></span>
             <span className="pr-10">{label}</span>
             <span className="font-medium text-gray-900 dark:text-gray-50">
@@ -228,10 +237,11 @@ export default function EbitCard({
 
           <BarList
             data={barListRegionData}
+            valueFormatter={(value) => formatNumber(value, metricType)}
             className="mt-4 w-full text-xs"
-            color="gray-200 dark:gray-700"
             showAnimation={true}
             sortOrder="none"
+            backgroundColor="bg-gray-200 dark:bg-gray-800"
           />
         </div>
       </div>

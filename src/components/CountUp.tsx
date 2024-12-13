@@ -1,4 +1,3 @@
-import { Text } from "@tremor/react"
 import { useEffect, useState } from "react"
 
 type CountUpProps = {
@@ -24,9 +23,9 @@ const CountUp = ({ target, duration = 2000 }: CountUpProps) => {
   }, [target, duration])
 
   return (
-    <Text className="text-xl font-bold text-gray-900 dark:text-gray-50">
+    <h1 className="text-xl font-bold text-gray-900 dark:text-gray-50">
       {count}
-    </Text>
+    </h1>
   )
 }
 

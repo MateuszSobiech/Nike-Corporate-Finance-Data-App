@@ -2,6 +2,7 @@
 
 import { AreaChart } from "@/components/AreaChart"
 import { Card } from "@/components/Card"
+import { SparkAreaChart } from "@/components/SparkChart"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 
 import {
@@ -19,7 +20,6 @@ import {
 } from "@/data/profit_and_loss_data"
 import { useState } from "react"
 
-import { Badge } from "@/components/Badge"
 import {
   Table,
   TableBody,
@@ -269,13 +269,13 @@ export default function ProfitLoss() {
                         (category) => category.label,
                       )}
                       colors={["emerald", "red"]}
-                      valueFormatter={tooltipFormatter}
-                      yAxisFormatter={(value: number) =>
-                        `$${value.toFixed(0)}B`
+                      valueTooltipFormatter={tooltipFormatter}
+                      valueFormatter={(value: number) =>
+                        `$${(value / 1000).toFixed(1)}B`
                       }
                       showLegend={true}
                       showGridLines={true}
-                      yAxisWidth={50}
+                      yAxisWidth={60}
                     />
                   </TabsContent>
                   <TabsContent
@@ -293,7 +293,7 @@ export default function ProfitLoss() {
                       valueFormatter={(value) => `${value.toFixed(1)}%`}
                       showLegend={true}
                       showGridLines={true}
-                      yAxisWidth={50}
+                      yAxisWidth={60}
                     />
                   </TabsContent>
                 </div>
@@ -333,7 +333,7 @@ export default function ProfitLoss() {
           </div>
           <div>
             <TableRoot>
-              <Table>
+              <Table className="w-full">
                 <TableHead>
                   <TableRow>
                     <TableHeaderCell>{""}</TableHeaderCell>
@@ -357,8 +357,6 @@ export default function ProfitLoss() {
                       {/* Metric name */}
                       <TableCell
                         className={`${
-                          label === "NET INCOME" ? "font-semibold" : ""
-                        } ${
                           [
                             "Gross profit",
                             "Gross margin",
@@ -367,8 +365,8 @@ export default function ProfitLoss() {
                             "Effective tax rate",
                           ].includes(label)
                             ? "text-indent-4 text-blue-600"
-                            : ""
-                        }`}
+                            : "text-black dark:text-gray-100"
+                        } px-4 py-2 font-semibold`}
                       >
                         {label}
                       </TableCell>
@@ -427,7 +425,7 @@ export default function ProfitLoss() {
                                       `prev_${key}` as keyof typeof previousData
                                     ] || 0,
                                   ) === "success"
-                                    ? "text-green-600 dark:text-green-400"
+                                    ? "text-emerald-600 dark:text-emerald-500"
                                     : "text-red-600 dark:text-red-400"
                                 }`}
                               >
@@ -478,16 +476,20 @@ export default function ProfitLoss() {
                         ) : type === "percentage" ? (
                           ""
                         ) : (
-                          <Badge
-                            variant={determineBadgeVariant(
-                              label,
-                              filteredData?.[
-                                key as keyof typeof filteredData
-                              ] || 0,
-                              previousData?.[
-                                `prev_${key}` as keyof typeof previousData
-                              ] || 0,
-                            )}
+                          <span
+                            className={`rounded px-2 py-1 text-sm font-medium text-white ${
+                              determineBadgeVariant(
+                                label,
+                                filteredData?.[
+                                  key as keyof typeof filteredData
+                                ] || 0,
+                                previousData?.[
+                                  `prev_${key}` as keyof typeof previousData
+                                ] || 0,
+                              ) === "success"
+                                ? "bg-emerald-500"
+                                : "bg-rose-500"
+                            }`}
                           >
                             {filteredData && previousData
                               ? calculateChange(
@@ -501,7 +503,66 @@ export default function ProfitLoss() {
                                   label,
                                 )
                               : "N/A"}
-                          </Badge>
+                          </span>
+                        )}
+                      </TableCell>
+
+                      {/* Spark Area Chart */}
+                      <TableCell>
+                        {filteredData && key in filteredData && (
+                          <SparkAreaChart
+                            data={ResultsOfOperations.filter(
+                              (item) =>
+                                item.fiscal_year <= selectedYear &&
+                                item.fiscal_year > selectedYear - 5,
+                            ).map((item) => ({
+                              year: item.fiscal_year,
+                              Performance:
+                                item[key as keyof typeof ResultsOfOperations],
+                            }))}
+                            categories={["Performance"]}
+                            index={"year"}
+                            colors={[
+                              determineBadgeVariant(
+                                label,
+                                filteredData[
+                                  key as keyof typeof filteredData
+                                ] || 0,
+                                previousData?.[
+                                  `prev_${key}` as keyof typeof previousData
+                                ] || 0,
+                              ) === "success"
+                                ? "emerald" // Green for positive trend
+                                : "red", // Red for negative trend
+                            ]}
+                            valueRange={{
+                              min: Math.min(
+                                ...ResultsOfOperations.filter(
+                                  (item) =>
+                                    item.fiscal_year <= selectedYear &&
+                                    item.fiscal_year > selectedYear - 5,
+                                ).map(
+                                  (item) =>
+                                    item[
+                                      key as keyof typeof ResultsOfOperations
+                                    ] || 0,
+                                ),
+                              ),
+                              max: Math.max(
+                                ...ResultsOfOperations.filter(
+                                  (item) =>
+                                    item.fiscal_year <= selectedYear &&
+                                    item.fiscal_year > selectedYear - 5,
+                                ).map(
+                                  (item) =>
+                                    item[
+                                      key as keyof typeof ResultsOfOperations
+                                    ] || 0,
+                                ),
+                              ),
+                            }}
+                            className="h-8 w-20"
+                          />
                         )}
                       </TableCell>
                     </TableRow>

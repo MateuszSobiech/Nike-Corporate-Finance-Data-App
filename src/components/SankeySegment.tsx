@@ -128,7 +128,7 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
         if (d.name === "Selling and administrative expense") return "#ef4444"
         if (d.name === "Demand creation expense") return "#ef4444"
         if (d.name === "Operating overhead expense") return "#ef4444"
-        return isDarkMode ? "#d4d4d4" : "#d4d4d4"
+        return isDarkMode ? "#d1d5db" : "#d1d5db"
       })
       .attr("stroke-opacity", 0.3)
     // .append("title") // Tooltip
@@ -146,12 +146,11 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
       .attr("stroke-width", (d) => Math.max(1, d.width || 1))
       .style(
         "stroke",
-        isDarkMode ? (d) => d.color || "#d4d4d4" : (d) => d.color || "#d4d4d4",
+        isDarkMode ? (d) => d.color || "#d1d5db" : (d) => d.color || "#d1d5db",
+        // (d) => (isDarkMode ? d.darkColor : d.color), // If I change color depending on the theme
+        // (d) => (isDarkMode ? d.darkColor : d.color) as string, // If I change color depending on the theme
       )
-      // .attr("stroke", (d) => d.color || "#d4d4d4")
       .style("stroke-opacity", isDarkMode ? 0.2 : 0.2)
-      // .attr("stroke-opacity", 0.2)
-      .style("mix-blend-mode", "multiply")
       .on("mouseover", (event: MouseEvent, d: Link) => {
         tooltip
           .html(

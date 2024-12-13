@@ -1,12 +1,15 @@
 "use client"
 
 import { TabNavigation, TabNavigationLink } from "@/components/TabNavigation"
+import { usePathname } from "next/navigation"
 
 export default function IncomeStatement({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const pathname = usePathname()
+
   return (
     <main className="lg:pl-1">
       <div className="relative">
@@ -21,37 +24,25 @@ export default function IncomeStatement({
             <TabNavigation>
               <TabNavigationLink
                 href="/income-statement/executive-summary"
-                active={
-                  window.location.pathname ===
-                  "/income-statement/executive-summary"
-                }
+                active={pathname === "/income-statement/executive-summary"}
               >
                 Executive Summary
               </TabNavigationLink>
               <TabNavigationLink
                 href="/income-statement/profit-and-loss"
-                active={
-                  window.location.pathname ===
-                  "/income-statement/profit-and-loss"
-                }
+                active={pathname === "/income-statement/profit-and-loss"}
               >
                 Profit & Loss
               </TabNavigationLink>
               <TabNavigationLink
                 href="/income-statement/revenue-and-cor"
-                active={
-                  window.location.pathname ===
-                  "/income-statement/revenue-and-cor"
-                }
+                active={pathname === "/income-statement/revenue-and-cor"}
               >
                 Revenue & Cost of Revenues
               </TabNavigationLink>
               <TabNavigationLink
                 href="/income-statement/operating-expenses"
-                active={
-                  window.location.pathname ===
-                  "/income-statement/operating-expenses"
-                }
+                active={pathname === "/income-statement/operating-expenses"}
               >
                 Oparating Expences
               </TabNavigationLink>
