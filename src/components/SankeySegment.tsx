@@ -37,23 +37,6 @@ const SankeySegment: React.FC<SankeyProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const { resolvedTheme } = useTheme()
   const isDarkMode = resolvedTheme === "dark"
-  // const [isDarkMode, setIsDarkMode] = useState(false)
-
-  // useEffect(() => {
-  //   // const isDarkMode = theme === "dark"
-  //   // const textColor = isDarkMode ? "#F9FAFB" : "#111827"
-
-  //   const updateTheme = () => {
-  //     const darkModeActive = document.documentElement.classList.contains("dark")
-  //     setIsDarkMode(darkModeActive)
-  //   }
-
-  //   updateTheme()
-  //   window.addEventListener("theme-change", updateTheme)
-  //   return () => {
-  //     window.removeEventListener("theme-change", updateTheme)
-  //   }
-  // }, [])
 
   useEffect(() => {
     const svgElement = d3.select(svgRef.current)

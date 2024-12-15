@@ -34,13 +34,6 @@ export default function ProfitLoss() {
   // AREA CHART
   const tooltipFormatter = (value: number) => `$${value.toLocaleString()}M`
 
-  // Preprocess data for Y-axis display in billions
-  const processMetricsData = PLKeyMetrics.map((item) => ({
-    fiscal_year: item.fiscal_year,
-    revenues: item.Revenues / 1000,
-    cost_of_sales: item["Cost of Sales"] / 1000,
-  }))
-
   const categoriesMetrics = [
     { label: "Revenues", value: "revenues" },
     { label: "Cost of Sales", value: "cost_of_sales" },
@@ -316,13 +309,19 @@ export default function ProfitLoss() {
                 className="mr-2 space-y-2 text-sm leading-7 text-gray-600 outline outline-0 outline-offset-2 outline-orange-500 focus-visible:outline-2 dark:text-gray-500 dark:outline-orange-500"
               ></div>
               <div className="w-40">
-                <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <Select
+                  value={selectedYear.toString()}
+                  onValueChange={(value) => setSelectedYear(Number(value))}
+                >
                   <SelectTrigger className="mx-auto h-8">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
                     {dataYears.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
+                      <SelectItem
+                        key={item.value}
+                        value={item.value.toString()}
+                      >
                         {item.label}
                       </SelectItem>
                     ))}
@@ -388,15 +387,11 @@ export default function ProfitLoss() {
 
                       {/* Previous Year Column */}
                       <TableCell
-                        className={`${
-                          label === "NET INCOME" ? "font-semibold" : ""
-                        }`}
+                        className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
                       >
-                        {previousData && `prev_${key}` in previousData
+                        {previousData && key in previousData
                           ? formatNumber(
-                              previousData[
-                                `prev_${key}` as keyof typeof previousData
-                              ],
+                              previousData[key as keyof typeof previousData],
                               type,
                               label,
                             )
@@ -405,13 +400,12 @@ export default function ProfitLoss() {
 
                       {/* Change Column */}
                       <TableCell
-                        className={`${
-                          label === "NET INCOME" ? "font-semibold" : ""
-                        }`}
+                        className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
                       >
                         {filteredData && key in filteredData ? (
                           <>
-                            {previousData && `prev_${key}` in previousData ? (
+                            {previousData &&
+                            previousData[`prev_${key}`] !== undefined ? (
                               <span
                                 className={`${
                                   label === "NET INCOME" ? "font-semibold" : ""
@@ -421,9 +415,7 @@ export default function ProfitLoss() {
                                     filteredData[
                                       key as keyof typeof filteredData
                                     ] || 0,
-                                    previousData[
-                                      `prev_${key}` as keyof typeof previousData
-                                    ] || 0,
+                                    previousData[`prev_${key}`] || 0,
                                   ) === "success"
                                     ? "text-emerald-600 dark:text-emerald-500"
                                     : "text-red-600 dark:text-red-400"
@@ -434,9 +426,7 @@ export default function ProfitLoss() {
                                       filteredData[
                                         key as keyof typeof filteredData
                                       ],
-                                      previousData[
-                                        `prev_${key}` as keyof typeof previousData
-                                      ],
+                                      previousData[`prev_${key}`], // Corrected to access `prev_*` field
                                       type,
                                       label,
                                       true,
@@ -445,9 +435,7 @@ export default function ProfitLoss() {
                                       filteredData[
                                         key as keyof typeof filteredData
                                       ],
-                                      previousData[
-                                        `prev_${key}` as keyof typeof previousData
-                                      ],
+                                      previousData[`prev_${key}`], // Corrected to access `prev_*` field
                                       type,
                                       label,
                                       false,
