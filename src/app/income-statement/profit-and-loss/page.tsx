@@ -231,7 +231,7 @@ export default function ProfitLoss() {
         <section>
           <div className="grid grid-cols-1">
             <Card>
-              <h2 className="text-m pb-2 font-medium text-gray-900 dark:text-gray-100">
+              <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
                 Key Financial Profit & Loss Highlights
               </h2>
               <p className="pb-6 text-sm text-gray-500 dark:text-gray-400">

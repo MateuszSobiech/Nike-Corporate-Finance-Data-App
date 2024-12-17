@@ -45,9 +45,9 @@ export default function ExecutiveSummary() {
             </h2>
             <Tabs defaultValue="tab1">
               <TabsList variant="solid">
-                <TabsTrigger value="tab1">by Segment</TabsTrigger>
+                <TabsTrigger value="tab1">by Product Line</TabsTrigger>
                 <TabsTrigger value="tab2">by Region</TabsTrigger>
-                <TabsTrigger value="tab3">by Segment & Region</TabsTrigger>
+                <TabsTrigger value="tab3">by Product Line & Region</TabsTrigger>
               </TabsList>
               <div className="ml-2 mt-4">
                 <TabsContent
