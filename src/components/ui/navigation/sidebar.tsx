@@ -47,7 +47,7 @@ const shortcuts = [
   },
   {
     name: "EBIT Performance Overview",
-    href: "#",
+    href: "/income-statement/executive-summary#ebit",
     icon: RiLinkM,
   },
   {

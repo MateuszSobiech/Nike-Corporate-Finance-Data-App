@@ -230,17 +230,19 @@ export default function ProfitLoss() {
       <div className="space-y-10">
         <section>
           <div className="grid grid-cols-1">
-            <Card>
-              <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-                Key Financial Profit & Loss Highlights
-              </h2>
-              <p className="pb-6 text-sm text-gray-500 dark:text-gray-400">
-                Highlighting essential Profit & Loss metrics and ratios for
-                tracking Nike's revenue, costs, and profitability performance.
-              </p>
+            <Card className="px-0">
+              <div className="px-6">
+                <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+                  Key Financial Profit & Loss Highlights
+                </h2>
+                <p className="pb-6 text-sm text-gray-500 dark:text-gray-400">
+                  Highlighting essential Profit & Loss metrics and ratios for
+                  tracking Nike's revenue, costs, and profitability performance.
+                </p>
+              </div>
 
               <Tabs defaultValue="tab1">
-                <TabsList className="border-b border-gray-200 dark:border-gray-700">
+                <TabsList className="border-b border-gray-200 px-6 dark:border-gray-700">
                   <TabsTrigger value="tab1" className="text-sm">
                     Revenue & Cost Metrics
                   </TabsTrigger>
@@ -249,7 +251,7 @@ export default function ProfitLoss() {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="ml-2 mt-4">
+                <div className="ml-2 mt-4 px-6">
                   <TabsContent
                     value="tab1"
                     className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
@@ -404,8 +406,8 @@ export default function ProfitLoss() {
                       >
                         {filteredData && key in filteredData ? (
                           <>
-                            {previousData &&
-                            previousData[`prev_${key}`] !== undefined ? (
+                            {filteredData &&
+                            filteredData[`prev_${key}`] !== undefined ? (
                               <span
                                 className={`${
                                   label === "NET INCOME" ? "font-semibold" : ""
@@ -415,7 +417,7 @@ export default function ProfitLoss() {
                                     filteredData[
                                       key as keyof typeof filteredData
                                     ] || 0,
-                                    previousData[`prev_${key}`] || 0,
+                                    filteredData[`prev_${key}`] || 0,
                                   ) === "success"
                                     ? "text-emerald-600 dark:text-emerald-500"
                                     : "text-red-600 dark:text-red-400"
@@ -426,7 +428,7 @@ export default function ProfitLoss() {
                                       filteredData[
                                         key as keyof typeof filteredData
                                       ],
-                                      previousData[`prev_${key}`], // Corrected to access `prev_*` field
+                                      filteredData[`prev_${key}`], // Corrected to access `prev_*` field
                                       type,
                                       label,
                                       true,
@@ -435,7 +437,7 @@ export default function ProfitLoss() {
                                       filteredData[
                                         key as keyof typeof filteredData
                                       ],
-                                      previousData[`prev_${key}`], // Corrected to access `prev_*` field
+                                      filteredData[`prev_${key}`], // Corrected to access `prev_*` field
                                       type,
                                       label,
                                       false,
@@ -471,8 +473,8 @@ export default function ProfitLoss() {
                                 filteredData?.[
                                   key as keyof typeof filteredData
                                 ] || 0,
-                                previousData?.[
-                                  `prev_${key}` as keyof typeof previousData
+                                filteredData?.[
+                                  `prev_${key}` as keyof typeof filteredData
                                 ] || 0,
                               ) === "success"
                                 ? "bg-emerald-500"
@@ -484,8 +486,8 @@ export default function ProfitLoss() {
                                   filteredData[
                                     key as keyof typeof filteredData
                                   ],
-                                  previousData[
-                                    `prev_${key}` as keyof typeof previousData
+                                  filteredData[
+                                    `prev_${key}` as keyof typeof filteredData
                                   ],
                                   type,
                                   label,
@@ -496,7 +498,7 @@ export default function ProfitLoss() {
                       </TableCell>
 
                       {/* Spark Area Chart */}
-                      <TableCell>
+                      <TableCell className="w-28">
                         {filteredData && key in filteredData && (
                           <SparkAreaChart
                             data={ResultsOfOperations.filter(
@@ -516,8 +518,8 @@ export default function ProfitLoss() {
                                 filteredData[
                                   key as keyof typeof filteredData
                                 ] || 0,
-                                previousData?.[
-                                  `prev_${key}` as keyof typeof previousData
+                                filteredData?.[
+                                  `prev_${key}` as keyof typeof filteredData
                                 ] || 0,
                               ) === "success"
                                 ? "emerald" // Green for positive trend
@@ -549,7 +551,7 @@ export default function ProfitLoss() {
                                 ),
                               ),
                             }}
-                            className="h-8 w-20"
+                            className="h-8"
                           />
                         )}
                       </TableCell>

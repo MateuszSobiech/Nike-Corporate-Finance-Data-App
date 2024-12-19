@@ -5,6 +5,7 @@ import { Badge } from "@/components/Badge"
 import { BarList } from "@/components/BarList"
 import { EbitRegion } from "@/data/ebit_data"
 import { AvailableChartColorsKeys } from "@/lib/chartUtils"
+import CountUp from "react-countup"
 
 type EbitCardProps = {
   title: string
@@ -30,14 +31,18 @@ export default function EbitCard({
     if (typeof num !== "number") return num
 
     if (type === "currency") {
-      const formattedValue = (num / 1_000).toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      return `$${formattedValue}M`
+      return (
+        <>
+          $<CountUp end={num / 1_000} duration={1} />M
+        </>
+      )
     }
 
-    return `${num.toFixed(1)}%`
+    return (
+      <>
+        <CountUp end={num} decimals={1} duration={1} />%
+      </>
+    )
   }
 
   const calculateChange = (
@@ -218,7 +223,6 @@ export default function EbitCard({
             data={filteredData}
             index="fiscal_year"
             categories={["value"]}
-            showAnimation={true}
             className="h-36"
             showYAxis={false}
             startEndOnly={true}
@@ -237,7 +241,7 @@ export default function EbitCard({
 
           <BarList
             data={barListRegionData}
-            valueFormatter={(value) => formatNumber(value, metricType)}
+            valueFormatter={(value) => formatNumber(value, metricType)} // Works properly with error
             className="mt-4 w-full text-xs"
             showAnimation={true}
             sortOrder="none"
