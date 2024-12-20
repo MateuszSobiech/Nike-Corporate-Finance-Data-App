@@ -1,6 +1,8 @@
 "use client"
 
 import { Card } from "@/components/Card"
+import { CategoryBarCard } from "@/components/CategoryBarCard"
+import { Divider } from "@/components/Divider"
 import { DonutChart } from "@/components/DonutChart"
 import { LineChart } from "@/components/LineChart"
 import {
@@ -13,6 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import {
   dataYears,
+  drProductBarCard,
   nbDistChanneLineChart,
   nbDistChannelDonut,
   nbProductLineChart,
@@ -111,6 +114,12 @@ export default function RevenueCoR() {
     Corporate: "bg-gray-900 dark:bg-gray-100",
   }
 
+  const colorMapping: { [key: string]: string } = {
+    "NIKE Brand": "bg-orange-500 dark:bg-orange-500",
+    Converse: "bg-gray-400 dark:bg-gray-500",
+    Corporate: "bg-gray-900 dark:bg-gray-100",
+  }
+
   const categoryProductLineColors: {
     Footwear: string
     Apparel: string
@@ -150,6 +159,67 @@ export default function RevenueCoR() {
   // Nike Brand Line Charts
   const tooltipFormatter = (value: number) => formatToMillions(value)
 
+  // Nike Inc Category Bar Cards
+  const getCategoryBarCardData = (productLine: string) => {
+    const filteredData = drProductBarCard.filter(
+      (item) =>
+        item.fiscal_year === selectedYear && item.product_line === productLine,
+    )
+
+    const total = Object.values(filteredData[0] || {}).reduce(
+      (sum, val) => (typeof val === "number" ? sum + val : sum),
+      0,
+    )
+
+    return Object.entries(filteredData[0] || {})
+      .filter(([key]) => key !== "fiscal_year" && key !== "product_line")
+      .map(([key, value]) => ({
+        title: key,
+        value: `$${((value as number) / 1_000_000).toFixed(1)}M`, // Convert to millions
+        color: colorMapping[key] || "bg-gray-500", // Default color if not found
+        percentage: (((value as number) / total) * 100).toFixed(1), // Format percentage to 1 decimal place
+      }))
+  }
+
+  const getPercentageChange = (productLine: string) => {
+    const currentYearData = drProductBarCard.find(
+      (item) =>
+        item.fiscal_year === selectedYear && item.product_line === productLine,
+    )
+    const previousYearData = drProductBarCard.find(
+      (item) =>
+        item.fiscal_year === selectedYear - 1 &&
+        item.product_line === productLine,
+    )
+
+    if (!currentYearData || !previousYearData)
+      return { change: "N/A", color: "bg-gray-500" }
+
+    const currentTotal = Object.values(currentYearData).reduce(
+      (sum, val) => (typeof val === "number" ? sum + val : sum),
+      0,
+    )
+    const previousTotal = Object.values(previousYearData).reduce(
+      (sum, val) => (typeof val === "number" ? sum + val : sum),
+      0,
+    )
+
+    const percentageChange =
+      previousTotal > 0
+        ? (((currentTotal - previousTotal) / previousTotal) * 100).toFixed(1) +
+          "%"
+        : "N/A"
+
+    const color =
+      currentTotal > previousTotal
+        ? "bg-emerald-500 dark:bg-emerald-500"
+        : "bg-red-500 dark:bg-red-500"
+
+    return { change: percentageChange, color }
+  }
+
+  const productLines = ["footwear", "apparel", "equipment", "other"]
+
   return (
     <div>
       <div className="space-y-10">
@@ -184,7 +254,7 @@ export default function RevenueCoR() {
           </div>
 
           {/* Total Nike Inc. Revenues Donut Chart */}
-          <Card className="mt-6 p-10">
+          <Card className="mt-6 px-6">
             <div>
               <h3 className="mt-0 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} NIKE Inc. Revenue Breakdown
@@ -245,6 +315,73 @@ export default function RevenueCoR() {
                 </div>
               </div>
             </div>
+
+            <Divider />
+            {/* Disagreagation of Revenues */}
+            <section>
+              <div className="grid grid-cols-1">
+                <h3 className="mb-4 text-base font-medium text-gray-900 dark:text-gray-300">
+                  Disaggregation of FY{selectedYear} NIKE Inc. Revenue
+                </h3>
+                <Tabs defaultValue="tab1">
+                  <TabsList variant="solid">
+                    <TabsTrigger value="tab1">by Product Line</TabsTrigger>
+                    <TabsTrigger value="tab2">
+                      by Distribution Channel
+                    </TabsTrigger>
+                  </TabsList>
+                  <div>
+                    <TabsContent
+                      value="tab1"
+                      className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                    >
+                      <div className="mt-10 grid grid-cols-4 gap-14">
+                        {productLines.map((productLine) => {
+                          const cardData = getCategoryBarCardData(productLine)
+                          const { change, color } =
+                            getPercentageChange(productLine)
+
+                          return (
+                            <CategoryBarCard
+                              key={productLine}
+                              title={
+                                productLine.charAt(0).toUpperCase() +
+                                productLine.slice(1)
+                              }
+                              change={change}
+                              changeBadgeClassName={color}
+                              value={
+                                `$` +
+                                cardData
+                                  .reduce(
+                                    (sum, item) =>
+                                      sum +
+                                      (parseFloat(
+                                        item.value
+                                          .replace("$", "")
+                                          .replace("M", ""),
+                                      ) || 0), // Ensure fallback to 0 if parsing fails
+                                    0,
+                                  )
+                                  .toFixed(1) +
+                                "M"
+                              }
+                              data={cardData}
+                            />
+                          )
+                        })}
+                      </div>
+                    </TabsContent>
+                    <TabsContent
+                      value="tab2"
+                      className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                    >
+                      <div>Dist channel</div>
+                    </TabsContent>
+                  </div>
+                </Tabs>
+              </div>
+            </section>
           </Card>
 
           {/* NIKE Brand Revenue Highlights */}
@@ -658,13 +795,6 @@ export default function RevenueCoR() {
                 </div>
               </Tabs>
             </Card>
-          </div>
-
-          {/* Disagreagation of Revenues */}
-          <div>
-            <h3 className="mt-6 text-lg font-medium text-gray-900 dark:text-gray-300">
-              Disagregation of Revenues
-            </h3>
           </div>
         </section>
 

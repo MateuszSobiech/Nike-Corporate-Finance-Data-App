@@ -787,3 +787,206 @@ export const nbDistChanneLineChart: {
     "NIKE Direct": 21519000,
   },
 ]
+
+export const drProductBarCard: {
+  fiscal_year: number
+  product_line: string
+  "NIKE Brand": number
+  Converse: number
+  Corporate: number
+}[] = [
+  {
+    fiscal_year: 2019,
+    product_line: "footwear",
+    "NIKE Brand": 24222000,
+    Converse: 1658000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2019,
+    product_line: "apparel",
+    "NIKE Brand": 11550000,
+    Converse: 118000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2019,
+    product_line: "equipment",
+    "NIKE Brand": 1404000,
+    Converse: 24000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2019,
+    product_line: "other",
+    "NIKE Brand": 42000,
+    Converse: 106000,
+    Corporate: -7000,
+  },
+  {
+    fiscal_year: 2020,
+    product_line: "footwear",
+    "NIKE Brand": 23305000,
+    Converse: 1642000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2020,
+    product_line: "apparel",
+    "NIKE Brand": 10953000,
+    Converse: 89000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2020,
+    product_line: "equipment",
+    "NIKE Brand": 1280000,
+    Converse: 25000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2020,
+    product_line: "other",
+    "NIKE Brand": 30000,
+    Converse: 90000,
+    Corporate: -11000,
+  },
+  {
+    fiscal_year: 2021,
+    product_line: "footwear",
+    "NIKE Brand": 28021000,
+    Converse: 1986000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2021,
+    product_line: "apparel",
+    "NIKE Brand": 12865000,
+    Converse: 104000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2021,
+    product_line: "equipment",
+    "NIKE Brand": 1382000,
+    Converse: 29000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2021,
+    product_line: "other",
+    "NIKE Brand": 25000,
+    Converse: 86000,
+    Corporate: 40000,
+  },
+  {
+    fiscal_year: 2022,
+    product_line: "footwear",
+    "NIKE Brand": 29143000,
+    Converse: 2094000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2022,
+    product_line: "apparel",
+    "NIKE Brand": 13567000,
+    Converse: 103000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2022,
+    product_line: "equipment",
+    "NIKE Brand": 1624000,
+    Converse: 26000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2022,
+    product_line: "other",
+    "NIKE Brand": 102000,
+    Converse: 123000,
+    Corporate: -72000,
+  },
+  {
+    fiscal_year: 2023,
+    product_line: "footwear",
+    "NIKE Brand": 33135000,
+    Converse: 2155000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2023,
+    product_line: "apparel",
+    "NIKE Brand": 13843000,
+    Converse: 90000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2023,
+    product_line: "equipment",
+    "NIKE Brand": 1727000,
+    Converse: 28000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2023,
+    product_line: "other",
+    "NIKE Brand": 58000,
+    Converse: 154000,
+    Corporate: 27000,
+  },
+  {
+    fiscal_year: 2024,
+    product_line: "footwear",
+    "NIKE Brand": 33427000,
+    Converse: 1800000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2024,
+    product_line: "apparel",
+    "NIKE Brand": 13775000,
+    Converse: 93000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2024,
+    product_line: "equipment",
+    "NIKE Brand": 2075000,
+    Converse: 37000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2024,
+    product_line: "other",
+    "NIKE Brand": 45000,
+    Converse: 152000,
+    Corporate: -42000,
+  },
+]
+
+export type KpiEntryExtended = {
+  value: string
+  color: string
+}
+
+export const data3: KpiEntryExtended[] = [
+  {
+    title: "NIKE Brand",
+    percentage: 68.1,
+    value: "$200",
+    color: "bg-orange-500 dark:bg-orange-500",
+  },
+  {
+    title: "Converse",
+    percentage: 20.8,
+    value: "$61.1",
+    color: "bg-gray-400 dark:bg-gray-500",
+  },
+  {
+    title: "Corporate",
+    percentage: 11.1,
+    value: "$31.9",
+    color: "bg-gray-900 dark:bg-gray-100",
+  },
+]
