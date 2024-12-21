@@ -15,6 +15,18 @@ export const chartColors = {
     fill: "fill-orange-500",
     text: "text-orange-500",
   },
+  lightOrange: {
+    bg: "bg-orange-300 dark:bg-orange-300",
+    stroke: "stroke-orange-300 dark:stroke-orange-300",
+    fill: "fill-orange-300 dark:fill-orange-300",
+    text: "text-orange-300 dark:text-orange-300",
+  },
+  darkOrange: {
+    bg: "bg-orange-500 dark:bg-orange-500",
+    stroke: "stroke-orange-500 dark:stroke-orange-500",
+    fill: "fill-orange-500 dark:fill-orange-500",
+    text: "text-orange-500 dark:text-orange-500",
+  },
   blue: {
     bg: "bg-blue-500",
     stroke: "stroke-blue-500",
@@ -50,6 +62,18 @@ export const chartColors = {
     stroke: "stroke-gray-500",
     fill: "fill-gray-500",
     text: "text-gray-500",
+  },
+  lightGray: {
+    bg: "bg-gray-400 dark:bg-gray-500",
+    stroke: "stroke-gray-400 dark:stroke-gray-500",
+    fill: "fill-gray-400 dark:fill-gray-500",
+    text: "text-gray-400 dark:text-gray-500",
+  },
+  darkGray: {
+    bg: "bg-gray-900 dark:bg-gray-100",
+    stroke: "stroke-gray-900 dark:stroke-gray-100",
+    fill: "fill-gray-900 dark:fill-gray-100",
+    text: "text-gray-900 dark:text-gray-100",
   },
   cyan: {
     bg: "bg-cyan-500",

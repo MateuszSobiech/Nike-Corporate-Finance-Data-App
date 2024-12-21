@@ -1,4 +1,4 @@
-// Tremor LineChart [v0.3.2]
+// Tremor BarChart [v0.2.1]
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client"
@@ -6,12 +6,11 @@
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react"
 import React from "react"
 import {
+  Bar,
   CartesianGrid,
-  Dot,
   Label,
-  Line,
+  BarChart as RechartsBarChart,
   Legend as RechartsLegend,
-  LineChart as RechartsLineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -25,10 +24,69 @@ import {
   constructCategoryColors,
   getColorClassName,
   getYAxisDomain,
-  hasOnlyOneValueForKey,
 } from "@/lib/chartUtils"
 import { useOnWindowResize } from "@/lib/useOnWindowResize"
 import { cx } from "@/lib/utils"
+
+//#region Shape
+
+function deepEqual<T>(obj1: T, obj2: T): boolean {
+  if (obj1 === obj2) return true
+
+  if (
+    typeof obj1 !== "object" ||
+    typeof obj2 !== "object" ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return false
+  }
+
+  const keys1 = Object.keys(obj1) as Array<keyof T>
+  const keys2 = Object.keys(obj2) as Array<keyof T>
+
+  if (keys1.length !== keys2.length) return false
+
+  for (const key of keys1) {
+    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) return false
+  }
+
+  return true
+}
+
+const renderShape = (
+  props: any,
+  activeBar: any | undefined,
+  activeLegend: string | undefined,
+  layout: string,
+) => {
+  const { fillOpacity, name, payload, value } = props
+  let { x, width, y, height } = props
+
+  if (layout === "horizontal" && height < 0) {
+    y += height
+    height = Math.abs(height) // height must be a positive number
+  } else if (layout === "vertical" && width < 0) {
+    x += width
+    width = Math.abs(width) // width must be a positive number
+  }
+
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      opacity={
+        activeBar || (activeLegend && activeLegend !== name)
+          ? deepEqual(activeBar, { ...payload, value })
+            ? fillOpacity
+            : 0.3
+          : fillOpacity
+      }
+    />
+  )
+}
 
 //#region Legend
 
@@ -62,7 +120,7 @@ const LegendItem = ({
     >
       <span
         className={cx(
-          "h-[3px] w-3.5 shrink-0 rounded-full",
+          "size-2 shrink-0 rounded-sm",
           getColorClassName(color, "bg"),
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
         )}
@@ -332,25 +390,27 @@ const ChartLegend = (
     setLegendHeight(calculateHeight(legendRef.current?.clientHeight))
   })
 
-  const legendPayload = payload.filter((item: any) => item.type !== "none")
+  const filteredPayload = payload.filter((item: any) => item.type !== "none")
 
   const paddingLeft =
     legendPosition === "left" && yAxisWidth ? yAxisWidth - 8 : 0
 
   return (
     <div
-      ref={legendRef}
       style={{ paddingLeft: paddingLeft }}
+      ref={legendRef}
       className={cx(
         "flex items-center",
         { "justify-center": legendPosition === "center" },
-        { "justify-start": legendPosition === "left" },
+        {
+          "justify-start": legendPosition === "left",
+        },
         { "justify-end": legendPosition === "right" },
       )}
     >
       <Legend
-        categories={legendPayload.map((entry: any) => entry.value)}
-        colors={legendPayload.map((entry: any) =>
+        categories={filteredPayload.map((entry: any) => entry.value)}
+        colors={filteredPayload.map((entry: any) =>
           categoryColors.get(entry.value),
         )}
         onClickLegendItem={onClick}
@@ -388,7 +448,6 @@ const ChartTooltip = ({
   valueFormatter,
 }: ChartTooltipProps) => {
   if (active && payload && payload.length) {
-    const legendPayload = payload.filter((item: any) => item.type !== "none")
     return (
       <div
         className={cx(
@@ -413,7 +472,7 @@ const ChartTooltip = ({
           </p>
         </div>
         <div className={cx("space-y-1 px-4 py-2")}>
-          {legendPayload.map(({ value, category, color }, index) => (
+          {payload.map(({ value, category, color }, index) => (
             <div
               key={`id-${index}`}
               className="flex items-center justify-between space-x-8"
@@ -422,7 +481,7 @@ const ChartTooltip = ({
                 <span
                   aria-hidden="true"
                   className={cx(
-                    "h-[3px] w-3.5 shrink-0 rounded-full",
+                    "size-2 shrink-0 rounded-sm",
                     getColorClassName(color, "bg"),
                   )}
                 />
@@ -456,28 +515,22 @@ const ChartTooltip = ({
   return null
 }
 
-//#region LineChart
-
-interface ActiveDot {
-  index?: number
-  dataKey?: string
-}
+//#region BarChart
 
 type BaseEventProps = {
-  eventType: "dot" | "category"
+  eventType: "category" | "bar"
   categoryClicked: string
   [key: string]: number | string
 }
 
-type LineChartEventProps = BaseEventProps | null | undefined
+type BarChartEventProps = BaseEventProps | null | undefined
 
-interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   data: Record<string, any>[]
   index: string
   categories: string[]
   colors?: AvailableChartColorsKeys[]
   valueFormatter?: (value: number) => string
-  valueTooltipFormatter?: (value: number) => string
   startEndOnly?: boolean
   showXAxis?: boolean
   showYAxis?: boolean
@@ -490,26 +543,27 @@ interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   minValue?: number
   maxValue?: number
   allowDecimals?: boolean
-  onValueChange?: (value: LineChartEventProps) => void
+  onValueChange?: (value: BarChartEventProps) => void
   enableLegendSlider?: boolean
   tickGap?: number
-  connectNulls?: boolean
+  barCategoryGap?: string | number
   xAxisLabel?: string
   yAxisLabel?: string
+  layout?: "vertical" | "horizontal"
+  type?: "default" | "stacked" | "percent"
   legendPosition?: "left" | "center" | "right"
   tooltipCallback?: (tooltipCallbackContent: TooltipProps) => void
   customTooltip?: React.ComponentType<TooltipProps>
 }
 
-const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
-  (props, ref) => {
+const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
+  (props, forwardedRef) => {
     const {
       data = [],
       categories = [],
       index,
       colors = AvailableChartColors,
       valueFormatter = (value: number) => value.toString(),
-      valueTooltipFormatter,
       startEndOnly = false,
       showXAxis = true,
       showYAxis = true,
@@ -522,13 +576,14 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       minValue,
       maxValue,
       allowDecimals = true,
-      connectNulls = false,
       className,
       onValueChange,
       enableLegendSlider = false,
+      barCategoryGap,
       tickGap = 5,
       xAxisLabel,
       yAxisLabel,
+      layout = "horizontal",
       type = "default",
       legendPosition = "right",
       tooltipCallback,
@@ -539,16 +594,15 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
     const paddingValue =
       (!showXAxis && !showYAxis) || (startEndOnly && !showYAxis) ? 0 : 20
     const [legendHeight, setLegendHeight] = React.useState(60)
-    const [activeDot, setActiveDot] = React.useState<ActiveDot | undefined>(
-      undefined,
-    )
     const [activeLegend, setActiveLegend] = React.useState<string | undefined>(
       undefined,
     )
     const categoryColors = constructCategoryColors(categories, colors)
-
+    const [activeBar, setActiveBar] = React.useState<any | undefined>(undefined)
     const yAxisDomain = getYAxisDomain(autoMinValue, minValue, maxValue)
     const hasOnValueChange = !!onValueChange
+    const stacked = type === "stacked" || type === "percent"
+
     const prevActiveRef = React.useRef<boolean | undefined>(undefined)
     const prevLabelRef = React.useRef<string | undefined>(undefined)
 
@@ -556,42 +610,30 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       return `${(value * 100).toFixed(0)}%`
     }
 
-    function onDotClick(itemData: any, event: React.MouseEvent) {
+    function onBarClick(data: any, _: any, event: React.MouseEvent) {
       event.stopPropagation()
-
-      if (!hasOnValueChange) return
-      if (
-        (itemData.index === activeDot?.index &&
-          itemData.dataKey === activeDot?.dataKey) ||
-        (hasOnlyOneValueForKey(data, itemData.dataKey) &&
-          activeLegend &&
-          activeLegend === itemData.dataKey)
-      ) {
+      if (!onValueChange) return
+      if (deepEqual(activeBar, { ...data.payload, value: data.value })) {
         setActiveLegend(undefined)
-        setActiveDot(undefined)
+        setActiveBar(undefined)
         onValueChange?.(null)
       } else {
-        setActiveLegend(itemData.dataKey)
-        setActiveDot({
-          index: itemData.index,
-          dataKey: itemData.dataKey,
+        setActiveLegend(data.tooltipPayload?.[0]?.dataKey)
+        setActiveBar({
+          ...data.payload,
+          value: data.value,
         })
         onValueChange?.({
-          eventType: "dot",
-          categoryClicked: itemData.dataKey,
-          ...itemData.payload,
+          eventType: "bar",
+          categoryClicked: data.tooltipPayload?.[0]?.dataKey,
+          ...data.payload,
         })
       }
     }
 
     function onCategoryClick(dataKey: string) {
       if (!hasOnValueChange) return
-      if (
-        (dataKey === activeLegend && !activeDot) ||
-        (hasOnlyOneValueForKey(data, dataKey) &&
-          activeDot &&
-          activeDot.dataKey === dataKey)
-      ) {
+      if (dataKey === activeLegend && !activeBar) {
         setActiveLegend(undefined)
         onValueChange?.(null)
       } else {
@@ -601,23 +643,23 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           categoryClicked: dataKey,
         })
       }
-      setActiveDot(undefined)
+      setActiveBar(undefined)
     }
 
     return (
       <div
-        ref={ref}
+        ref={forwardedRef}
         className={cx("h-80 w-full", className)}
         tremor-id="tremor-raw"
         {...other}
       >
         <ResponsiveContainer>
-          <RechartsLineChart
+          <RechartsBarChart
             data={data}
             onClick={
-              hasOnValueChange && (activeLegend || activeDot)
+              hasOnValueChange && (activeLegend || activeBar)
                 ? () => {
-                    setActiveDot(undefined)
+                    setActiveBar(undefined)
                     setActiveLegend(undefined)
                     onValueChange?.(null)
                   }
@@ -629,25 +671,23 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               right: yAxisLabel ? 5 : undefined,
               top: 5,
             }}
+            stackOffset={type === "percent" ? "expand" : undefined}
+            layout={layout}
+            barCategoryGap={barCategoryGap}
           >
             {showGridLines ? (
               <CartesianGrid
                 className={cx("stroke-gray-200 stroke-1 dark:stroke-gray-800")}
-                horizontal={true}
-                vertical={false}
+                horizontal={layout !== "vertical"}
+                vertical={layout === "vertical"}
               />
             ) : null}
             <XAxis
-              padding={{ left: paddingValue, right: paddingValue }}
               hide={!showXAxis}
-              dataKey={index}
-              interval={startEndOnly ? "preserveStartEnd" : intervalType}
-              tick={{ transform: "translate(0, 6)" }}
-              ticks={
-                startEndOnly
-                  ? [data[0][index], data[data.length - 1][index]]
-                  : undefined
-              }
+              tick={{
+                transform:
+                  layout !== "vertical" ? "translate(0, 6)" : undefined,
+              }}
               fill=""
               stroke=""
               className={cx(
@@ -655,10 +695,30 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 "text-xs",
                 // text fill
                 "fill-gray-500 dark:fill-gray-500",
+                { "mt-4": layout !== "vertical" },
               )}
               tickLine={false}
               axisLine={false}
               minTickGap={tickGap}
+              {...(layout !== "vertical"
+                ? {
+                    padding: {
+                      left: paddingValue,
+                      right: paddingValue,
+                    },
+                    dataKey: index,
+                    interval: startEndOnly ? "preserveStartEnd" : intervalType,
+                    ticks: startEndOnly
+                      ? [data[0][index], data[data.length - 1][index]]
+                      : undefined,
+                  }
+                : {
+                    type: "number",
+                    domain: yAxisDomain as AxisDomain,
+                    tickFormatter:
+                      type === "percent" ? valueToPercent : valueFormatter,
+                    allowDecimals: allowDecimals,
+                  })}
             >
               {xAxisLabel && (
                 <Label
@@ -675,9 +735,6 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               hide={!showYAxis}
               axisLine={false}
               tickLine={false}
-              type="number"
-              domain={yAxisDomain as AxisDomain}
-              tick={{ transform: "translate(-3, 0)" }}
               fill=""
               stroke=""
               className={cx(
@@ -686,10 +743,28 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 // text fill
                 "fill-gray-500 dark:fill-gray-500",
               )}
-              tickFormatter={
-                type === "percent" ? valueToPercent : valueFormatter
-              }
-              allowDecimals={allowDecimals}
+              tick={{
+                transform:
+                  layout !== "vertical"
+                    ? "translate(-3, 0)"
+                    : "translate(0, 0)",
+              }}
+              {...(layout !== "vertical"
+                ? {
+                    type: "number",
+                    domain: yAxisDomain as AxisDomain,
+                    tickFormatter:
+                      type === "percent" ? valueToPercent : valueFormatter,
+                    allowDecimals: allowDecimals,
+                  }
+                : {
+                    dataKey: index,
+                    ticks: startEndOnly
+                      ? [data[0][index], data[data.length - 1][index]]
+                      : undefined,
+                    type: "category",
+                    interval: "equidistantPreserveStart",
+                  })}
             >
               {yAxisLabel && (
                 <Label
@@ -707,9 +782,12 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               wrapperStyle={{ outline: "none" }}
               isAnimationActive={true}
               animationDuration={100}
-              cursor={{ stroke: "#d1d5db", strokeWidth: 1 }}
+              cursor={{ fill: "#d1d5db", opacity: "0.15" }}
               offset={20}
-              position={{ y: 0 }}
+              position={{
+                y: layout === "horizontal" ? 0 : undefined,
+                x: layout === "horizontal" ? undefined : yAxisWidth + 20,
+              }}
               content={({ active, payload, label }) => {
                 const cleanPayload: TooltipProps["payload"] = payload
                   ? payload.map((item: any) => ({
@@ -746,13 +824,12 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                       active={active}
                       payload={cleanPayload}
                       label={label}
-                      valueFormatter={valueTooltipFormatter || valueFormatter}
+                      valueFormatter={valueFormatter}
                     />
                   )
                 ) : null
               }}
             />
-
             {showLegend ? (
               <RechartsLegend
                 verticalAlign="top"
@@ -775,142 +852,34 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               />
             ) : null}
             {categories.map((category) => (
-              <Line
+              <Bar
                 className={cx(
                   getColorClassName(
                     categoryColors.get(category) as AvailableChartColorsKeys,
-                    "stroke",
+                    "fill",
                   ),
+                  onValueChange ? "cursor-pointer" : "",
                 )}
-                strokeOpacity={
-                  activeDot || (activeLegend && activeLegend !== category)
-                    ? 0.3
-                    : 1
-                }
-                activeDot={(props: any) => {
-                  const {
-                    cx: cxCoord,
-                    cy: cyCoord,
-                    stroke,
-                    strokeLinecap,
-                    strokeLinejoin,
-                    strokeWidth,
-                    dataKey,
-                  } = props
-                  return (
-                    <Dot
-                      className={cx(
-                        "stroke-white dark:stroke-gray-950",
-                        onValueChange ? "cursor-pointer" : "",
-                        getColorClassName(
-                          categoryColors.get(
-                            dataKey,
-                          ) as AvailableChartColorsKeys,
-                          "fill",
-                        ),
-                      )}
-                      cx={cxCoord}
-                      cy={cyCoord}
-                      r={5}
-                      fill=""
-                      stroke={stroke}
-                      strokeLinecap={strokeLinecap}
-                      strokeLinejoin={strokeLinejoin}
-                      strokeWidth={strokeWidth}
-                      onClick={(_, event) => onDotClick(props, event)}
-                    />
-                  )
-                }}
-                dot={(props: any) => {
-                  const {
-                    stroke,
-                    strokeLinecap,
-                    strokeLinejoin,
-                    strokeWidth,
-                    cx: cxCoord,
-                    cy: cyCoord,
-                    dataKey,
-                    index,
-                  } = props
-
-                  if (
-                    (hasOnlyOneValueForKey(data, category) &&
-                      !(
-                        activeDot ||
-                        (activeLegend && activeLegend !== category)
-                      )) ||
-                    (activeDot?.index === index &&
-                      activeDot?.dataKey === category)
-                  ) {
-                    return (
-                      <Dot
-                        key={index}
-                        cx={cxCoord}
-                        cy={cyCoord}
-                        r={5}
-                        stroke={stroke}
-                        fill=""
-                        strokeLinecap={strokeLinecap}
-                        strokeLinejoin={strokeLinejoin}
-                        strokeWidth={strokeWidth}
-                        className={cx(
-                          "stroke-white dark:stroke-gray-950",
-                          onValueChange ? "cursor-pointer" : "",
-                          getColorClassName(
-                            categoryColors.get(
-                              dataKey,
-                            ) as AvailableChartColorsKeys,
-                            "fill",
-                          ),
-                        )}
-                      />
-                    )
-                  }
-                  return <React.Fragment key={index}></React.Fragment>
-                }}
                 key={category}
                 name={category}
                 type="linear"
                 dataKey={category}
-                stroke=""
-                strokeWidth={2}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                isAnimationActive={true}
-                connectNulls={connectNulls}
+                stackId={stacked ? "stack" : undefined}
+                isAnimationActive={false}
+                fill=""
+                shape={(props: any) =>
+                  renderShape(props, activeBar, activeLegend, layout)
+                }
+                onClick={onBarClick}
               />
             ))}
-            {/* hidden lines to increase clickable target area */}
-            {onValueChange
-              ? categories.map((category) => (
-                  <Line
-                    className={cx("cursor-pointer")}
-                    strokeOpacity={0}
-                    key={category}
-                    name={category}
-                    type="linear"
-                    dataKey={category}
-                    stroke="transparent"
-                    fill="transparent"
-                    legendType="none"
-                    tooltipType="none"
-                    strokeWidth={12}
-                    connectNulls={connectNulls}
-                    onClick={(props: any, event) => {
-                      event.stopPropagation()
-                      const { name } = props
-                      onCategoryClick(name)
-                    }}
-                  />
-                ))
-              : null}
-          </RechartsLineChart>
+          </RechartsBarChart>
         </ResponsiveContainer>
       </div>
     )
   },
 )
 
-LineChart.displayName = "LineChart"
+BarChart.displayName = "BarChart"
 
-export { LineChart, type LineChartEventProps, type TooltipProps }
+export { BarChart, type BarChartEventProps, type TooltipProps }

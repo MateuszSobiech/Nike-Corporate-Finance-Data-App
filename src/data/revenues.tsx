@@ -965,6 +965,141 @@ export const drProductBarCard: {
   },
 ]
 
+export const drChannelBarCard: {
+  fiscal_year: number
+  product_line: string
+  "NIKE Brand": number
+  Converse: number
+  Corporate: number
+}[] = [
+  {
+    fiscal_year: 2019,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 25423000,
+    Converse: 1247000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2019,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 11753000,
+    Converse: 553000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2019,
+    dist_channel: "Other",
+    "NIKE Brand": 42000,
+    Converse: 106000,
+    Corporate: -7000,
+  },
+  {
+    fiscal_year: 2020,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 23156000,
+    Converse: 1154000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2020,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 12382000,
+    Converse: 602000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2020,
+    dist_channel: "Other",
+    "NIKE Brand": 30000,
+    Converse: 90000,
+    Corporate: -11000,
+  },
+  {
+    fiscal_year: 2021,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 25898000,
+    Converse: 1353000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2021,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 16370000,
+    Converse: 766000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2021,
+    dist_channel: "Other",
+    "NIKE Brand": 25000,
+    Converse: 86000,
+    Corporate: 40000,
+  },
+  {
+    fiscal_year: 2022,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 25608000,
+    Converse: 1292000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2022,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 18726000,
+    Converse: 931000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2022,
+    dist_channel: "Other",
+    "NIKE Brand": 102000,
+    Converse: 123000,
+    Corporate: -72000,
+  },
+  {
+    fiscal_year: 2023,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 27397000,
+    Converse: 1299000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2023,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 21308000,
+    Converse: 974000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2023,
+    dist_channel: "Other",
+    "NIKE Brand": 58000,
+    Converse: 154000,
+    Corporate: 27000,
+  },
+  {
+    fiscal_year: 2024,
+    dist_channel: "Wholesale",
+    "NIKE Brand": 27758000,
+    Converse: 1098000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2024,
+    dist_channel: "NIKE Direct",
+    "NIKE Brand": 21519000,
+    Converse: 832000,
+    Corporate: 0,
+  },
+  {
+    fiscal_year: 2024,
+    dist_channel: "Other",
+    "NIKE Brand": 45000,
+    Converse: 152000,
+    Corporate: -42000,
+  },
+]
+
 export type KpiEntryExtended = {
   value: string
   color: string
@@ -973,20 +1108,71 @@ export type KpiEntryExtended = {
 export const data3: KpiEntryExtended[] = [
   {
     title: "NIKE Brand",
-    percentage: 68.1,
-    value: "$200",
     color: "bg-orange-500 dark:bg-orange-500",
   },
   {
     title: "Converse",
-    percentage: 20.8,
-    value: "$61.1",
     color: "bg-gray-400 dark:bg-gray-500",
   },
   {
     title: "Corporate",
-    percentage: 11.1,
-    value: "$31.9",
     color: "bg-gray-900 dark:bg-gray-100",
+  },
+]
+
+export const reveneueCostOfRevenueData: {
+  fiscal_year: number
+  "Gross Profit": number
+  "Cost of Sales": number
+}[] = [
+  {
+    fiscal_year: 2015,
+    "Gross Profit": 30601,
+    "Cost of Sales": 16534,
+  },
+  {
+    fiscal_year: 2016,
+    "Gross Profit": 32376,
+    "Cost of Sales": 17405,
+  },
+  {
+    fiscal_year: 2017,
+    "Gross Profit": 34350,
+    "Cost of Sales": 19038,
+  },
+  {
+    fiscal_year: 2018,
+    "Gross Profit": 36397,
+    "Cost of Sales": 20441,
+  },
+  {
+    fiscal_year: 2019,
+    "Gross Profit": 39117,
+    "Cost of Sales": 21643,
+  },
+  {
+    fiscal_year: 2020,
+    "Gross Profit": 37403,
+    "Cost of Sales": 21162,
+  },
+  {
+    fiscal_year: 2021,
+    "Gross Profit": 44538,
+    "Cost of Sales": 24576,
+  },
+  {
+    fiscal_year: 2022,
+    "Gross Profit": 46710,
+    "Cost of Sales": 25231,
+  },
+  {
+    fiscal_year: 2023,
+    "Gross Profit": 51217,
+    "Cost of Sales": 28925,
+  },
+  {
+    fiscal_year: 2024,
+    "Gross Profit": 51362,
+    "Cost of Sales": 28475,
   },
 ]

@@ -79,7 +79,7 @@ export default function ExecutiveSummary() {
           </div>
         </section>
         <section id="ebit">
-          <div className="sticky top-16 z-20 mt-14 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 sm:pt-4 lg:top-0 lg:mx-0 lg:px-0 lg:pt-4 dark:border-gray-800 dark:bg-gray-950">
+          <div className="sticky top-0 z-20 mt-14 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 dark:border-gray-800 dark:bg-gray-950">
             <h2 className="flex scroll-mt-8 items-end text-lg font-semibold text-gray-900 dark:text-gray-50">
               EBIT Performance Overview
             </h2>
@@ -110,7 +110,7 @@ export default function ExecutiveSummary() {
             </div>
           </div>
 
-          <div className="mt-6 grid w-full grid-cols-3 gap-14">
+          <div className="mt-10 grid w-full grid-cols-3 gap-20">
             <EbitCard
               title="EBIT"
               value={getFilteredData(Ebit)[0]?.value || 0}

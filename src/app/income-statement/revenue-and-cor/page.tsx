@@ -1,5 +1,6 @@
 "use client"
 
+import { BarChart } from "@/components/BarChart"
 import { Card } from "@/components/Card"
 import { CategoryBarCard } from "@/components/CategoryBarCard"
 import { Divider } from "@/components/Divider"
@@ -15,6 +16,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import {
   dataYears,
+  drChannelBarCard,
   drProductBarCard,
   nbDistChanneLineChart,
   nbDistChannelDonut,
@@ -22,6 +24,7 @@ import {
   nbProductLineDonut,
   nbRegionDonut,
   nbRegionLineChart,
+  reveneueCostOfRevenueData,
   revenuesDonut,
 } from "@/data/revenues"
 import { useMemo, useState } from "react"
@@ -62,6 +65,11 @@ export default function RevenueCoR() {
   const totalRevenue = useMemo(
     () => filteredData.reduce((sum, item) => sum + item.value, 0),
     [filteredData],
+  )
+
+  // Cost of Revenues Bar Chart Data
+  const filteredCoRBarChartData = reveneueCostOfRevenueData.filter(
+    (item) => item.fiscal_year <= selectedYear,
   )
 
   // Filter data for NIKE Brand only
@@ -181,53 +189,111 @@ export default function RevenueCoR() {
       }))
   }
 
-  const getPercentageChange = (productLine: string) => {
-    const currentYearData = drProductBarCard.find(
-      (item) =>
-        item.fiscal_year === selectedYear && item.product_line === productLine,
-    )
-    const previousYearData = drProductBarCard.find(
-      (item) =>
-        item.fiscal_year === selectedYear - 1 &&
-        item.product_line === productLine,
+  const getPercentageShare = (productLine: string) => {
+    const currentYearData = drProductBarCard.filter(
+      (item) => item.fiscal_year === selectedYear,
     )
 
-    if (!currentYearData || !previousYearData)
-      return { change: "N/A", color: "bg-gray-500" }
+    const productLineData = currentYearData.find(
+      (item) => item.product_line === productLine,
+    )
 
-    const currentTotal = Object.values(currentYearData).reduce(
+    if (!currentYearData.length || !productLineData)
+      return { share: "N/A", color: "bg-gray-500" }
+
+    const totalRevenue = currentYearData.reduce(
+      (sum, item) =>
+        sum +
+        Object.values(item).reduce(
+          (innerSum, val) =>
+            typeof val === "number" ? innerSum + val : innerSum,
+          0,
+        ),
+      0,
+    )
+
+    const productLineTotal = Object.values(productLineData).reduce(
       (sum, val) => (typeof val === "number" ? sum + val : sum),
       0,
     )
-    const previousTotal = Object.values(previousYearData).reduce(
-      (sum, val) => (typeof val === "number" ? sum + val : sum),
-      0,
-    )
 
-    const percentageChange =
-      previousTotal > 0
-        ? (((currentTotal - previousTotal) / previousTotal) * 100).toFixed(1) +
-          "%"
+    const percentageShare =
+      totalRevenue > 0
+        ? ((productLineTotal / totalRevenue) * 100).toFixed(1) + "%"
         : "N/A"
 
-    const color =
-      currentTotal > previousTotal
-        ? "bg-emerald-500 dark:bg-emerald-500"
-        : "bg-red-500 dark:bg-red-500"
-
-    return { change: percentageChange, color }
+    return { share: percentageShare }
   }
 
   const productLines = ["footwear", "apparel", "equipment", "other"]
+
+  const getCategoryBarCardDataForChannel = (channel: string) => {
+    const filteredChannelData = drChannelBarCard.find(
+      (item) =>
+        item.fiscal_year === selectedYear && item.dist_channel === channel,
+    )
+
+    if (!filteredChannelData) return []
+
+    const total = Object.values(filteredChannelData)
+      .filter((val) => typeof val === "number")
+      .reduce((sum, val) => sum + val, 0)
+
+    return Object.entries(filteredChannelData)
+      .filter(([key]) => key !== "fiscal_year" && key !== "dist_channel") // Exclude irrelevant fields
+      .map(([key, value]) => ({
+        title: key,
+        value: `$${((value as number) / 1_000_000).toFixed(1)}M`, // Convert to millions
+        color: colorMapping[key] || "bg-gray-500", // Default color if not found
+        percentage: (((value as number) / total) * 100).toFixed(1), // Format percentage to 1 decimal place
+      }))
+  }
+
+  const getPercentageShareForChannel = (channel: string) => {
+    const yearData = drChannelBarCard.filter(
+      (item) => item.fiscal_year === selectedYear,
+    )
+
+    if (!yearData.length) return { share: "N/A", color: "bg-gray-500" }
+
+    const totalRevenue = yearData.reduce(
+      (sum, item) =>
+        sum +
+        Object.values(item)
+          .filter((val) => typeof val === "number")
+          .reduce((subSum, val) => subSum + val, 0),
+      0,
+    )
+
+    const channelData = yearData.find((item) => item.dist_channel === channel)
+
+    const channelTotal = channelData
+      ? Object.values(channelData)
+          .filter((val) => typeof val === "number")
+          .reduce((sum, val) => sum + val, 0)
+      : 0
+
+    const percentageShare =
+      totalRevenue > 0
+        ? ((channelTotal / totalRevenue) * 100).toFixed(1) + "%"
+        : "N/A"
+
+    const color =
+      percentageShare !== "N/A" && parseFloat(percentageShare) >= 50
+        ? "bg-emerald-500 dark:bg-emerald-500"
+        : "bg-red-500 dark:bg-red-500"
+
+    return { share: percentageShare, color }
+  }
 
   return (
     <div>
       <div className="space-y-10">
         {/* Revenues Section */}
         <section>
-          <div className="sticky top-16 z-20 mt-4 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 dark:border-gray-800 dark:bg-gray-950">
+          <div className="sticky top-0 z-20 mt-4 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 dark:border-gray-800 dark:bg-gray-950">
             <h2 className="flex scroll-mt-8 items-end text-lg font-semibold text-gray-900 dark:text-gray-50">
-              Revenues Highlights
+              Revenues & CoR Highlights
             </h2>
             <div className="flex items-center">
               <div className="w-40">
@@ -259,7 +325,7 @@ export default function RevenueCoR() {
               <h3 className="mt-0 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} NIKE Inc. Revenue Breakdown
               </h3>
-              <div className="flex-end flex flex-row justify-between">
+              <div className="flex flex-row items-end justify-between">
                 <div className="flex flex-row">
                   <DonutChart
                     data={filteredData.map((item) => ({
@@ -269,13 +335,14 @@ export default function RevenueCoR() {
                           item.name as keyof typeof categoryColors
                         ] || "bg-gray-500",
                     }))}
+                    colors={["orange", "lightGray", "darkGray"]}
                     category="name"
                     value="value"
-                    className="mx-auto mt-8 h-24 w-24"
+                    className="mx-auto mt-8 h-32 w-32"
                     showTooltip={false}
                   />
                   <div className="ml-4 flex flex-col justify-end">
-                    <p className="text-left text-lg font-semibold text-gray-900 dark:text-gray-50">
+                    <p className="text-left text-3xl font-medium text-gray-900 dark:text-gray-50">
                       {formatToMillions(totalRevenue)}
                     </p>
                     <p className="text-left text-sm font-normal text-gray-500 dark:text-gray-300">
@@ -330,6 +397,7 @@ export default function RevenueCoR() {
                       by Distribution Channel
                     </TabsTrigger>
                   </TabsList>
+
                   <div>
                     <TabsContent
                       value="tab1"
@@ -338,8 +406,7 @@ export default function RevenueCoR() {
                       <div className="mt-10 grid grid-cols-4 gap-14">
                         {productLines.map((productLine) => {
                           const cardData = getCategoryBarCardData(productLine)
-                          const { change, color } =
-                            getPercentageChange(productLine)
+                          const { share } = getPercentageShare(productLine)
 
                           return (
                             <CategoryBarCard
@@ -348,8 +415,7 @@ export default function RevenueCoR() {
                                 productLine.charAt(0).toUpperCase() +
                                 productLine.slice(1)
                               }
-                              change={change}
-                              changeBadgeClassName={color}
+                              change={share}
                               value={
                                 `$` +
                                 cardData
@@ -372,11 +438,46 @@ export default function RevenueCoR() {
                         })}
                       </div>
                     </TabsContent>
+
                     <TabsContent
                       value="tab2"
                       className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                     >
-                      <div>Dist channel</div>
+                      <div className="mt-10 grid grid-cols-3 gap-14">
+                        {["Wholesale", "NIKE Direct", "Other"].map(
+                          (channel) => {
+                            const cardData =
+                              getCategoryBarCardDataForChannel(channel)
+                            const { share } =
+                              getPercentageShareForChannel(channel)
+
+                            return (
+                              <CategoryBarCard
+                                key={channel}
+                                title={channel}
+                                change={share}
+                                value={
+                                  `$` +
+                                  cardData
+                                    .reduce(
+                                      (sum, item) =>
+                                        sum +
+                                        (parseFloat(
+                                          item.value
+                                            .replace("$", "")
+                                            .replace("M", ""),
+                                        ) || 0),
+                                      0,
+                                    )
+                                    .toFixed(1) +
+                                  "M"
+                                }
+                                data={cardData}
+                              />
+                            )
+                          },
+                        )}
+                      </div>
                     </TabsContent>
                   </div>
                 </Tabs>
@@ -389,7 +490,7 @@ export default function RevenueCoR() {
             <Card className="mt-6 px-0">
               <div className="px-6">
                 <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-                  FY{selectedYear} NIKE Brand Revenue Highlights
+                  NIKE Brand Revenue Highlights
                 </h2>
                 <p className="pb-6 text-sm text-gray-500 dark:text-gray-400">
                   The following charts provide a detailed breakdown of NIKE
@@ -450,6 +551,7 @@ export default function RevenueCoR() {
                 </div>
 
                 <div className="mt-4 px-6">
+                  {/* Nike Brand Revenues by Product Line */}
                   <TabsContent
                     value="tab1"
                     className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
@@ -465,13 +567,8 @@ export default function RevenueCoR() {
                         </span>
                         <div className="relative mx-auto mt-6 h-32 w-32 pb-6">
                           <DonutChart
-                            data={filteredNBProductLineData.map((item) => ({
-                              ...item,
-                              color:
-                                categoryProductLineColors[
-                                  item.name as keyof typeof categoryProductLineColors
-                                ] || "bg-gray-500",
-                            }))}
+                            data={filteredNBProductLineData}
+                            colors={["darkOrange", "lightGray", "darkGray"]}
                             category="name"
                             value="value"
                             showTooltip={false}
@@ -541,14 +638,9 @@ export default function RevenueCoR() {
                           excl. Global Brand Divisions
                         </span>
                         <LineChart
-                          className="mt-8"
-                          data={filteredNBProductLineChartData.map((item) => ({
-                            ...item,
-                            color:
-                              categoryProductLineColors[
-                                item.name as keyof typeof categoryProductLineColors
-                              ] || "bg-gray-500",
-                          }))}
+                          className="mt-8 h-[315px]"
+                          data={filteredNBProductLineChartData}
+                          colors={["darkOrange", "lightGray", "darkGray"]}
                           index="fiscal_year"
                           categories={["Footwear", "Apparel", "Equipment"]}
                           valueTooltipFormatter={tooltipFormatter}
@@ -562,6 +654,7 @@ export default function RevenueCoR() {
                     </div>
                   </TabsContent>
 
+                  {/* Nike Brand Revenues by Region */}
                   <TabsContent
                     value="tab2"
                     className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
@@ -577,13 +670,13 @@ export default function RevenueCoR() {
                         </span>
                         <div className="relative mx-auto mt-6 h-32 w-32 pb-6">
                           <DonutChart
-                            data={filteredNBRegionData.map((item) => ({
-                              ...item,
-                              color:
-                                categoryRegionColors[
-                                  item.name as keyof typeof categoryProductLineColors
-                                ] || "bg-gray-500",
-                            }))}
+                            data={filteredNBRegionData}
+                            colors={[
+                              "darkOrange",
+                              "lightOrange",
+                              "lightGray",
+                              "darkGray",
+                            ]}
                             category="name"
                             value="value"
                             showTooltip={false}
@@ -653,14 +746,14 @@ export default function RevenueCoR() {
                           excl. Global Brand Divisions
                         </span>
                         <LineChart
-                          className="mt-8"
-                          data={filteredNBRegionLineChartData.map((item) => ({
-                            ...item,
-                            color:
-                              categoryRegionColors[
-                                item.name as keyof typeof categoryLineColors
-                              ] || "bg-gray-500",
-                          }))}
+                          className="mt-8 h-[360px]"
+                          data={filteredNBRegionLineChartData}
+                          colors={[
+                            "darkOrange",
+                            "lightOrange",
+                            "lightGray",
+                            "darkGray",
+                          ]}
                           index="fiscal_year"
                           categories={[
                             "North America",
@@ -679,6 +772,7 @@ export default function RevenueCoR() {
                     </div>
                   </TabsContent>
 
+                  {/* Nike Brand Revenues by Disttribution Channel */}
                   <TabsContent
                     value="tab3"
                     className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
@@ -694,13 +788,8 @@ export default function RevenueCoR() {
                         </span>
                         <div className="relative mx-auto mt-6 h-32 w-32 pb-6">
                           <DonutChart
-                            data={filteredNBDistChannelData.map((item) => ({
-                              ...item,
-                              color:
-                                categoryDistChannelColors[
-                                  item.name as keyof typeof categoryProductLineColors
-                                ] || "bg-gray-500",
-                            }))}
+                            data={filteredNBDistChannelData}
+                            colors={["darkOrange", "lightGray"]}
                             category="name"
                             value="value"
                             showTooltip={false}
@@ -770,16 +859,9 @@ export default function RevenueCoR() {
                           excl. Global Brand Divisions
                         </span>
                         <LineChart
-                          className="mt-8"
-                          data={filteredNBDistChannelLineChartData.map(
-                            (item) => ({
-                              ...item,
-                              color:
-                                categoryDistChannelColors[
-                                  item.name as keyof typeof categoryDistChannelColors
-                                ] || "bg-gray-500",
-                            }),
-                          )}
+                          className="mt-8 h-[270px]"
+                          data={filteredNBDistChannelLineChartData}
+                          colors={["orange", "lightGray"]}
                           index="fiscal_year"
                           categories={["Wholesale", "NIKE Direct"]}
                           valueTooltipFormatter={tooltipFormatter}
@@ -800,33 +882,140 @@ export default function RevenueCoR() {
 
         {/* Costs Section */}
         <section>
-          <div className="sticky top-16 z-20 mt-4 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 dark:border-gray-800 dark:bg-gray-950">
-            <h2 className="flex scroll-mt-8 items-end text-lg font-semibold text-gray-900 dark:text-gray-50">
-              Cost of Revenues Breakdown
-            </h2>
-            <div className="flex items-center">
-              <div className="w-40">
-                <Select
-                  value={selectedYear.toString()}
-                  onValueChange={(value) => setSelectedYear(Number(value))}
+          {/* <Card>
+            <div>
+              <h3 className="mt-0 pb-6 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
+                Cost of Revenues Highlights
+              </h3>
+              <p className="text-sm text-gray-500">
+                FY{selectedYear} Total Costs of Sales
+              </p>
+              <h1 className="mt-1 text-3xl font-medium">
+                {formatToMillions(
+                  revenuesDonut
+                    .filter(
+                      (item) =>
+                        item.fiscal_year === selectedYear &&
+                        item.name === "NIKE Brand",
+                    )
+                    .reduce((sum, item) => sum + item.value, 0),
+                )}
+              </h1>
+              <div className="flex items-baseline">
+                <p
+                  className={`mr-1 mt-1 text-sm font-medium ${
+                    nikeBrandRevenueDifference > 0
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
                 >
-                  <SelectTrigger className="mx-auto h-8">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {dataYears.map((item) => (
-                      <SelectItem
-                        key={item.value}
-                        value={item.value.toString()}
-                      >
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {nikeBrandRevenueDifferenceSign}
+                  {formatToMillions(Math.abs(nikeBrandRevenueDifference))} (
+                  {nikeBrandRevenueDifferencePercentageSign}
+                  {Math.abs(nikeBrandRevenueDifferencePercentage).toFixed(1)}
+                  %)
+                </p>
+                <p className="text-sm font-normal text-gray-500">
+                  vs. FY{selectedYear - 1}
+                </p>
               </div>
             </div>
-          </div>
+          </Card> */}
+
+          <Card className="mt-6 px-0">
+            <div className="px-6">
+              <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+                Cost of Revenues Highlights
+              </h2>
+              <p className="pb-6 text-sm text-gray-500 dark:text-gray-400">
+                Cost of sales consists primarily of inventory costs, as well as
+                warehousing costs (including the cost of warehouse labor),
+                third- party royalties, certain foreign currency hedge gains and
+                losses and product design costs. Shipping and handling costs are
+                expensed as incurred and included in Cost of sales
+              </p>
+            </div>
+
+            <Tabs defaultValue="tab1">
+              <TabsList className="border-b border-gray-200 px-6 dark:border-gray-700">
+                <TabsTrigger value="tab1" className="text-sm">
+                  Dollar Amounts
+                </TabsTrigger>
+                <TabsTrigger value="tab2" className="text-sm">
+                  Percentage Share
+                </TabsTrigger>
+              </TabsList>
+
+              <div className="mt-6 px-6">
+                <p className="text-sm text-gray-500">
+                  FY{selectedYear} Total Costs of Sales
+                </p>
+                <h1 className="mt-1 text-3xl font-medium">
+                  {formatToMillions(
+                    revenuesDonut
+                      .filter(
+                        (item) =>
+                          item.fiscal_year === selectedYear &&
+                          item.name === "NIKE Brand",
+                      )
+                      .reduce((sum, item) => sum + item.value, 0),
+                  )}
+                </h1>
+                <div className="flex items-baseline">
+                  <p
+                    className={`mr-1 mt-1 text-sm font-medium ${
+                      nikeBrandRevenueDifference > 0
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : "text-red-600 dark:text-red-400"
+                    }`}
+                  >
+                    {nikeBrandRevenueDifferenceSign}
+                    {formatToMillions(Math.abs(nikeBrandRevenueDifference))} (
+                    {nikeBrandRevenueDifferencePercentageSign}
+                    {Math.abs(nikeBrandRevenueDifferencePercentage).toFixed(1)}
+                    %)
+                  </p>
+                  <p className="text-sm font-normal text-gray-500">
+                    vs. FY{selectedYear - 1}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 px-6">
+                {/* Cost of Sales Dollar Value */}
+                <TabsContent
+                  value="tab1"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <BarChart
+                    type="stacked"
+                    className="h-60"
+                    data={filteredCoRBarChartData}
+                    index="fiscal_year"
+                    categories={["Gross Profit", "Cost of Sales"]}
+                    colors={["lightGray", "darkOrange"]}
+                    showLegend={false}
+                  />
+                </TabsContent>
+
+                {/* Nike Brand Revenues by Region */}
+                <TabsContent
+                  value="tab2"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <BarChart
+                    type="percent"
+                    className="h-60"
+                    data={filteredCoRBarChartData}
+                    index="fiscal_year"
+                    categories={["Gross Profit", "Cost of Sales"]}
+                    colors={["lightGray", "darkOrange"]}
+                    showLegend={false}
+                  />
+                </TabsContent>
+              </div>
+            </Tabs>
+          </Card>
         </section>
       </div>
     </div>

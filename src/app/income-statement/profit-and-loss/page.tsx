@@ -346,217 +346,227 @@ export default function ProfitLoss() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {dataKeys.map(({ key, label, type }) => (
-                    <TableRow
-                      key={key}
-                      className={
-                        label === "Cost of sales"
-                          ? "border-b-10 border-black"
-                          : ""
-                      }
-                    >
-                      {/* Metric name */}
-                      <TableCell
-                        className={`${
-                          [
-                            "Gross profit",
-                            "Gross margin",
-                            "Total selling and administrative expense",
-                            "% of revenues",
-                            "Effective tax rate",
-                          ].includes(label)
-                            ? "text-indent-4 text-blue-600"
-                            : "text-black dark:text-gray-100"
-                        } px-4 py-2 font-semibold`}
-                      >
-                        {label}
-                      </TableCell>
+                  {dataKeys.map(({ key, label, type }) => {
+                    const hasIndent = [
+                      "Gross profit",
+                      "Gross margin",
+                      "Total selling and administrative expense",
+                      "% of revenues",
+                      "Effective tax rate",
+                    ].includes(label)
 
-                      {/* Selected Year Column */}
-                      <TableCell
-                        className={`${
-                          label === "NET INCOME" ? "font-semibold" : ""
-                        }`}
-                      >
-                        {filteredData && key in filteredData
-                          ? formatNumber(
-                              filteredData[key as keyof typeof filteredData],
-                              type,
-                              label,
-                            )
-                          : "N/A"}
-                      </TableCell>
+                    const hasBorder = [
+                      "Cost of sales",
+                      "Operating overhead expense",
+                      "Other (income) expense, net",
+                      "Effective tax rate",
+                      "NET INCOME",
+                    ].includes(label)
 
-                      {/* Previous Year Column */}
-                      <TableCell
-                        className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
+                    return (
+                      <TableRow
+                        key={key}
+                        className={
+                          hasBorder ? "!border-b !border-b-gray-400" : ""
+                        }
                       >
-                        {previousData && key in previousData
-                          ? formatNumber(
-                              previousData[key as keyof typeof previousData],
-                              type,
-                              label,
-                            )
-                          : "N/A"}
-                      </TableCell>
+                        {/* Metric name */}
+                        <TableCell
+                          className={`${
+                            hasIndent ? "!pl-12" : ""
+                          } px-4 py-2 font-semibold text-black dark:text-gray-100`}
+                        >
+                          {label}
+                        </TableCell>
 
-                      {/* Change Column */}
-                      <TableCell
-                        className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
-                      >
-                        {filteredData && key in filteredData ? (
-                          <>
-                            {filteredData &&
-                            filteredData[`prev_${key}`] !== undefined ? (
-                              <span
-                                className={`${
-                                  label === "NET INCOME" ? "font-semibold" : ""
-                                } ${
-                                  determineBadgeVariant(
-                                    label,
+                        {/* Selected Year Column */}
+                        <TableCell
+                          className={`${
+                            label === "NET INCOME" ? "font-semibold" : ""
+                          }`}
+                        >
+                          {filteredData && key in filteredData
+                            ? formatNumber(
+                                filteredData[key as keyof typeof filteredData],
+                                type,
+                                label,
+                              )
+                            : "N/A"}
+                        </TableCell>
+
+                        {/* Previous Year Column */}
+                        <TableCell
+                          className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
+                        >
+                          {previousData && key in previousData
+                            ? formatNumber(
+                                previousData[key as keyof typeof previousData],
+                                type,
+                                label,
+                              )
+                            : "N/A"}
+                        </TableCell>
+
+                        {/* Change Column */}
+                        <TableCell
+                          className={`${label === "NET INCOME" ? "font-semibold" : ""}`}
+                        >
+                          {filteredData && key in filteredData ? (
+                            <>
+                              {filteredData &&
+                              filteredData[`prev_${key}`] !== undefined ? (
+                                <span
+                                  className={`${
+                                    label === "NET INCOME"
+                                      ? "font-semibold"
+                                      : ""
+                                  } ${
+                                    determineBadgeVariant(
+                                      label,
+                                      filteredData[
+                                        key as keyof typeof filteredData
+                                      ] || 0,
+                                      filteredData[`prev_${key}`] || 0,
+                                    ) === "success"
+                                      ? "text-emerald-600 dark:text-emerald-500"
+                                      : "text-red-600 dark:text-red-400"
+                                  }`}
+                                >
+                                  {type === "currency"
+                                    ? calculateChange(
+                                        filteredData[
+                                          key as keyof typeof filteredData
+                                        ],
+                                        filteredData[`prev_${key}`], // Corrected to access `prev_*` field
+                                        type,
+                                        label,
+                                        true,
+                                      )
+                                    : calculateChange(
+                                        filteredData[
+                                          key as keyof typeof filteredData
+                                        ],
+                                        filteredData[`prev_${key}`], // Corrected to access `prev_*` field
+                                        type,
+                                        label,
+                                        false,
+                                      )}
+                                </span>
+                              ) : (
+                                "N/A"
+                              )}
+                            </>
+                          ) : (
+                            "N/A"
+                          )}
+                        </TableCell>
+
+                        {/* % Change Column */}
+                        <TableCell
+                          className={`${
+                            label === "NET INCOME" ? "font-semibold" : ""
+                          }`}
+                        >
+                          {[
+                            "Interest expense (income), net",
+                            "Other (income) expense, net",
+                          ].includes(label) ? (
+                            ""
+                          ) : type === "percentage" ? (
+                            ""
+                          ) : (
+                            <span
+                              className={`rounded px-2 py-1 text-sm font-medium text-white ${
+                                determineBadgeVariant(
+                                  label,
+                                  filteredData?.[
+                                    key as keyof typeof filteredData
+                                  ] || 0,
+                                  filteredData?.[
+                                    `prev_${key}` as keyof typeof filteredData
+                                  ] || 0,
+                                ) === "success"
+                                  ? "bg-emerald-500"
+                                  : "bg-rose-500"
+                              }`}
+                            >
+                              {filteredData && previousData
+                                ? calculateChange(
                                     filteredData[
                                       key as keyof typeof filteredData
-                                    ] || 0,
-                                    filteredData[`prev_${key}`] || 0,
-                                  ) === "success"
-                                    ? "text-emerald-600 dark:text-emerald-500"
-                                    : "text-red-600 dark:text-red-400"
-                                }`}
-                              >
-                                {type === "currency"
-                                  ? calculateChange(
-                                      filteredData[
-                                        key as keyof typeof filteredData
-                                      ],
-                                      filteredData[`prev_${key}`], // Corrected to access `prev_*` field
-                                      type,
-                                      label,
-                                      true,
-                                    )
-                                  : calculateChange(
-                                      filteredData[
-                                        key as keyof typeof filteredData
-                                      ],
-                                      filteredData[`prev_${key}`], // Corrected to access `prev_*` field
-                                      type,
-                                      label,
-                                      false,
-                                    )}
-                              </span>
-                            ) : (
-                              "N/A"
-                            )}
-                          </>
-                        ) : (
-                          "N/A"
-                        )}
-                      </TableCell>
+                                    ],
+                                    filteredData[
+                                      `prev_${key}` as keyof typeof filteredData
+                                    ],
+                                    type,
+                                    label,
+                                  )
+                                : "N/A"}
+                            </span>
+                          )}
+                        </TableCell>
 
-                      {/* % Change Column */}
-                      <TableCell
-                        className={`${
-                          label === "NET INCOME" ? "font-semibold" : ""
-                        }`}
-                      >
-                        {[
-                          "Interest expense (income), net",
-                          "Other (income) expense, net",
-                        ].includes(label) ? (
-                          ""
-                        ) : type === "percentage" ? (
-                          ""
-                        ) : (
-                          <span
-                            className={`rounded px-2 py-1 text-sm font-medium text-white ${
-                              determineBadgeVariant(
-                                label,
-                                filteredData?.[
-                                  key as keyof typeof filteredData
-                                ] || 0,
-                                filteredData?.[
-                                  `prev_${key}` as keyof typeof filteredData
-                                ] || 0,
-                              ) === "success"
-                                ? "bg-emerald-500"
-                                : "bg-rose-500"
-                            }`}
-                          >
-                            {filteredData && previousData
-                              ? calculateChange(
+                        {/* Spark Area Chart */}
+                        <TableCell className="w-28">
+                          {filteredData && key in filteredData && (
+                            <SparkAreaChart
+                              data={ResultsOfOperations.filter(
+                                (item) =>
+                                  item.fiscal_year <= selectedYear &&
+                                  item.fiscal_year > selectedYear - 5,
+                              ).map((item) => ({
+                                year: item.fiscal_year,
+                                Performance:
+                                  item[key as keyof typeof ResultsOfOperations],
+                              }))}
+                              categories={["Performance"]}
+                              index={"year"}
+                              colors={[
+                                determineBadgeVariant(
+                                  label,
                                   filteredData[
                                     key as keyof typeof filteredData
-                                  ],
-                                  filteredData[
+                                  ] || 0,
+                                  filteredData?.[
                                     `prev_${key}` as keyof typeof filteredData
-                                  ],
-                                  type,
-                                  label,
-                                )
-                              : "N/A"}
-                          </span>
-                        )}
-                      </TableCell>
-
-                      {/* Spark Area Chart */}
-                      <TableCell className="w-28">
-                        {filteredData && key in filteredData && (
-                          <SparkAreaChart
-                            data={ResultsOfOperations.filter(
-                              (item) =>
-                                item.fiscal_year <= selectedYear &&
-                                item.fiscal_year > selectedYear - 5,
-                            ).map((item) => ({
-                              year: item.fiscal_year,
-                              Performance:
-                                item[key as keyof typeof ResultsOfOperations],
-                            }))}
-                            categories={["Performance"]}
-                            index={"year"}
-                            colors={[
-                              determineBadgeVariant(
-                                label,
-                                filteredData[
-                                  key as keyof typeof filteredData
-                                ] || 0,
-                                filteredData?.[
-                                  `prev_${key}` as keyof typeof filteredData
-                                ] || 0,
-                              ) === "success"
-                                ? "emerald" // Green for positive trend
-                                : "red", // Red for negative trend
-                            ]}
-                            valueRange={{
-                              min: Math.min(
-                                ...ResultsOfOperations.filter(
-                                  (item) =>
-                                    item.fiscal_year <= selectedYear &&
-                                    item.fiscal_year > selectedYear - 5,
-                                ).map(
-                                  (item) =>
-                                    item[
-                                      key as keyof typeof ResultsOfOperations
-                                    ] || 0,
+                                  ] || 0,
+                                ) === "success"
+                                  ? "emerald" // Green for positive trend
+                                  : "red", // Red for negative trend
+                              ]}
+                              valueRange={{
+                                min: Math.min(
+                                  ...ResultsOfOperations.filter(
+                                    (item) =>
+                                      item.fiscal_year <= selectedYear &&
+                                      item.fiscal_year > selectedYear - 5,
+                                  ).map(
+                                    (item) =>
+                                      item[
+                                        key as keyof typeof ResultsOfOperations
+                                      ] || 0,
+                                  ),
                                 ),
-                              ),
-                              max: Math.max(
-                                ...ResultsOfOperations.filter(
-                                  (item) =>
-                                    item.fiscal_year <= selectedYear &&
-                                    item.fiscal_year > selectedYear - 5,
-                                ).map(
-                                  (item) =>
-                                    item[
-                                      key as keyof typeof ResultsOfOperations
-                                    ] || 0,
+                                max: Math.max(
+                                  ...ResultsOfOperations.filter(
+                                    (item) =>
+                                      item.fiscal_year <= selectedYear &&
+                                      item.fiscal_year > selectedYear - 5,
+                                  ).map(
+                                    (item) =>
+                                      item[
+                                        key as keyof typeof ResultsOfOperations
+                                      ] || 0,
+                                  ),
                                 ),
-                              ),
-                            }}
-                            className="h-8"
-                          />
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                              }}
+                              className="h-8"
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
                 </TableBody>
               </Table>
             </TableRoot>

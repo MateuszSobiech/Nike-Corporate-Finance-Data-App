@@ -204,7 +204,7 @@ export default function EbitCard({
   }
 
   return (
-    <div className="grid-col-1 grid p-4">
+    <div className="grid-col-1 grid">
       <div>
         <div className="flex items-center">
           <h1 className="mr-2 text-sm font-bold text-gray-900 dark:text-gray-50">
