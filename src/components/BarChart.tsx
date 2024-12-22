@@ -531,6 +531,7 @@ interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   categories: string[]
   colors?: AvailableChartColorsKeys[]
   valueFormatter?: (value: number) => string
+  valueTooltipFormatter?: (value: number) => string
   startEndOnly?: boolean
   showXAxis?: boolean
   showYAxis?: boolean
@@ -564,6 +565,7 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
       index,
       colors = AvailableChartColors,
       valueFormatter = (value: number) => value.toString(),
+      valueTooltipFormatter,
       startEndOnly = false,
       showXAxis = true,
       showYAxis = true,
@@ -824,7 +826,7 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
                       active={active}
                       payload={cleanPayload}
                       label={label}
-                      valueFormatter={valueFormatter}
+                      valueFormatter={valueTooltipFormatter || valueFormatter}
                     />
                   )
                 ) : null
@@ -865,7 +867,7 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
                 type="linear"
                 dataKey={category}
                 stackId={stacked ? "stack" : undefined}
-                isAnimationActive={false}
+                isAnimationActive={true}
                 fill=""
                 shape={(props: any) =>
                   renderShape(props, activeBar, activeLegend, layout)

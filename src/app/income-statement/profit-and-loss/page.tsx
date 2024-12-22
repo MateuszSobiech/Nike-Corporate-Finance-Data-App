@@ -332,7 +332,7 @@ export default function ProfitLoss() {
               </div>
             </div>
           </div>
-          <div>
+          <div className="mb-6">
             <TableRoot>
               <Table className="w-full">
                 <TableHead>

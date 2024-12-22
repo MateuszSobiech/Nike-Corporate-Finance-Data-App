@@ -6,7 +6,7 @@ import type { KpiEntryExtended } from "@/data/revenues"
 export type CardProps = {
   title: string
   change: string
-  value: string
+  value: string | number
   //   valueDescription: string
   //   subtitle: string
   //   ctaDescription: string
@@ -90,6 +90,8 @@ export function CategoryBarCard({
   value,
   data = [],
 }: CardProps) {
+  const parsedValue = typeof value === "string" ? parseFloat(value) : value
+
   return (
     <div className="flex flex-col justify-between">
       <div>
@@ -102,6 +104,11 @@ export function CategoryBarCard({
         <p className="mt-2 flex items-baseline gap-2">
           <span className="text-xl text-gray-900 dark:text-gray-50">
             {value}
+            {/* <CountUp
+              end={parsedValue} 
+              duration={1}
+              formattingFn={(value) => `$${value.toLocaleString("en-US")}M`} 
+            /> */}
           </span>
         </p>
         <div className="mt-4">

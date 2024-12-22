@@ -28,6 +28,7 @@ import {
   revenuesDonut,
 } from "@/data/revenues"
 import { useMemo, useState } from "react"
+import CountUp from "react-countup"
 
 export default function RevenueCoR() {
   const [selectedYear, setSelectedYear] = useState(2024)
@@ -66,6 +67,12 @@ export default function RevenueCoR() {
     () => filteredData.reduce((sum, item) => sum + item.value, 0),
     [filteredData],
   )
+
+  const totalRevenueNikeBrand = revenuesDonut
+    .filter(
+      (item) => item.fiscal_year === selectedYear && item.name === "NIKE Brand",
+    )
+    .reduce((sum, item) => sum + item.value, 0)
 
   // Cost of Revenues Bar Chart Data
   const filteredCoRBarChartData = reveneueCostOfRevenueData.filter(
@@ -183,9 +190,9 @@ export default function RevenueCoR() {
       .filter(([key]) => key !== "fiscal_year" && key !== "product_line")
       .map(([key, value]) => ({
         title: key,
-        value: `$${((value as number) / 1_000_000).toFixed(1)}M`, // Convert to millions
-        color: colorMapping[key] || "bg-gray-500", // Default color if not found
-        percentage: (((value as number) / total) * 100).toFixed(1), // Format percentage to 1 decimal place
+        value: `$${((value as number) / 1_000_000).toFixed(1)}M`,
+        color: colorMapping[key] || "bg-gray-500",
+        percentage: (((value as number) / total) * 100).toFixed(1),
       }))
   }
 
@@ -240,12 +247,12 @@ export default function RevenueCoR() {
       .reduce((sum, val) => sum + val, 0)
 
     return Object.entries(filteredChannelData)
-      .filter(([key]) => key !== "fiscal_year" && key !== "dist_channel") // Exclude irrelevant fields
+      .filter(([key]) => key !== "fiscal_year" && key !== "dist_channel")
       .map(([key, value]) => ({
         title: key,
-        value: `$${((value as number) / 1_000_000).toFixed(1)}M`, // Convert to millions
-        color: colorMapping[key] || "bg-gray-500", // Default color if not found
-        percentage: (((value as number) / total) * 100).toFixed(1), // Format percentage to 1 decimal place
+        value: `$${((value as number) / 1_000_000).toFixed(1)}M`,
+        color: colorMapping[key] || "bg-gray-500",
+        percentage: (((value as number) / total) * 100).toFixed(1),
       }))
   }
 
@@ -285,6 +292,90 @@ export default function RevenueCoR() {
 
     return { share: percentageShare, color }
   }
+
+  // Current year "Cost of Sales"
+  const currentCostOfSales =
+    filteredCoRBarChartData.find((item) => item.fiscal_year === selectedYear)?.[
+      "Cost of Sales"
+    ] || 0
+
+  // Previous year "Cost of Sales"
+  const previousCostOfSales =
+    filteredCoRBarChartData.find(
+      (item) => item.fiscal_year === selectedYear - 1,
+    )?.["Cost of Sales"] || 0
+
+  // Difference in "Cost of Sales"
+  const costOfSalesDifference = currentCostOfSales - previousCostOfSales
+
+  // Percentage difference in "Cost of Sales"
+  const costOfSalesDifferencePercentage =
+    previousCostOfSales !== 0
+      ? (costOfSalesDifference / previousCostOfSales) * 100
+      : 0
+
+  // Sign for the difference
+  const costOfSalesDifferenceSign =
+    costOfSalesDifference > 0 ? "+" : costOfSalesDifference < 0 ? "-" : ""
+
+  // Sign for the percentage difference
+  const costOfSalesDifferencePercentageSign =
+    costOfSalesDifferencePercentage > 0
+      ? "+"
+      : costOfSalesDifferencePercentage < 0
+        ? "-"
+        : ""
+
+  // Current year "Gross Profit"
+  const currentGrossProfit =
+    filteredCoRBarChartData.find((item) => item.fiscal_year === selectedYear)?.[
+      "Gross Profit"
+    ] || 0
+
+  // Current Year Total
+  const currentTotal = currentCostOfSales + currentGrossProfit
+
+  // Calculate current year percentage share
+  const currentYearCostShare =
+    filteredCoRBarChartData
+      .filter((item) => item.fiscal_year === selectedYear)
+      .reduce((sum, item) => sum + item["Cost of Sales"], 0) /
+    filteredCoRBarChartData
+      .filter((item) => item.fiscal_year === selectedYear)
+      .reduce(
+        (sum, item) => sum + item["Gross Profit"] + item["Cost of Sales"],
+        0,
+      )
+
+  // Calculate previous year percentage share
+  const previousYearCostShare =
+    filteredCoRBarChartData
+      .filter((item) => item.fiscal_year === selectedYear - 1)
+      .reduce((sum, item) => sum + item["Cost of Sales"], 0) /
+    filteredCoRBarChartData
+      .filter((item) => item.fiscal_year === selectedYear - 1)
+      .reduce(
+        (sum, item) => sum + item["Gross Profit"] + item["Cost of Sales"],
+        0,
+      )
+
+  // Calculate percentage point difference (without rounding early)
+  const percentagePointDifference = currentYearCostShare - previousYearCostShare
+
+  // Format the percentage point difference to 1 decimal place
+  const formattedDifference = (percentagePointDifference * 100).toFixed(1)
+
+  // Determine the sign and color coding
+  const differenceSign =
+    percentagePointDifference > 0
+      ? "+"
+      : percentagePointDifference < 0
+        ? "-"
+        : ""
+  const textColor =
+    percentagePointDifference > 0
+      ? "text-red-600 dark:text-red-400"
+      : "text-emerald-600 dark:text-emerald-400"
 
   return (
     <div>
@@ -343,7 +434,13 @@ export default function RevenueCoR() {
                   />
                   <div className="ml-4 flex flex-col justify-end">
                     <p className="text-left text-3xl font-medium text-gray-900 dark:text-gray-50">
-                      {formatToMillions(totalRevenue)}
+                      <CountUp
+                        end={totalRevenue / 1_000}
+                        duration={1}
+                        formattingFn={(value) =>
+                          `$${value.toLocaleString("en-US")}M`
+                        }
+                      />
                     </p>
                     <p className="text-left text-sm font-normal text-gray-500 dark:text-gray-300">
                       Total Revenues
@@ -426,7 +523,7 @@ export default function RevenueCoR() {
                                         item.value
                                           .replace("$", "")
                                           .replace("M", ""),
-                                      ) || 0), // Ensure fallback to 0 if parsing fails
+                                      ) || 0),
                                     0,
                                   )
                                   .toFixed(1) +
@@ -518,15 +615,14 @@ export default function RevenueCoR() {
                     FY{selectedYear} Total NIKE Brand Revenue
                   </p>
                   <h1 className="mt-1 text-3xl font-medium">
-                    {formatToMillions(
-                      revenuesDonut
-                        .filter(
-                          (item) =>
-                            item.fiscal_year === selectedYear &&
-                            item.name === "NIKE Brand",
-                        )
-                        .reduce((sum, item) => sum + item.value, 0),
-                    )}
+                    <CountUp
+                      end={totalRevenueNikeBrand / 1_000}
+                      duration={1}
+                      start={0}
+                      formattingFn={(value) =>
+                        `$${value.toLocaleString("en-US")}M`
+                      }
+                    />
                   </h1>
                   <div className="flex items-baseline">
                     <p
@@ -878,51 +974,9 @@ export default function RevenueCoR() {
               </Tabs>
             </Card>
           </div>
-        </section>
 
-        {/* Costs Section */}
-        <section>
-          {/* <Card>
-            <div>
-              <h3 className="mt-0 pb-6 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
-                Cost of Revenues Highlights
-              </h3>
-              <p className="text-sm text-gray-500">
-                FY{selectedYear} Total Costs of Sales
-              </p>
-              <h1 className="mt-1 text-3xl font-medium">
-                {formatToMillions(
-                  revenuesDonut
-                    .filter(
-                      (item) =>
-                        item.fiscal_year === selectedYear &&
-                        item.name === "NIKE Brand",
-                    )
-                    .reduce((sum, item) => sum + item.value, 0),
-                )}
-              </h1>
-              <div className="flex items-baseline">
-                <p
-                  className={`mr-1 mt-1 text-sm font-medium ${
-                    nikeBrandRevenueDifference > 0
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-red-600 dark:text-red-400"
-                  }`}
-                >
-                  {nikeBrandRevenueDifferenceSign}
-                  {formatToMillions(Math.abs(nikeBrandRevenueDifference))} (
-                  {nikeBrandRevenueDifferencePercentageSign}
-                  {Math.abs(nikeBrandRevenueDifferencePercentage).toFixed(1)}
-                  %)
-                </p>
-                <p className="text-sm font-normal text-gray-500">
-                  vs. FY{selectedYear - 1}
-                </p>
-              </div>
-            </div>
-          </Card> */}
-
-          <Card className="mt-6 px-0">
+          {/* Costs Section */}
+          <Card className="mb-6 mt-6 px-0">
             <div className="px-6">
               <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
                 Cost of Revenues Highlights
@@ -946,71 +1000,200 @@ export default function RevenueCoR() {
                 </TabsTrigger>
               </TabsList>
 
-              <div className="mt-6 px-6">
-                <p className="text-sm text-gray-500">
-                  FY{selectedYear} Total Costs of Sales
-                </p>
-                <h1 className="mt-1 text-3xl font-medium">
-                  {formatToMillions(
-                    revenuesDonut
-                      .filter(
-                        (item) =>
-                          item.fiscal_year === selectedYear &&
-                          item.name === "NIKE Brand",
-                      )
-                      .reduce((sum, item) => sum + item.value, 0),
-                  )}
-                </h1>
-                <div className="flex items-baseline">
-                  <p
-                    className={`mr-1 mt-1 text-sm font-medium ${
-                      nikeBrandRevenueDifference > 0
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-red-600 dark:text-red-400"
-                    }`}
-                  >
-                    {nikeBrandRevenueDifferenceSign}
-                    {formatToMillions(Math.abs(nikeBrandRevenueDifference))} (
-                    {nikeBrandRevenueDifferencePercentageSign}
-                    {Math.abs(nikeBrandRevenueDifferencePercentage).toFixed(1)}
-                    %)
-                  </p>
-                  <p className="text-sm font-normal text-gray-500">
-                    vs. FY{selectedYear - 1}
-                  </p>
-                </div>
-              </div>
-
               <div className="mt-4 px-6">
                 {/* Cost of Sales Dollar Value */}
                 <TabsContent
                   value="tab1"
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
+                  <div className="mb-9 mt-6 flex justify-between px-0">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        FY{selectedYear} Costs of Sales
+                      </p>
+                      <h1 className="mt-1 text-3xl font-medium text-gray-900 dark:text-gray-50">
+                        <CountUp
+                          end={
+                            filteredCoRBarChartData
+                              .filter(
+                                (item) => item.fiscal_year === selectedYear,
+                              )
+                              .reduce(
+                                (sum, item) => sum + item["Cost of Sales"],
+                                0,
+                              ) / 1_000
+                          }
+                          duration={1}
+                          formattingFn={(value) =>
+                            `$${value.toLocaleString("en-US").replace(".", ",")}M`
+                          }
+                        />
+                      </h1>
+                      <div className="flex items-baseline">
+                        <p
+                          className={`mr-1 mt-1 text-sm font-medium ${
+                            costOfSalesDifference > 0
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {costOfSalesDifferenceSign}
+                          {`$${Math.abs(costOfSalesDifference / 1_000)
+                            .toLocaleString("en-US")
+                            .replace(".", ",")}M`}{" "}
+                          ({costOfSalesDifferencePercentageSign}
+                          {Math.abs(costOfSalesDifferencePercentage).toFixed(1)}
+                          %)
+                        </p>
+                        <p className="text-sm font-normal text-gray-500">
+                          vs. FY{selectedYear - 1}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-end">
+                      <div className="ml-11">
+                        <p className="border-r border-gray-200 pr-4 text-right text-sm text-gray-500 dark:border-gray-500">
+                          Gross Profit
+                        </p>
+                        <p className="mt-0 border-r border-gray-200 pr-4 pt-1 text-right text-sm font-semibold text-gray-900 dark:border-gray-500 dark:text-gray-50">
+                          <CountUp
+                            end={currentGrossProfit / 1_000}
+                            duration={1}
+                            formattingFn={(value) =>
+                              `$${value.toLocaleString("en-US").replace(".", ",")}M`
+                            }
+                          />
+                        </p>
+                      </div>
+                      <div className="ml-11">
+                        <p className="border-r border-gray-200 pr-4 text-right text-sm text-gray-500 dark:border-gray-500">
+                          Revenue
+                        </p>
+                        <p className="mt-0 border-r border-gray-200 pr-4 pt-1 text-right text-sm font-semibold text-gray-900 dark:border-gray-500 dark:text-gray-50">
+                          <CountUp
+                            end={currentTotal / 1_000}
+                            duration={1}
+                            formattingFn={(value) =>
+                              `$${value.toLocaleString("en-US").replace(".", ",")}M`
+                            }
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <BarChart
                     type="stacked"
-                    className="h-60"
+                    className="h-96"
                     data={filteredCoRBarChartData}
                     index="fiscal_year"
                     categories={["Gross Profit", "Cost of Sales"]}
                     colors={["lightGray", "darkOrange"]}
-                    showLegend={false}
+                    showLegend={true}
+                    valueTooltipFormatter={tooltipFormatter}
+                    valueFormatter={(value: number) =>
+                      `$${(value / 1000000).toFixed(1)}B`
+                    }
                   />
                 </TabsContent>
 
-                {/* Nike Brand Revenues by Region */}
+                {/* Cost of Sales Percentage Share */}
                 <TabsContent
                   value="tab2"
                   className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
                 >
+                  <div className="mb-9 mt-6 flex justify-between px-0">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        FY{selectedYear} Cost of Sales as % of Revenue
+                      </p>
+                      <h1 className="mt-1 text-3xl font-medium text-gray-900 dark:text-gray-50">
+                        <CountUp
+                          end={
+                            (filteredCoRBarChartData
+                              .filter(
+                                (item) => item.fiscal_year === selectedYear,
+                              )
+                              .reduce(
+                                (sum, item) => sum + item["Cost of Sales"],
+                                0,
+                              ) /
+                              filteredCoRBarChartData
+                                .filter(
+                                  (item) => item.fiscal_year === selectedYear,
+                                )
+                                .reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    item["Gross Profit"] +
+                                    item["Cost of Sales"],
+                                  0,
+                                )) *
+                            100
+                          }
+                          duration={1}
+                          decimals={1}
+                          formattingFn={(value) => `${value.toFixed(1)}%`}
+                        />
+                      </h1>
+                      <div className="flex items-baseline">
+                        <p
+                          className={`mr-1 mt-1 text-sm font-medium ${textColor}`}
+                        >
+                          {differenceSign}
+                          {Math.abs(percentagePointDifference * 100).toFixed(
+                            1,
+                          )}{" "}
+                          p.p.
+                        </p>
+                        <p className="text-sm font-normal text-gray-500">
+                          vs. FY{selectedYear - 1}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-end">
+                      <div className="ml-11">
+                        <p className="border-r border-gray-200 pr-4 text-right text-sm text-gray-500 dark:border-gray-500">
+                          Gross Profit
+                        </p>
+                        <p className="mt-0 border-r border-gray-200 pr-4 pt-1 text-right text-sm font-semibold text-gray-900 dark:border-gray-500 dark:text-gray-50">
+                          <CountUp
+                            end={
+                              (currentGrossProfit /
+                                (currentGrossProfit + currentCostOfSales)) *
+                              100
+                            }
+                            duration={1}
+                            decimals={1} // Ensures one decimal place
+                            formattingFn={(value) => `${value.toFixed(1)}%`}
+                          />
+                        </p>
+                      </div>
+                      <div className="ml-11">
+                        <p className="border-r border-gray-200 pr-4 text-right text-sm text-gray-500 dark:border-gray-500">
+                          Revenue
+                        </p>
+                        <p className="mt-0 border-r border-gray-200 pr-4 pt-1 text-right text-sm font-semibold text-gray-900 dark:border-gray-500 dark:text-gray-50">
+                          {`${((currentTotal / (currentGrossProfit + currentCostOfSales)) * 100).toFixed(1)}%`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <BarChart
                     type="percent"
-                    className="h-60"
-                    data={filteredCoRBarChartData}
+                    className="h-96"
+                    data={filteredCoRBarChartData.map((item) => {
+                      const total = item["Gross Profit"] + item["Cost of Sales"]
+                      return {
+                        ...item,
+                        "Gross Profit": (item["Gross Profit"] / total) * 100,
+                        "Cost of Sales": (item["Cost of Sales"] / total) * 100,
+                      }
+                    })}
+                    valueTooltipFormatter={(value) => `${value.toFixed(1)}%`}
                     index="fiscal_year"
                     categories={["Gross Profit", "Cost of Sales"]}
                     colors={["lightGray", "darkOrange"]}
-                    showLegend={false}
+                    showLegend={true}
                   />
                 </TabsContent>
               </div>
