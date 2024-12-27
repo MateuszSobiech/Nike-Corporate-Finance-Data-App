@@ -64,10 +64,10 @@ export const chartColors = {
     text: "text-gray-500",
   },
   lightGray: {
-    bg: "bg-gray-400 dark:bg-gray-500",
-    stroke: "stroke-gray-400 dark:stroke-gray-500",
-    fill: "fill-gray-400 dark:fill-gray-500",
-    text: "text-gray-400 dark:text-gray-500",
+    bg: "bg-gray-200 dark:bg-gray-700",
+    stroke: "stroke-gray-200 dark:stroke-gray-700",
+    fill: "fill-gray-200 dark:fill-gray-700",
+    text: "text-gray-200 dark:text-gray-700",
   },
   darkGray: {
     bg: "bg-gray-900 dark:bg-gray-100",
