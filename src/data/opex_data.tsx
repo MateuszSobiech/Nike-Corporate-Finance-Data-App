@@ -57,94 +57,151 @@ export const opexTotal: {
   },
 ]
 
-export const demandCreation: {
-  name: string
-  value: number
+export const expenseCombined: {
+  fiscal_year: number
+  "Demand Creation Expense": number
+  "Operating Overhead Expense": number
 }[] = [
   {
-    name: "FY2015",
-    value: 3213000,
+    fiscal_year: 2015,
+    "Demand Creation Expense": 3213000,
+    "Operating Overhead Expense": 6679000,
   },
   {
-    name: "FY2016",
-    value: 3278000,
+    fiscal_year: 2016,
+    "Demand Creation Expense": 3278000,
+    "Operating Overhead Expense": 7191000,
   },
   {
-    name: "FY2017",
-    value: 3341000,
+    fiscal_year: 2017,
+    "Demand Creation Expense": 3341000,
+    "Operating Overhead Expense": 7222000,
   },
   {
-    name: "FY2018",
-    value: 3577000,
+    fiscal_year: 2018,
+    "Demand Creation Expense": 3577000,
+    "Operating Overhead Expense": 7934000,
   },
   {
-    name: "FY2019",
-    value: 3753000,
+    fiscal_year: 2019,
+    "Demand Creation Expense": 3753000,
+    "Operating Overhead Expense": 8949000,
   },
   {
-    name: "FY2020",
-    value: 3592000,
+    fiscal_year: 2020,
+    "Demand Creation Expense": 3592000,
+    "Operating Overhead Expense": 9534000,
   },
   {
-    name: "FY2021",
-    value: 3114000,
+    fiscal_year: 2021,
+    "Demand Creation Expense": 3114000,
+    "Operating Overhead Expense": 9911000,
   },
   {
-    name: "FY2022",
-    value: 3850000,
+    fiscal_year: 2022,
+    "Demand Creation Expense": 3850000,
+    "Operating Overhead Expense": 10954000,
   },
   {
-    name: "FY2023",
-    value: 4060000,
+    fiscal_year: 2023,
+    "Demand Creation Expense": 4060000,
+    "Operating Overhead Expense": 12317000,
   },
   {
-    name: "FY2024",
-    value: 4285000,
+    fiscal_year: 2024,
+    "Demand Creation Expense": 4285000,
+    "Operating Overhead Expense": 12291000,
+  },
+]
+
+export const demandCreation: {
+  fiscal_year: number
+  "Demand Creation Expense": number
+}[] = [
+  {
+    fiscal_year: 2015,
+    "Demand Creation Expense": 3213000,
+  },
+  {
+    fiscal_year: 2016,
+    "Demand Creation Expense": 3278000,
+  },
+  {
+    fiscal_year: 2017,
+    "Demand Creation Expense": 3341000,
+  },
+  {
+    fiscal_year: 2018,
+    "Demand Creation Expense": 3577000,
+  },
+  {
+    fiscal_year: 2019,
+    "Demand Creation Expense": 3753000,
+  },
+  {
+    fiscal_year: 2020,
+    "Demand Creation Expense": 3592000,
+  },
+  {
+    fiscal_year: 2021,
+    "Demand Creation Expense": 3114000,
+  },
+  {
+    fiscal_year: 2022,
+    "Demand Creation Expense": 3850000,
+  },
+  {
+    fiscal_year: 2023,
+    "Demand Creation Expense": 4060000,
+  },
+  {
+    fiscal_year: 2024,
+    "Demand Creation Expense": 4285000,
   },
 ]
 
 export const operatingOverhead: {
-  name: string
-  value: number
+  fiscal_year: number
+  "Operating Overhead Expense": number
 }[] = [
   {
-    name: "FY2015",
-    value: 6679000,
+    fiscal_year: 2015,
+    "Operating Overhead Expense": 6679000,
   },
   {
-    name: "FY2016",
-    value: 7191000,
+    fiscal_year: 2016,
+    "Operating Overhead Expense": 7191000,
   },
   {
-    name: "FY2017",
-    value: 7222000,
+    fiscal_year: 2017,
+    "Operating Overhead Expense": 7222000,
   },
   {
-    name: "FY2018",
-    value: 7934000,
+    fiscal_year: 2018,
+    "Operating Overhead Expense": 7934000,
   },
   {
-    name: "FY2019",
-    value: 8949000,
+    fiscal_year: 2019,
+    "Operating Overhead Expense": 8949000,
   },
   {
-    name: "FY2020",
-    value: 9534000,
+    fiscal_year: 2020,
+    "Operating Overhead Expense": 9534000,
   },
   {
-    name: "FY2021",
-    value: 9911000,
+    fiscal_year: 2021,
+    "Operating Overhead Expense": 9911000,
   },
   {
-    name: "FY2022",
-    value: 10954000,
+    fiscal_year: 2022,
+    "Operating Overhead Expense": 10954000,
   },
   {
-    name: "FY2023",
-    value: 12317000,
+    fiscal_year: 2023,
+    "Operating Overhead Expense": 12317000,
   },
   {
-    name: "FY2024",
-    value: 12291000,
+    fiscal_year: 2024,
+    "Operating Overhead Expense": 12291000,
   },
 ]
