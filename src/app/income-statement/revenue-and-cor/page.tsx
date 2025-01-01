@@ -125,13 +125,13 @@ export default function RevenueCoR() {
     Corporate: string
   } = {
     "NIKE Brand": "bg-orange-500 dark:bg-orange-500",
-    Converse: "bg-gray-400 dark:bg-gray-500",
+    Converse: "bg-gray-200 dark:bg-gray-700",
     Corporate: "bg-gray-900 dark:bg-gray-100",
   }
 
   const colorMapping: { [key: string]: string } = {
     "NIKE Brand": "bg-orange-500 dark:bg-orange-500",
-    Converse: "bg-gray-400 dark:bg-gray-500",
+    Converse: "bg-gray-200 dark:bg-gray-700",
     Corporate: "bg-gray-900 dark:bg-gray-100",
   }
 
@@ -141,7 +141,7 @@ export default function RevenueCoR() {
     Equipment: string
   } = {
     Footwear: "bg-orange-500 dark:bg-orange-500",
-    Apparel: "bg-gray-400 dark:bg-gray-500",
+    Apparel: "bg-gray-200 dark:bg-gray-700",
     Equipment: "bg-gray-900 dark:bg-gray-100",
   }
 
@@ -153,7 +153,7 @@ export default function RevenueCoR() {
   } = {
     "North America": "bg-orange-500 dark:bg-orange-500",
     EMEA: "bg-orange-200 dark:bg-orange-200",
-    "Greater China": "bg-gray-400 dark:bg-gray-500",
+    "Greater China": "bg-gray-200 dark:bg-gray-700",
     APLA: "bg-gray-900 dark:bg-gray-100",
   }
 
@@ -162,7 +162,7 @@ export default function RevenueCoR() {
     "NIKE Direct": string
   } = {
     Wholesale: "bg-orange-500 dark:bg-orange-500",
-    "NIKE Direct": "bg-gray-400 dark:bg-gray-500",
+    "NIKE Direct": "bg-gray-200 dark:bg-gray-700",
   }
 
   const formatToMillions = (value: number) => {

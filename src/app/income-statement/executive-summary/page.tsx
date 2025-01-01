@@ -112,6 +112,14 @@ export default function ExecutiveSummary() {
 
           <div className="mt-10 grid w-full grid-cols-3 gap-20">
             <EbitCard
+              title="Revenues"
+              value={getFilteredData(EbitRevenues)[0]?.value || 0}
+              previous={getFilteredData(EbitRevenues)[0]?.previous || 0}
+              metricType="currency"
+              data={EbitRevenues}
+              selectedYear={getFilteredData(EbitRevenues)[0]?.fiscal_year}
+            />
+            <EbitCard
               title="EBIT"
               value={getFilteredData(Ebit)[0]?.value || 0}
               previous={getFilteredData(Ebit)[0]?.previous || 0}
@@ -127,14 +135,7 @@ export default function ExecutiveSummary() {
               data={EbitMargin}
               selectedYear={getFilteredData(EbitMargin)[0]?.fiscal_year}
             />
-            <EbitCard
-              title="Revenues"
-              value={getFilteredData(EbitRevenues)[0]?.value || 0}
-              previous={getFilteredData(EbitRevenues)[0]?.previous || 0}
-              metricType="currency"
-              data={EbitRevenues}
-              selectedYear={getFilteredData(EbitRevenues)[0]?.fiscal_year}
-            />
+
             <EbitCard
               title="Operating Expenses"
               value={getFilteredData(EbitOpEx)[0]?.value || 0}
