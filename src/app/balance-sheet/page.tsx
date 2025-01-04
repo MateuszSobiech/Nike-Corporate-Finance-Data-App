@@ -1,36 +1,59 @@
 "use client"
-import { TabNavigation, TabNavigationLink } from "@/components/TabNavigation"
 
-export default function BalanceSheet() {
+import { TabNavigation, TabNavigationLink } from "@/components/TabNavigation"
+import { usePathname } from "next/navigation"
+
+export default function BalanceSheet({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const pathname = usePathname()
+
   return (
     <main className="lg:pl-1">
       <div className="relative">
-        <div className="p-4 sm:px-6 sm:pb-10 sm:pt-10 lg:px-10 lg:pt-7">
+        <div className="p-4 lg:px-10 lg:pt-7">
           <div aria-labelledby="current-billing-cycle">
             <h1
               id="current-billing-cycle"
-              className="mb-12 scroll-mt-10 text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-50"
+              className="mb-12 scroll-mt-10 text-2xl font-semibold text-gray-900 dark:text-gray-50"
             >
               Balance Sheet
             </h1>
             <TabNavigation>
-              <TabNavigationLink href="#" active>
+              <TabNavigationLink
+                href="/balance-sheet/executive-summary"
+                active={pathname === "/balance-sheet/executive-summary"}
+              >
                 Executive Summary
               </TabNavigationLink>
-              <TabNavigationLink href="#">FY Balance Sheet</TabNavigationLink>
-              <TabNavigationLink href="#">
+              <TabNavigationLink
+                href="/balance-sheet/current-assets-and-liabilities"
+                active={
+                  pathname === "/balance-sheet/current-assets-and-liabilities"
+                }
+              >
                 Current Assets & Liabilities
               </TabNavigationLink>
-              <TabNavigationLink href="#">
+              <TabNavigationLink
+                href="/balance-sheet/non-current-assets-and-liabilities"
+                active={
+                  pathname ===
+                  "/balance-sheet/non-current-assets-and-liabilities"
+                }
+              >
                 Non-Current Assets & Liabilities
               </TabNavigationLink>
-              <TabNavigationLink href="#">Equity</TabNavigationLink>
+              <TabNavigationLink
+                href="/balance-sheet/equity"
+                active={pathname === "/balance-sheet/equity"}
+              >
+                Equity
+              </TabNavigationLink>
             </TabNavigation>
-            <div className="mt-4 grid grid-cols-1 gap-14 sm:mt-8 sm:grid-cols-2 lg:mt-10 xl:grid-cols-3">
-              <h1>Test</h1>
-            </div>
           </div>
-          {/* {children} */}
+          {children}
         </div>
       </div>
     </main>
