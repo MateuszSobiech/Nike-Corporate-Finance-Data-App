@@ -11,7 +11,7 @@ const OperatingExpenses: React.FC = () => {
   const [datas, setDatas] = React.useState<TooltipProps | null>(null)
 
   const currencyFormatter = (number: number) =>
-    `$${(number / 1_000_000).toLocaleString("en-US")}M`
+    `$${(number / 1_000_000).toLocaleString("en-US", { minimumFractionDigits: 1 })}M`
 
   const percentageFormatter = (number: number) => `${number.toFixed(1)}%`
 

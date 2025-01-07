@@ -5,7 +5,7 @@ export const siteConfig = {
   baseLinks: {
     home: "/",
     incomeStatement: "/income-statement/executive-summary",
-    balanceSheet: "/balance-sheet",
+    balanceSheet: "/balance-sheet/executive-summary",
     cashFlow: "/cash-flow",
     investors: "/investors",
   },

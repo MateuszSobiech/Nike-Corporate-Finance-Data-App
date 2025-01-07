@@ -1,5 +1,6 @@
 import { Badge } from "@/components/Badge"
 import { cx } from "@/lib/utils"
+import CountUp from "react-countup"
 
 import type { KpiEntryExtended } from "@/data/revenues"
 
@@ -103,12 +104,12 @@ export function CategoryBarCard({
         </div>
         <p className="mt-2 flex items-baseline gap-2">
           <span className="text-xl text-gray-900 dark:text-gray-50">
-            {value}
-            {/* <CountUp
-              end={parsedValue} 
+            <CountUp
+              end={parsedValue}
               duration={1}
-              formattingFn={(value) => `$${value.toLocaleString("en-US")}M`} 
-            /> */}
+              decimals={1}
+              formattingFn={(value) => `$${value.toLocaleString("en-US")}M`}
+            />
           </span>
         </p>
         <div className="mt-4">

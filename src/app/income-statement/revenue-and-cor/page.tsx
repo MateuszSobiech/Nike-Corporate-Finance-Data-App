@@ -30,6 +30,9 @@ import {
 import { useMemo, useState } from "react"
 import CountUp from "react-countup"
 
+// Filter data for NIKE Brand only
+const nikeBrandData = revenuesDonut.filter((item) => item.name === "NIKE Brand")
+
 export default function RevenueCoR() {
   const [selectedYear, setSelectedYear] = useState(2024)
 
@@ -77,11 +80,6 @@ export default function RevenueCoR() {
   // Cost of Revenues Bar Chart Data
   const filteredCoRBarChartData = reveneueCostOfRevenueData.filter(
     (item) => item.fiscal_year <= selectedYear,
-  )
-
-  // Filter data for NIKE Brand only
-  const nikeBrandData = revenuesDonut.filter(
-    (item) => item.name === "NIKE Brand",
   )
 
   // Current year revenue for NIKE Brand
@@ -513,22 +511,16 @@ export default function RevenueCoR() {
                                 productLine.slice(1)
                               }
                               change={share}
-                              value={
-                                `$` +
-                                cardData
-                                  .reduce(
-                                    (sum, item) =>
-                                      sum +
-                                      (parseFloat(
-                                        item.value
-                                          .replace("$", "")
-                                          .replace("M", ""),
-                                      ) || 0),
-                                    0,
-                                  )
-                                  .toFixed(1) +
-                                "M"
-                              }
+                              value={cardData.reduce(
+                                (sum, item) =>
+                                  sum +
+                                  (parseFloat(
+                                    item.value
+                                      .replace("$", "")
+                                      .replace("M", ""),
+                                  ) || 0),
+                                0,
+                              )}
                               data={cardData}
                             />
                           )
@@ -553,22 +545,16 @@ export default function RevenueCoR() {
                                 key={channel}
                                 title={channel}
                                 change={share}
-                                value={
-                                  `$` +
-                                  cardData
-                                    .reduce(
-                                      (sum, item) =>
-                                        sum +
-                                        (parseFloat(
-                                          item.value
-                                            .replace("$", "")
-                                            .replace("M", ""),
-                                        ) || 0),
-                                      0,
-                                    )
-                                    .toFixed(1) +
-                                  "M"
-                                }
+                                value={cardData.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(
+                                      item.value
+                                        .replace("$", "")
+                                        .replace("M", ""),
+                                    ) || 0),
+                                  0,
+                                )}
                                 data={cardData}
                               />
                             )
