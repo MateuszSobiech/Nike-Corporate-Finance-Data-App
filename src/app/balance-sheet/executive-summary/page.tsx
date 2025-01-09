@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/Select"
-import WaterfallWorkingCapital from "@/components/WaterfallWorkingCapital"
-import { dataYears } from "@/data/balance_sheet_data"
+import WaterfallBalanceSheet from "@/components/WaterfallBalanceSheet"
+import { dataYears, waterfallBalanceSheet } from "@/data/balance_sheet_data"
 import { useState } from "react"
 
 export default function ExecutiveSummary() {
@@ -16,7 +16,7 @@ export default function ExecutiveSummary() {
 
   return (
     <div>
-      <div className="space-y-10">
+      <div>
         <div className="sticky top-0 z-20 mt-4 flex items-end justify-between border-b border-gray-200 bg-white pb-4 pt-4 dark:border-gray-800 dark:bg-gray-950">
           <h2 className="flex scroll-mt-8 items-end text-lg font-semibold text-gray-900 dark:text-gray-50">
             Working Capital & Equity Highlights
@@ -41,14 +41,37 @@ export default function ExecutiveSummary() {
             </div>
           </div>
         </div>
-        <div className="flex w-full">
-          <div>
-            <h3>Net Working Capital</h3>
-            <WaterfallWorkingCapital selectedYear={selectedYear} />
+        <div className="mt-6 flex">
+          <div className="flex-1 pr-7">
+            <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
+              Working Capital
+            </h3>
+            <WaterfallBalanceSheet
+              selectedYear={selectedYear}
+              dataset={waterfallBalanceSheet}
+              categories={[
+                { name: "Total Current Assets", field: "total_current_assets" },
+                {
+                  name: "Total Current Liabilities",
+                  field: "total_current_liabilities",
+                },
+                { name: "Net Working Capital", field: "net_working_capital" },
+              ]}
+            />
           </div>
-          <div>
-            <h3>Total Equity</h3>
-            <WaterfallWorkingCapital selectedYear={selectedYear} />
+          <div className="flex-1 pl-7">
+            <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
+              Total Equity
+            </h3>
+            <WaterfallBalanceSheet
+              selectedYear={selectedYear}
+              dataset={waterfallBalanceSheet}
+              categories={[
+                { name: "Total Assets", field: "total_assets" },
+                { name: "Total Liabilities", field: "total_liabilities" },
+                { name: "Total Equity", field: "total_equity" },
+              ]}
+            />{" "}
           </div>
         </div>
       </div>
