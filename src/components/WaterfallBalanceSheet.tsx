@@ -39,9 +39,9 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
 
     // Get container dimensions
     const containerWidth = svgRef.current.parentElement?.clientWidth || 800
-    const margin = { top: 30, right: 0, bottom: 40, left: 0 }
+    const margin = { top: 30, right: 0, bottom: -30, left: 0 }
     const width = containerWidth - margin.left - margin.right
-    const height = 330 - margin.top - margin.bottom
+    const height = 290 - margin.top - margin.bottom
 
     const chart = svg
       .attr("viewBox", `0 0 ${containerWidth} 400`)
@@ -103,18 +103,18 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
       .attr("class", "bar")
       .attr("x", (d) => x(d.category)!)
       .attr("y", (d) =>
-        d.category === "Net Working Capital" || d.category === "Total Equity"
+        d.category === "Working Capital" || d.category === "Total Equity"
           ? y(d.start)
           : y(Math.max(d.start, d.start + d.value)),
       )
       .attr("width", x.bandwidth())
       .attr("height", (d) =>
-        d.category === "Net Working Capital" || d.category === "Total Equity"
+        d.category === "Working Capital" || d.category === "Total Equity"
           ? Math.abs(y(d.start) - y(0))
           : Math.abs(y(d.start) - y(d.start + d.value)),
       )
       .attr("fill", (d) =>
-        d.category === "Net Working Capital" || d.category === "Total Equity"
+        d.category === "Working Capital" || d.category === "Total Equity"
           ? "#d1d5db"
           : d.value > 0
             ? "#059669"
@@ -145,10 +145,7 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
       .attr("class", "label")
       .attr("x", (d) => x(d.category)! + x.bandwidth() / 2) // Center the label horizontally
       .attr("y", (d) => {
-        if (
-          d.category === "Net Working Capital" ||
-          d.category === "Total Equity"
-        ) {
+        if (d.category === "Working Capital" || d.category === "Total Equity") {
           const barPosition = d.start - d.value
           const barHeight = Math.abs(y(d.start) - y(barPosition))
 

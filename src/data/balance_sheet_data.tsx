@@ -31,6 +31,7 @@ export const waterfallBalanceSheet: {
   total_assets: number
   total_liabilities: number
   total_equity: number
+  inventories: number
 }[] = [
   {
     fiscal_year: 2015,
@@ -40,6 +41,7 @@ export const waterfallBalanceSheet: {
     total_assets: 21597000,
     total_liabilities: -8890000,
     total_equity: 12707000,
+    inventories: 4337000,
   },
   {
     fiscal_year: 2016,
@@ -49,6 +51,7 @@ export const waterfallBalanceSheet: {
     total_assets: 21396000,
     total_liabilities: -9138000,
     total_equity: 12258000,
+    inventories: 4838000,
   },
   {
     fiscal_year: 2017,
@@ -58,6 +61,7 @@ export const waterfallBalanceSheet: {
     total_assets: 23259000,
     total_liabilities: -10852000,
     total_equity: 12407000,
+    inventories: 5055000,
   },
   {
     fiscal_year: 2018,
@@ -67,6 +71,7 @@ export const waterfallBalanceSheet: {
     total_assets: 22536000,
     total_liabilities: -12724000,
     total_equity: 9812000,
+    inventories: 5261000,
   },
   {
     fiscal_year: 2019,
@@ -76,6 +81,7 @@ export const waterfallBalanceSheet: {
     total_assets: 23717000,
     total_liabilities: -14677000,
     total_equity: 9040000,
+    inventories: 5622000,
   },
   {
     fiscal_year: 2020,
@@ -85,6 +91,7 @@ export const waterfallBalanceSheet: {
     total_assets: 31342000,
     total_liabilities: -23287000,
     total_equity: 8055000,
+    inventories: 7367000,
   },
   {
     fiscal_year: 2021,
@@ -94,6 +101,7 @@ export const waterfallBalanceSheet: {
     total_assets: 37740000,
     total_liabilities: -24973000,
     total_equity: 12767000,
+    inventories: 6854000,
   },
   {
     fiscal_year: 2022,
@@ -103,6 +111,7 @@ export const waterfallBalanceSheet: {
     total_assets: 40321000,
     total_liabilities: -25040000,
     total_equity: 15281000,
+    inventories: 8420000,
   },
   {
     fiscal_year: 2023,
@@ -112,6 +121,7 @@ export const waterfallBalanceSheet: {
     total_assets: 37531000,
     total_liabilities: -23527000,
     total_equity: 14004000,
+    inventories: 8454000,
   },
   {
     fiscal_year: 2024,
@@ -121,5 +131,6 @@ export const waterfallBalanceSheet: {
     total_assets: 38110000,
     total_liabilities: -23680000,
     total_equity: 14430000,
+    inventories: 7519000,
   },
 ]
