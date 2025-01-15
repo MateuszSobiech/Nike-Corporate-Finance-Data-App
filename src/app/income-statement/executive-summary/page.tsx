@@ -1,5 +1,6 @@
 "use client"
 
+import EbitCard from "@/components/EbitCard"
 import SankeyRegion from "@/components/SankeyRegion"
 import SankeySegment from "@/components/SankeySegment"
 import SankeySegmentRegion from "@/components/SankeySegmentRegion"
@@ -10,9 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/Select"
-import { useState } from "react"
-
-import EbitCard from "@/components/EbitCard"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import {
   Ebit,
@@ -25,6 +23,7 @@ import {
 import sankeyRegionData from "@/data/sankey_region_data"
 import sankeySegmentData from "@/data/sankey_segment_data"
 import sankeySegmentRegionData from "@/data/sankey_segment_region_data"
+import { useState } from "react"
 
 export default function ExecutiveSummary() {
   // State for selected fiscal year
