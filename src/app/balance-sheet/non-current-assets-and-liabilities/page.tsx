@@ -156,7 +156,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
               value="tab1"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <div className="mb-10 flex gap-8">
+              <div className="mb-10 flex gap-12">
                 <div>
                   <div className="mb-1 flex items-center">
                     <span className="mr-2 h-1 w-4 rounded bg-orange-500"></span>
@@ -505,7 +505,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
                 <div>
                   <div className="mb-1 flex items-center">
                     <span className="mr-2 h-1 w-4 rounded bg-gray-200 dark:bg-gray-700"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
+                    <p className="mr-24 text-xs text-gray-700 dark:text-gray-300">
                       Deferred income taxes and other assets
                     </p>
                   </div>
