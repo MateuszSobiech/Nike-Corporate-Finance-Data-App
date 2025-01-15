@@ -21,6 +21,12 @@ export const chartColors = {
     fill: "fill-orange-300 dark:fill-orange-300",
     text: "text-orange-300 dark:text-orange-300",
   },
+  mediumOrange: {
+    bg: "bg-orange-700 dark:bg-orange-200",
+    stroke: "stroke-orange-700 dark:stroke-orange-200",
+    fill: "fill-orange-700 dark:fill-orange-200",
+    text: "text-orange-700 dark:text-orange-200",
+  },
   darkOrange: {
     bg: "bg-orange-500 dark:bg-orange-500",
     stroke: "stroke-orange-500 dark:stroke-orange-500",
