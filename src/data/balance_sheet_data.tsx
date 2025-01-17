@@ -160,6 +160,11 @@ export const assetsAndLiabilities: {
   "Operating lease liabilities": number
   "Deferred income taxes and other liabilities": number
   "Total non-current liabilities": number
+  "Common stock: Class B": number
+  "Capital in excess of stated value": number
+  "Accumulated other comprehensive income (loss)": number
+  "Retained earnings (deficit)": number
+  "Total equity": number
 }[] = [
   {
     fiscal_year: 2015,
@@ -186,6 +191,11 @@ export const assetsAndLiabilities: {
     // "Operating lease liabilities": "",
     "Deferred income taxes and other liabilities": 1479000,
     "Total non-current liabilities": 2558000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 6773000,
+    "Accumulated other comprehensive income (loss)": 1246000,
+    "Retained earnings (deficit)": 4685000,
+    "Total equity": 12707000,
   },
   {
     fiscal_year: 2016,
@@ -212,6 +222,11 @@ export const assetsAndLiabilities: {
     // "Operating lease liabilities": "",
     "Deferred income taxes and other liabilities": 1770000,
     "Total non-current liabilities": 3780000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 7786000,
+    "Accumulated other comprehensive income (loss)": 318000,
+    "Retained earnings (deficit)": 4151000,
+    "Total equity": 12258000,
   },
   {
     fiscal_year: 2017,
@@ -238,6 +253,11 @@ export const assetsAndLiabilities: {
     // "Operating lease liabilities": "",
     "Deferred income taxes and other liabilities": 1907000,
     "Total non-current liabilities": 5378000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 5710000,
+    "Accumulated other comprehensive income (loss)": -213000,
+    "Retained earnings (deficit)": 6907000,
+    "Total equity": 12407000,
   },
   {
     fiscal_year: 2018,
@@ -264,6 +284,11 @@ export const assetsAndLiabilities: {
     // "Operating lease liabilities": "",
     "Deferred income taxes and other liabilities": 3216000,
     "Total non-current liabilities": 6684000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 6384000,
+    "Accumulated other comprehensive income (loss)": -92000,
+    "Retained earnings (deficit)": 3517000,
+    "Total equity": 9812000,
   },
   {
     fiscal_year: 2019,
@@ -290,6 +315,11 @@ export const assetsAndLiabilities: {
     // "Operating lease liabilities": "",
     "Deferred income taxes and other liabilities": 3347000,
     "Total non-current liabilities": 6811000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 7163000,
+    "Accumulated other comprehensive income (loss)": 231000,
+    "Retained earnings (deficit)": 1643000,
+    "Total equity": 9040000,
   },
   {
     fiscal_year: 2020,
@@ -316,6 +346,11 @@ export const assetsAndLiabilities: {
     "Operating lease liabilities": 2913000,
     "Deferred income taxes and other liabilities": 2684000,
     "Total non-current liabilities": 15003000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 8299000,
+    "Accumulated other comprehensive income (loss)": -56000,
+    "Retained earnings (deficit)": -191000,
+    "Total equity": 8055000,
   },
   {
     fiscal_year: 2021,
@@ -342,6 +377,11 @@ export const assetsAndLiabilities: {
     "Operating lease liabilities": 2931000,
     "Deferred income taxes and other liabilities": 2955000,
     "Total non-current liabilities": 15299000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 9965000,
+    "Accumulated other comprehensive income (loss)": -380000,
+    "Retained earnings (deficit)": 3179000,
+    "Total equity": 12767000,
   },
   {
     fiscal_year: 2022,
@@ -368,6 +408,11 @@ export const assetsAndLiabilities: {
     "Operating lease liabilities": 2777000,
     "Deferred income taxes and other liabilities": 2613000,
     "Total non-current liabilities": 14310000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 11484000,
+    "Accumulated other comprehensive income (loss)": 318000,
+    "Retained earnings (deficit)": 3476000,
+    "Total equity": 15281000,
   },
   {
     fiscal_year: 2023,
@@ -394,6 +439,11 @@ export const assetsAndLiabilities: {
     "Operating lease liabilities": 2786000,
     "Deferred income taxes and other liabilities": 2558000,
     "Total non-current liabilities": 14271000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 12412000,
+    "Accumulated other comprehensive income (loss)": 231000,
+    "Retained earnings (deficit)": 1358000,
+    "Total equity": 14004000,
   },
   {
     fiscal_year: 2024,
@@ -420,5 +470,10 @@ export const assetsAndLiabilities: {
     "Operating lease liabilities": 2566000,
     "Deferred income taxes and other liabilities": 2618000,
     "Total non-current liabilities": 13087000,
+    "Common stock: Class B": 3000,
+    "Capital in excess of stated value": 13409000,
+    "Accumulated other comprehensive income (loss)": 53000,
+    "Retained earnings (deficit)": 965000,
+    "Total equity": 14430000,
   },
 ]

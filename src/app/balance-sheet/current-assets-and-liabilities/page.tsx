@@ -1,6 +1,6 @@
 "use client"
 
-import BalanceSheetKPI from "@/components/BalanceSheetKPI"
+import BalanceSheetKPIv1 from "@/components/BalanceSheetKPIv1"
 import { Card } from "@/components/Card"
 import { Divider } from "@/components/Divider"
 import { LineChart, TooltipProps } from "@/components/LineChart"
@@ -178,7 +178,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
               value="tab1"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <BalanceSheetKPI
+              <BalanceSheetKPIv1
                 title="Total Current Assets"
                 amount={parseFloat(totalCurrentAssets.toFixed(2))}
                 data={datas}
@@ -221,7 +221,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
             >
               <div className="flex">
                 <div className="flex flex-row gap-12">
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Cash and equivalents"
                     amount={parseFloat(cashAndEquivalents.toFixed(2))}
                     data={datas}
@@ -231,7 +231,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-orange-500"
                     darkColor="bg-orange-500"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Short-term investments"
                     amount={parseFloat(shortTermInvestments.toFixed(2))}
                     data={datas}
@@ -241,7 +241,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-orange-300"
                     darkColor="bg-orange-300"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Accounts receivable, net"
                     amount={parseFloat(accountsReceivable.toFixed(2))}
                     data={datas}
@@ -251,7 +251,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-gray-900"
                     darkColor="bg-gray-100"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Inventories"
                     amount={parseFloat(inventories.toFixed(2))}
                     data={datas}
@@ -261,7 +261,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-gray-400"
                     darkColor="bg-gray-500"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Prepaid expenses"
                     amount={parseFloat(prepaidExpenses.toFixed(2))}
                     data={datas}
@@ -333,7 +333,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
               value="tab1"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <BalanceSheetKPI
+              <BalanceSheetKPIv1
                 title="Total Current Liabilities"
                 amount={parseFloat(totalCurrentLiabilities.toFixed(2))}
                 data={datas}
@@ -376,7 +376,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
             >
               <div className="flex">
                 <div className="flex flex-row gap-12">
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Long-term debt"
                     amount={parseFloat(currentPortionOfLongTermDebt.toFixed(2))}
                     data={datas}
@@ -386,7 +386,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-orange-700"
                     darkColor="bg-orange-100"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Notes payable"
                     amount={parseFloat(notesPayable.toFixed(2))}
                     data={datas}
@@ -396,7 +396,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-orange-500"
                     darkColor="bg-orange-500"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Accounts payable"
                     amount={parseFloat(accountsPayable.toFixed(2))}
                     data={datas}
@@ -406,7 +406,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-orange-300"
                     darkColor="bg-orange-300"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Operating lease liabilities"
                     amount={parseFloat(
                       currentPortionOfOperatingLeaseLiabilities.toFixed(2),
@@ -418,7 +418,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-gray-900"
                     darkColor="bg-gray-100"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Accrued liabilities"
                     amount={parseFloat(accruedLiabilities.toFixed(2))}
                     data={datas}
@@ -428,7 +428,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     lightColor="bg-gray-400"
                     darkColor="bg-gray-500"
                   />
-                  <BalanceSheetKPI
+                  <BalanceSheetKPIv1
                     title="Income taxes payable"
                     amount={parseFloat(incomeTaxesPayable.toFixed(2))}
                     data={datas}

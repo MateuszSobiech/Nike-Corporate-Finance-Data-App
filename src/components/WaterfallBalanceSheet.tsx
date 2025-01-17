@@ -39,9 +39,9 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
 
     // Get container dimensions
     const containerWidth = svgRef.current.parentElement?.clientWidth || 800
-    const margin = { top: 30, right: 0, bottom: -30, left: 0 }
+    const margin = { top: 30, right: 0, bottom: -60, left: 0 }
     const width = containerWidth - margin.left - margin.right
-    const height = 290 - margin.top - margin.bottom
+    const height = 200 - margin.top - margin.bottom
 
     const chart = svg
       .attr("viewBox", `0 0 ${containerWidth} 400`)
