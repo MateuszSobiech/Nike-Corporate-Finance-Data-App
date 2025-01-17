@@ -1,12 +1,12 @@
 "use client"
 
+import BalanceSheetKPI from "@/components/BalanceSheetKPI"
 import { Card } from "@/components/Card"
 import { Divider } from "@/components/Divider"
 import { LineChart, TooltipProps } from "@/components/LineChart"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import { assetsAndLiabilities } from "@/data/balance_sheet_data"
 import React from "react"
-import CountUp from "react-countup"
 
 const CurrentAssetsAndLiabilities: React.FC = () => {
   const [datas, setDatas] = React.useState<TooltipProps | null>(null)
@@ -142,6 +142,9 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
 
   const tooltipFormatter = (value: number) => formatToMillions(value)
 
+  const previousYear =
+    assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year
+
   const getYoYChange = (
     data: { fiscal_year: number; value: number }[],
     currentYear: number,
@@ -175,67 +178,16 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
               value="tab1"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <div className="mb-10 flex gap-8">
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Total Current Assets
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(totalCurrentAssets.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            totalCurrentAssetsData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  totalCurrentAssetsData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  totalCurrentAssetsData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          duration={1}
-                          formattingFn={(value) =>
-                            `${value > 0 ? "+" : ""}${value.toFixed(1)}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <BalanceSheetKPI
+                title="Total Current Assets"
+                amount={parseFloat(totalCurrentAssets.toFixed(2))}
+                data={datas}
+                dataSource={totalCurrentAssetsData}
+                previousYear={previousYear}
+                dataFunction={getYoYChange}
+                lightColor="bg-orange-500"
+                darkColor="bg-orange-500"
+              />
               <LineChart
                 data={assetsAndLiabilities}
                 index="fiscal_year"
@@ -262,326 +214,66 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                 }}
               />
             </TabsContent>
+
             <TabsContent
               value="tab2"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <div className="mb-10 flex gap-12">
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Cash and equivalents
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(cashAndEquivalents.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            cashAndEquivalentsData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  cashAndEquivalentsData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  cashAndEquivalentsData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-300"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Short-term investments
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(shortTermInvestments.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            shortTermInvestmentsData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  shortTermInvestmentsData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  shortTermInvestmentsData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-900 dark:bg-gray-100"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Accounts receivable, net
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(accountsReceivable.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            accountsReceivableData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  accountsReceivableData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  accountsReceivableData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-400 dark:bg-gray-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Inventories
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(inventories.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            inventoriesData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  inventoriesData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  inventoriesData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-200 dark:bg-gray-700"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Prepaid expenses
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(prepaidExpenses.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            prepaidExpencesData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  prepaidExpencesData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  prepaidExpencesData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
+              <div className="flex">
+                <div className="flex flex-row gap-12">
+                  <BalanceSheetKPI
+                    title="Cash and equivalents"
+                    amount={parseFloat(cashAndEquivalents.toFixed(2))}
+                    data={datas}
+                    dataSource={cashAndEquivalentsData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-500"
+                    darkColor="bg-orange-500"
+                  />
+                  <BalanceSheetKPI
+                    title="Short-term investments"
+                    amount={parseFloat(shortTermInvestments.toFixed(2))}
+                    data={datas}
+                    dataSource={shortTermInvestmentsData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-300"
+                    darkColor="bg-orange-300"
+                  />
+                  <BalanceSheetKPI
+                    title="Accounts receivable, net"
+                    amount={parseFloat(accountsReceivable.toFixed(2))}
+                    data={datas}
+                    dataSource={accountsReceivableData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-900"
+                    darkColor="bg-gray-100"
+                  />
+                  <BalanceSheetKPI
+                    title="Inventories"
+                    amount={parseFloat(inventories.toFixed(2))}
+                    data={datas}
+                    dataSource={inventoriesData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-400"
+                    darkColor="bg-gray-500"
+                  />
+                  <BalanceSheetKPI
+                    title="Prepaid expenses"
+                    amount={parseFloat(prepaidExpenses.toFixed(2))}
+                    data={datas}
+                    dataSource={prepaidExpencesData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-200"
+                    darkColor="bg-gray-700"
+                  />
                 </div>
               </div>
+
               <LineChart
                 data={assetsAndLiabilities}
                 index="fiscal_year"
@@ -641,69 +333,16 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
               value="tab1"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <div className="mb-10 flex gap-12">
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Total Current Liabilities
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={
-                        parseFloat(totalCurrentLiabilities.toFixed(2)) / 1_000
-                      }
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            totalCurrentLiabilitiesData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  totalCurrentLiabilitiesData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  totalCurrentLiabilitiesData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          duration={1}
-                          formattingFn={(value) =>
-                            `${value > 0 ? "+" : ""}${value.toFixed(1)}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <BalanceSheetKPI
+                title="Total Current Liabilities"
+                amount={parseFloat(totalCurrentLiabilities.toFixed(2))}
+                data={datas}
+                dataSource={totalCurrentLiabilitiesData}
+                previousYear={previousYear}
+                dataFunction={getYoYChange}
+                lightColor="bg-orange-500"
+                darkColor="bg-orange-500"
+              />
               <LineChart
                 data={assetsAndLiabilities}
                 index="fiscal_year"
@@ -730,395 +369,78 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                 }}
               />
             </TabsContent>
+
             <TabsContent
               value="tab2"
               className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
             >
-              <div className="mb-10 flex gap-12">
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-700 dark:bg-orange-100"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Long-term debt
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={
-                        parseFloat(currentPortionOfLongTermDebt.toFixed(2)) /
-                        1_000
-                      }
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            currentPortionOfLongTermDebtData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  currentPortionOfLongTermDebtData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  currentPortionOfLongTermDebtData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Notes payable
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(notesPayable.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            notesPayableData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  notesPayableData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  notesPayableData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-orange-300"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Accounts payable
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(accountsPayable.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            accountsPayableData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  accountsPayableData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  accountsPayableData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-900 dark:bg-gray-100"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Operating lease liabilities
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={
-                        parseFloat(currentPortionOfLongTermDebt.toFixed(2)) /
-                        1_000
-                      }
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            currentPortionOfLongTermDebtData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  currentPortionOfLongTermDebtData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  currentPortionOfLongTermDebtData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-400 dark:bg-gray-500"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Accrued liabilities
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(accruedLiabilities.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            accruedLiabilitieseData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  accruedLiabilitieseData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  accruedLiabilitieseData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center">
-                    <span className="mr-2 h-1 w-4 rounded bg-gray-200 dark:bg-gray-700"></span>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      Income taxes payable
-                    </p>
-                  </div>
-                  <div>
-                    <CountUp
-                      className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50"
-                      end={parseFloat(incomeTaxesPayable.toFixed(2)) / 1_000}
-                      duration={1}
-                      formattingFn={(value) =>
-                        `$${value.toLocaleString("en-US")}M`
-                      }
-                    />
-                    <p className="text-xs">
-                      <span
-                        className={`${
-                          getYoYChange(
-                            incomeTaxesPayableData,
-                            datas?.payload?.[0]?.payload?.fiscal_year ??
-                              assetsAndLiabilities[
-                                assetsAndLiabilities.length - 1
-                              ].fiscal_year,
-                          ) >= 0
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                        } font-semibold`}
-                      >
-                        <CountUp
-                          start={0}
-                          end={
-                            datas
-                              ? getYoYChange(
-                                  incomeTaxesPayableData,
-                                  datas?.payload?.[0]?.payload?.fiscal_year,
-                                )
-                              : getYoYChange(
-                                  incomeTaxesPayableData,
-                                  assetsAndLiabilities[
-                                    assetsAndLiabilities.length - 1
-                                  ].fiscal_year,
-                                )
-                          }
-                          decimals={1}
-                          suffix="%"
-                          formattingFn={(value) =>
-                            `${
-                              value > 0 ? "+" : ""
-                            }${value.toLocaleString("en-US", { minimumFractionDigits: 1 })}%`
-                          }
-                        />
-                      </span>
-                      <span className="text-gray-500">
-                        {datas
-                          ? ` vs. FY${datas?.payload?.[0]?.payload?.fiscal_year - 1}`
-                          : ` vs. FY${assetsAndLiabilities[assetsAndLiabilities.length - 1].fiscal_year - 1}`}
-                      </span>
-                    </p>
-                  </div>
+              <div className="flex">
+                <div className="flex flex-row gap-12">
+                  <BalanceSheetKPI
+                    title="Long-term debt"
+                    amount={parseFloat(currentPortionOfLongTermDebt.toFixed(2))}
+                    data={datas}
+                    dataSource={currentPortionOfLongTermDebtData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-700"
+                    darkColor="bg-orange-100"
+                  />
+                  <BalanceSheetKPI
+                    title="Notes payable"
+                    amount={parseFloat(notesPayable.toFixed(2))}
+                    data={datas}
+                    dataSource={notesPayableData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-500"
+                    darkColor="bg-orange-500"
+                  />
+                  <BalanceSheetKPI
+                    title="Accounts payable"
+                    amount={parseFloat(accountsPayable.toFixed(2))}
+                    data={datas}
+                    dataSource={accountsPayableData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-300"
+                    darkColor="bg-orange-300"
+                  />
+                  <BalanceSheetKPI
+                    title="Operating lease liabilities"
+                    amount={parseFloat(
+                      currentPortionOfOperatingLeaseLiabilities.toFixed(2),
+                    )}
+                    data={datas}
+                    dataSource={currentPortionOfOperatingLeaseLiabilitieseData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-900"
+                    darkColor="bg-gray-100"
+                  />
+                  <BalanceSheetKPI
+                    title="Accrued liabilities"
+                    amount={parseFloat(accruedLiabilities.toFixed(2))}
+                    data={datas}
+                    dataSource={accruedLiabilitieseData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-400"
+                    darkColor="bg-gray-500"
+                  />
+                  <BalanceSheetKPI
+                    title="Income taxes payable"
+                    amount={parseFloat(incomeTaxesPayable.toFixed(2))}
+                    data={datas}
+                    dataSource={incomeTaxesPayableData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-gray-200"
+                    darkColor="bg-gray-700"
+                  />
                 </div>
               </div>
+
               <LineChart
                 data={assetsAndLiabilities}
                 index="fiscal_year"
@@ -1131,8 +453,8 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                   "Income taxes payable",
                 ]}
                 colors={[
-                  "darkOrange",
                   "mediumOrange",
+                  "darkOrange",
                   "lightOrange",
                   "darkGray",
                   "mediumGray",
