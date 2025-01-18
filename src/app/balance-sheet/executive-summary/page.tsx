@@ -145,7 +145,7 @@ export default function ExecutiveSummary() {
           </div>
         </div>
         <div className="mt-6 flex">
-          <Card className="mr-4">
+          <Card className="flex gap-14">
             <div className="flex-1">
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} Working Capital
@@ -333,9 +333,6 @@ export default function ExecutiveSummary() {
                 </Table>
               </TableRoot>
             </div>
-          </Card>
-
-          <Card className="ml-4">
             <div className="flex-1">
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} Total Equity

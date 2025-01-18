@@ -30,7 +30,6 @@ const BalanceSheetKPIv2: React.FC<FinancialItemProps> = ({
     <div className="mb-6 flex">
       <div className="ml-12">
         <div className="flex items-center">
-          {/* Dynamic colors for light and dark mode */}
           <span
             className={`mr-2 h-5 w-1 rounded ${lightColor} dark:${darkColor}`}
           ></span>
