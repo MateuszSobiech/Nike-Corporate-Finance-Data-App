@@ -20,8 +20,10 @@ export default function Investors() {
               <TabNavigationLink href="#">Share Repurchases</TabNavigationLink>
               <TabNavigationLink href="#">Market Coverage</TabNavigationLink>
             </TabNavigation>
-            <div className="mt-4 grid grid-cols-1 gap-14 sm:mt-8 sm:grid-cols-2 lg:mt-10 xl:grid-cols-3">
-              <h1>Test</h1>
+            <div className="flex h-screen w-full items-center justify-center pb-96">
+              <h1 className="text-sm font-medium text-gray-600 dark:text-gray-500">
+                View under construction
+              </h1>
             </div>
           </div>
           {/* {children} */}

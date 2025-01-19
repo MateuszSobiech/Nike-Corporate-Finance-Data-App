@@ -39,7 +39,7 @@ const navigation = [
 const shortcuts = [
   {
     name: "YoY Revenue Performance",
-    href: "#",
+    href: "/income-statement/profit-and-loss",
     icon: RiLinkM,
   },
   {
@@ -48,13 +48,13 @@ const shortcuts = [
     icon: RiLinkM,
   },
   {
-    name: "Disaggregation of Revenues",
-    href: "#",
+    name: "NIKE Brand Revenue Highlight",
+    href: "/income-statement/revenue-and-cor#nike-revenue",
     icon: RiLinkM,
   },
   {
-    name: "Cost of Revenues",
-    href: "#",
+    name: "Equity Performance",
+    href: "/balance-sheet/equity",
     icon: RiLinkM,
   },
 ] as const

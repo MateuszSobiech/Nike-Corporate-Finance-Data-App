@@ -569,7 +569,7 @@ export default function RevenueCoR() {
           </Card>
 
           {/* NIKE Brand Revenue Highlights */}
-          <div>
+          <div id="nike-revenue">
             <Card className="mt-6 px-0">
               <div className="px-6">
                 <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">

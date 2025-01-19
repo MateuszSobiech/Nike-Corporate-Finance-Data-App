@@ -82,11 +82,13 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
   }))
 
   const currentPortionOfLongTermDebt =
-    payload?.["Long-term debt"] ??
-    assetsAndLiabilities[assetsAndLiabilities.length - 1]["Long-term debt"]
+    payload?.["Current portion of long-term debt"] ??
+    assetsAndLiabilities[assetsAndLiabilities.length - 1][
+      "Current portion of long-term debt"
+    ]
   const currentPortionOfLongTermDebtData = assetsAndLiabilities.map((item) => ({
     fiscal_year: item.fiscal_year,
-    value: item["Long-term debt"],
+    value: item["Current portion of long-term debt"],
   }))
 
   const notesPayable =
@@ -106,14 +108,14 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
   }))
 
   const currentPortionOfOperatingLeaseLiabilities =
-    payload?.["Operating lease liabilities"] ??
+    payload?.["Current portion of operating lease liabilities"] ??
     assetsAndLiabilities[assetsAndLiabilities.length - 1][
-      "Operating lease liabilities"
+      "Current portion of operating lease liabilities"
     ]
   const currentPortionOfOperatingLeaseLiabilitieseData =
     assetsAndLiabilities.map((item) => ({
       fiscal_year: item.fiscal_year,
-      value: item["Accounts payable"],
+      value: item["Current portion of operating lease liabilities"],
     }))
 
   const accruedLiabilities =
@@ -384,10 +386,10 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     data={assetsAndLiabilities}
                     index="fiscal_year"
                     categories={[
-                      "Long-term debt",
+                      "Current portion of long-term debt",
                       "Notes payable",
                       "Accounts payable",
-                      "Operating lease liabilities",
+                      "Current portion of operating lease liabilities",
                       "Accrued liabilities",
                       "Income taxes payable",
                     ]}
