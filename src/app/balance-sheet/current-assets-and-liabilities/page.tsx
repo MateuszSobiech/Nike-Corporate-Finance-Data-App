@@ -160,339 +160,11 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
       : 0
   }
 
-  // return (
-  //   <div className="pt-6">
-  //     <Card className="mb-6">
-  //       <h2 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-  //         FY Trend: Total Current Assets & Top Categories of Current Assets
-  //       </h2>
-  //       <Tabs defaultValue="tab1">
-  //         <TabsList variant="solid">
-  //           <TabsTrigger value="tab1">Total Current Assets</TabsTrigger>
-  //           <TabsTrigger value="tab2">
-  //             Top Categories of Current Assets
-  //           </TabsTrigger>
-  //         </TabsList>
-  //         <div className="ml-2 mt-8">
-  //           <TabsContent
-  //             value="tab1"
-  //             className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-  //           >
-  //             <BalanceSheetKPIv1
-  //               title="Total Current Assets"
-  //               amount={parseFloat(totalCurrentAssets.toFixed(2))}
-  //               data={datas}
-  //               dataSource={totalCurrentAssetsData}
-  //               previousYear={previousYear}
-  //               dataFunction={getYoYChange}
-  //               lightColor="bg-orange-500"
-  //               darkColor="bg-orange-500"
-  //             />
-  //             <LineChart
-  //               data={assetsAndLiabilities}
-  //               index="fiscal_year"
-  //               categories={["Total current assets"]}
-  //               showLegend={false}
-  //               showYAxis={true}
-  //               startEndOnly={false}
-  //               colors={["darkOrange"]}
-  //               className="mt-8 h-80 pb-4"
-  //               valueTooltipFormatter={tooltipFormatter}
-  //               valueFormatter={(value: number) =>
-  //                 `$${(value / 1000000).toFixed(1)}B`
-  //               }
-  //               tooltipCallback={(props) => {
-  //                 if (props.active) {
-  //                   setDatas((prev) => {
-  //                     if (prev?.label === props.label) return prev
-  //                     return props
-  //                   })
-  //                 } else {
-  //                   setDatas(null)
-  //                 }
-  //                 return null
-  //               }}
-  //             />
-  //           </TabsContent>
-
-  //           <TabsContent
-  //             value="tab2"
-  //             className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-  //           >
-  //             <div className="flex">
-  //               <div className="flex flex-row gap-12">
-  //                 <BalanceSheetKPIv1
-  //                   title="Cash and equivalents"
-  //                   amount={parseFloat(cashAndEquivalents.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={cashAndEquivalentsData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-orange-500"
-  //                   darkColor="bg-orange-500"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Short-term investments"
-  //                   amount={parseFloat(shortTermInvestments.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={shortTermInvestmentsData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-orange-300"
-  //                   darkColor="bg-orange-300"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Accounts receivable, net"
-  //                   amount={parseFloat(accountsReceivable.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={accountsReceivableData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-900"
-  //                   darkColor="bg-gray-100"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Inventories"
-  //                   amount={parseFloat(inventories.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={inventoriesData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-400"
-  //                   darkColor="bg-gray-500"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Prepaid expenses"
-  //                   amount={parseFloat(prepaidExpenses.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={prepaidExpencesData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-200"
-  //                   darkColor="bg-gray-700"
-  //                 />
-  //               </div>
-  //             </div>
-
-  //             <LineChart
-  //               data={assetsAndLiabilities}
-  //               index="fiscal_year"
-  //               categories={[
-  //                 "Cash and equivalents",
-  //                 "Short-term investments",
-  //                 "Accounts receivable, net",
-  //                 "Inventories",
-  //                 "Prepaid expenses",
-  //               ]}
-  //               colors={[
-  //                 "darkOrange",
-  //                 "lightOrange",
-  //                 "darkGray",
-  //                 "mediumGray",
-  //                 "lightGray",
-  //               ]}
-  //               showLegend={false}
-  //               showYAxis={true}
-  //               startEndOnly={false}
-  //               className="mt-8 h-80 pb-4"
-  //               valueTooltipFormatter={tooltipFormatter}
-  //               valueFormatter={(value: number) =>
-  //                 `$${(value / 1000000).toFixed(1)}B`
-  //               }
-  //               tooltipCallback={(props) => {
-  //                 if (props.active) {
-  //                   setDatas((prev) => {
-  //                     if (prev?.label === props.label) return prev
-  //                     return props
-  //                   })
-  //                 } else {
-  //                   setDatas(null)
-  //                 }
-  //                 return null
-  //               }}
-  //             />
-  //           </TabsContent>
-  //         </div>
-  //       </Tabs>
-
-  //       <Divider />
-
-  //       <h2 className="pb-8 pt-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-  //         FY Trend: Total Current Liabilities & Top Categories of Current
-  //         Liabilities
-  //       </h2>
-  //       <Tabs defaultValue="tab1">
-  //         <TabsList variant="solid">
-  //           <TabsTrigger value="tab1">Total Current Liabilities</TabsTrigger>
-  //           <TabsTrigger value="tab2">
-  //             Top Categories of Current Liabilities
-  //           </TabsTrigger>
-  //         </TabsList>
-  //         <div className="ml-2 mt-8">
-  //           <TabsContent
-  //             value="tab1"
-  //             className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-  //           >
-  //             <BalanceSheetKPIv1
-  //               title="Total Current Liabilities"
-  //               amount={parseFloat(totalCurrentLiabilities.toFixed(2))}
-  //               data={datas}
-  //               dataSource={totalCurrentLiabilitiesData}
-  //               previousYear={previousYear}
-  //               dataFunction={getYoYChange}
-  //               lightColor="bg-orange-500"
-  //               darkColor="bg-orange-500"
-  //             />
-  //             <LineChart
-  //               data={assetsAndLiabilities}
-  //               index="fiscal_year"
-  //               categories={["Total current liabilities"]}
-  //               showLegend={false}
-  //               showYAxis={true}
-  //               startEndOnly={false}
-  //               colors={["darkOrange"]}
-  //               className="-mb-2 mt-8 h-80"
-  //               valueTooltipFormatter={tooltipFormatter}
-  //               valueFormatter={(value: number) =>
-  //                 `$${(value / 1000000).toFixed(1)}B`
-  //               }
-  //               tooltipCallback={(props) => {
-  //                 if (props.active) {
-  //                   setDatas((prev) => {
-  //                     if (prev?.label === props.label) return prev
-  //                     return props
-  //                   })
-  //                 } else {
-  //                   setDatas(null)
-  //                 }
-  //                 return null
-  //               }}
-  //             />
-  //           </TabsContent>
-
-  //           <TabsContent
-  //             value="tab2"
-  //             className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-  //           >
-  //             <div className="flex">
-  //               <div className="flex flex-row gap-12">
-  //                 <BalanceSheetKPIv1
-  //                   title="Long-term debt"
-  //                   amount={parseFloat(currentPortionOfLongTermDebt.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={currentPortionOfLongTermDebtData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-orange-700"
-  //                   darkColor="bg-orange-100"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Notes payable"
-  //                   amount={parseFloat(notesPayable.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={notesPayableData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-orange-500"
-  //                   darkColor="bg-orange-500"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Accounts payable"
-  //                   amount={parseFloat(accountsPayable.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={accountsPayableData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-orange-300"
-  //                   darkColor="bg-orange-300"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Operating lease liabilities"
-  //                   amount={parseFloat(
-  //                     currentPortionOfOperatingLeaseLiabilities.toFixed(2),
-  //                   )}
-  //                   data={datas}
-  //                   dataSource={currentPortionOfOperatingLeaseLiabilitieseData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-900"
-  //                   darkColor="bg-gray-100"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Accrued liabilities"
-  //                   amount={parseFloat(accruedLiabilities.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={accruedLiabilitieseData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-400"
-  //                   darkColor="bg-gray-500"
-  //                 />
-  //                 <BalanceSheetKPIv1
-  //                   title="Income taxes payable"
-  //                   amount={parseFloat(incomeTaxesPayable.toFixed(2))}
-  //                   data={datas}
-  //                   dataSource={incomeTaxesPayableData}
-  //                   previousYear={previousYear}
-  //                   dataFunction={getYoYChange}
-  //                   lightColor="bg-gray-200"
-  //                   darkColor="bg-gray-700"
-  //                 />
-  //               </div>
-  //             </div>
-
-  //             <LineChart
-  //               data={assetsAndLiabilities}
-  //               index="fiscal_year"
-  //               categories={[
-  //                 "Long-term debt",
-  //                 "Notes payable",
-  //                 "Accounts payable",
-  //                 "Operating lease liabilities",
-  //                 "Accrued liabilities",
-  //                 "Income taxes payable",
-  //               ]}
-  //               colors={[
-  //                 "mediumOrange",
-  //                 "darkOrange",
-  //                 "lightOrange",
-  //                 "darkGray",
-  //                 "mediumGray",
-  //                 "lightGray",
-  //               ]}
-  //               showLegend={false}
-  //               showYAxis={true}
-  //               startEndOnly={false}
-  //               className="-mb-2 mt-8 h-80"
-  //               valueTooltipFormatter={tooltipFormatter}
-  //               valueFormatter={(value: number) =>
-  //                 `$${(value / 1000000).toFixed(1)}B`
-  //               }
-  //               tooltipCallback={(props) => {
-  //                 if (props.active) {
-  //                   setDatas((prev) => {
-  //                     if (prev?.label === props.label) return prev
-  //                     return props
-  //                   })
-  //                 } else {
-  //                   setDatas(null)
-  //                 }
-  //                 return null
-  //               }}
-  //             />
-  //           </TabsContent>
-  //         </div>
-  //       </Tabs>
-  //     </Card>
-  //   </div>
-  // )
-
   return (
     <div className="pt-6">
       <Card className="mb-6">
         <h2 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-          Financial Year Insights: Total and Top Categories of Current Assets &
-          Liabilities
+          FY Trends: Total and Top Categories of Current Assets & Liabilities
         </h2>
         <Tabs defaultValue="tab1">
           <TabsList variant="solid">
@@ -544,6 +216,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     dataFunction={getYoYChange}
                     lightColor="bg-orange-500"
                     darkColor="bg-orange-500"
+                    type="assets"
                   />
                 </TabsContent>
                 {/* ASSETS CATEGORIES */}
@@ -598,6 +271,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-orange-500"
                       darkColor="bg-orange-500"
+                      type="assets"
                     />
                     <Divider className="mb-1 mt-1" />
                     <BalanceSheetKPIv1
@@ -609,6 +283,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-orange-300"
                       darkColor="bg-orange-300"
+                      type="assets"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -621,6 +296,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-900"
                       darkColor="bg-gray-100"
+                      type="assets"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -633,11 +309,12 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-400"
                       darkColor="bg-gray-500"
+                      type="assets"
                     />
                     <Divider className="mb-1 mt-1" />
 
                     <BalanceSheetKPIv1
-                      title="Prepaid expenses"
+                      title="Prepaid expenses and other current assets"
                       amount={parseFloat(prepaidExpenses.toFixed(2))}
                       data={datas}
                       dataSource={prepaidExpencesData}
@@ -645,6 +322,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-200"
                       darkColor="bg-gray-700"
+                      type="assets"
                     />
                   </div>
                 </TabsContent>
@@ -694,6 +372,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     dataFunction={getYoYChange}
                     lightColor="bg-orange-500"
                     darkColor="bg-orange-500"
+                    type="liabilities"
                   />
                 </TabsContent>
                 {/* LIABILITIES CATEGORIES */}
@@ -742,7 +421,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                   />
                   <div>
                     <BalanceSheetKPIv1
-                      title="Long-term debt"
+                      title="Current portion of long-term debt"
                       amount={parseFloat(
                         currentPortionOfLongTermDebt.toFixed(2),
                       )}
@@ -752,6 +431,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-orange-700"
                       darkColor="bg-orange-100"
+                      type="liabilities"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -764,6 +444,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-orange-500"
                       darkColor="bg-orange-500"
+                      type="liabilities"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -776,11 +457,12 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-orange-300"
                       darkColor="bg-orange-300"
+                      type="liabilities"
                     />
                     <Divider className="mb-1 mt-1" />
 
                     <BalanceSheetKPIv1
-                      title="Operating lease liabilities"
+                      title="Current portion of operating lease liabilities"
                       amount={parseFloat(
                         currentPortionOfOperatingLeaseLiabilities.toFixed(2),
                       )}
@@ -792,6 +474,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-900"
                       darkColor="bg-gray-100"
+                      type="liabilities"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -804,6 +487,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-400"
                       darkColor="bg-gray-500"
+                      type="liabilities"
                     />
                     <Divider className="mb-1 mt-1" />
 
@@ -816,6 +500,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                       dataFunction={getYoYChange}
                       lightColor="bg-gray-200"
                       darkColor="bg-gray-700"
+                      type="liabilities"
                     />
                   </div>
                 </TabsContent>

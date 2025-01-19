@@ -150,18 +150,21 @@ export default function ExecutiveSummary() {
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} Working Capital
               </h3>
-              <WaterfallBalanceSheet
-                selectedYear={selectedYear}
-                dataset={waterfallBalanceSheet}
-                categories={[
-                  { name: "Current Assets", field: "total_current_assets" },
-                  {
-                    name: "Current Liabilities",
-                    field: "total_current_liabilities",
-                  },
-                  { name: "Working Capital", field: "net_working_capital" },
-                ]}
-              />
+              <div className="h-64">
+                <WaterfallBalanceSheet
+                  selectedYear={selectedYear}
+                  dataset={waterfallBalanceSheet}
+                  categories={[
+                    { name: "Current Assets", field: "total_current_assets" },
+                    {
+                      name: "Current Liabilities",
+                      field: "total_current_liabilities",
+                    },
+                    { name: "Working Capital", field: "net_working_capital" },
+                  ]}
+                />
+              </div>
+
               <Divider />
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 Working Capital Breakdown
@@ -337,15 +340,18 @@ export default function ExecutiveSummary() {
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} Total Equity
               </h3>
-              <WaterfallBalanceSheet
-                selectedYear={selectedYear}
-                dataset={waterfallBalanceSheet}
-                categories={[
-                  { name: "Total Assets", field: "total_assets" },
-                  { name: "Total Liabilities", field: "total_liabilities" },
-                  { name: "Total Equity", field: "total_equity" },
-                ]}
-              />
+              <div className="h-64">
+                <WaterfallBalanceSheet
+                  selectedYear={selectedYear}
+                  dataset={waterfallBalanceSheet}
+                  categories={[
+                    { name: "Total Assets", field: "total_assets" },
+                    { name: "Total Liabilities", field: "total_liabilities" },
+                    { name: "Total Equity", field: "total_equity" },
+                  ]}
+                />
+              </div>
+
               <Divider />
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 Total Equity Breakdown

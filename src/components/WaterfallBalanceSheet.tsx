@@ -23,6 +23,15 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
   useEffect(() => {
     if (!svgRef.current) return
 
+    const container = svgRef.current?.parentElement
+    if (!container) return
+
+    const containerWidth = container.clientWidth
+    const containerHeight = container.clientHeight || 400
+    const margin = { top: 50, right: 20, bottom: 40, left: 20 }
+    const width = containerWidth - margin.left - margin.right
+    const height = containerHeight - margin.top - margin.bottom
+
     const filteredData = dataset.filter(
       (item) => item.fiscal_year === selectedYear,
     )
@@ -37,15 +46,11 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
     // Clear previous chart
     svg.selectAll("*").remove()
 
-    // Get container dimensions
-    const containerWidth = svgRef.current.parentElement?.clientWidth || 800
-    const margin = { top: 30, right: 0, bottom: -60, left: 0 }
-    const width = containerWidth - margin.left - margin.right
-    const height = 200 - margin.top - margin.bottom
+    svg
+      .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
 
     const chart = svg
-      .attr("viewBox", `0 0 ${containerWidth} 400`)
-      .attr("preserveAspectRatio", "xMidYMid meet")
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`)
       .style("font", "12px Inter, sans-serif")
@@ -85,7 +90,7 @@ const WaterfallBalanceSheet: React.FC<WaterfallChartProps> = ({
       .attr("transform", `translate(0,${height})`)
       .call(xAxis)
       .selectAll(".tick text")
-      .style("font", "14px Inter, sans-serif")
+      .style("font", "12px Inter, sans-serif")
       .attr("class", "fill-gray-500 dark:fill-gray-500")
 
     chart

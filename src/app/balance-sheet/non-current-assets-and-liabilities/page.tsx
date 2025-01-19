@@ -145,294 +145,293 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
     <div className="pt-6">
       <Card className="mb-6">
         <h2 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-          FY Trend: Total Non-Current Assets & Top Categories of Current Assets
-        </h2>
-        <Tabs defaultValue="tab1">
-          <TabsList variant="solid">
-            <TabsTrigger value="tab1">Total Non-Current Assets</TabsTrigger>
-            <TabsTrigger value="tab2">
-              Top Categories of Non-Current Assets
-            </TabsTrigger>
-          </TabsList>
-          <div className="ml-2 mt-8">
-            <TabsContent
-              value="tab1"
-              className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-            >
-              <BalanceSheetKPIv1
-                title="Total Non-Current Assets"
-                amount={parseFloat(totalNonCurrentAssets.toFixed(2))}
-                data={datas}
-                dataSource={totalNonCurrentAssetsData}
-                previousYear={previousYear}
-                dataFunction={getYoYChange}
-                lightColor="bg-orange-500"
-                darkColor="bg-orange-500"
-              />
-              <LineChart
-                data={assetsAndLiabilities}
-                index="fiscal_year"
-                categories={["Total non-current assets"]}
-                showLegend={false}
-                showYAxis={true}
-                startEndOnly={false}
-                colors={["darkOrange"]}
-                className="mt-8 h-80 pb-4"
-                valueTooltipFormatter={tooltipFormatter}
-                valueFormatter={(value: number) =>
-                  `$${(value / 1000000).toFixed(1)}B`
-                }
-                tooltipCallback={(props) => {
-                  if (props.active) {
-                    setDatas((prev) => {
-                      if (prev?.label === props.label) return prev
-                      return props
-                    })
-                  } else {
-                    setDatas(null)
-                  }
-                  return null
-                }}
-              />
-            </TabsContent>
-            <TabsContent
-              value="tab2"
-              className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-            >
-              <div className="flex gap-12">
-                <div>
-                  <div className="flex">
-                    <div className="flex flex-row gap-12">
-                      <BalanceSheetKPIv1
-                        title="Property, plant and equipment, net"
-                        amount={parseFloat(propertyPlantEquipmnet.toFixed(2))}
-                        data={datas}
-                        dataSource={propertyPlantEquipmnetData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-orange-500"
-                        darkColor="bg-orange-500"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Operating lease right-of-use assets, net"
-                        amount={parseFloat(operatingLeaseAssets.toFixed(2))}
-                        data={datas}
-                        dataSource={operatingLeaseAssetsData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-orange-300"
-                        darkColor="bg-orange-300"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Identifiable intangible assets, net"
-                        amount={parseFloat(intangibleAsses.toFixed(2))}
-                        data={datas}
-                        dataSource={intangibleAssesData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-gray-900"
-                        darkColor="bg-gray-100"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Goodwill"
-                        amount={parseFloat(goodwill.toFixed(2))}
-                        data={datas}
-                        dataSource={goodwillData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-gray-400"
-                        darkColor="bg-gray-500"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Deferred income taxes and other assets"
-                        amount={parseFloat(
-                          deferredIncomeTaxesAndOtherAssets.toFixed(2),
-                        )}
-                        data={datas}
-                        dataSource={deferredIncomeTaxesAndOtherAssetsData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-gray-200"
-                        darkColor="bg-gray-700"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <LineChart
-                data={assetsAndLiabilities}
-                index="fiscal_year"
-                categories={[
-                  "Property, plant and equipment, net",
-                  "Operating lease right-of-use assets, net",
-                  "Identifiable intangible assets, net",
-                  "Goodwill",
-                  "Deferred income taxes and other assets",
-                ]}
-                colors={[
-                  "darkOrange",
-                  "lightOrange",
-                  "darkGray",
-                  "mediumGray",
-                  "lightGray",
-                ]}
-                showLegend={false}
-                showYAxis={true}
-                startEndOnly={false}
-                className="mt-8 h-80 pb-4"
-                valueTooltipFormatter={tooltipFormatter}
-                valueFormatter={(value: number) =>
-                  `$${(value / 1000000).toFixed(1)}B`
-                }
-                tooltipCallback={(props) => {
-                  if (props.active) {
-                    setDatas((prev) => {
-                      if (prev?.label === props.label) return prev
-                      return props
-                    })
-                  } else {
-                    setDatas(null)
-                  }
-                  return null
-                }}
-              />
-            </TabsContent>
-          </div>
-        </Tabs>
-
-        <Divider />
-
-        <h2 className="pb-8 pt-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-          FY Trend: Total Non-Current Liabilities & Top Categories of Current
+          FY Trends: Total and Top Categories of Non-Current Assets &
           Liabilities
         </h2>
         <Tabs defaultValue="tab1">
           <TabsList variant="solid">
-            <TabsTrigger value="tab1">
-              Total Non-Current Liabilities
-            </TabsTrigger>
-            <TabsTrigger value="tab2">
-              Top Categories of Non-Current Liabilities
-            </TabsTrigger>
+            <TabsTrigger value="tab1">Total</TabsTrigger>
+            <TabsTrigger value="tab2">Top Categories</TabsTrigger>
           </TabsList>
-          <div className="ml-2 mt-8">
-            <TabsContent
-              value="tab1"
-              className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-            >
-              <BalanceSheetKPIv1
-                title="Total Non-Current Liabilitie"
-                amount={parseFloat(totalNonCurrentLiabilities.toFixed(2))}
-                data={datas}
-                dataSource={totalNonCurrentLiabilitiesData}
-                previousYear={previousYear}
-                dataFunction={getYoYChange}
-                lightColor="bg-orange-500"
-                darkColor="bg-orange-500"
-              />
-              <LineChart
-                data={assetsAndLiabilities}
-                index="fiscal_year"
-                categories={["Total non-current liabilities"]}
-                showLegend={false}
-                showYAxis={true}
-                startEndOnly={false}
-                colors={["darkOrange"]}
-                className="-mb-2 mt-8 h-80"
-                valueTooltipFormatter={tooltipFormatter}
-                valueFormatter={(value: number) =>
-                  `$${(value / 1000000).toFixed(1)}B`
-                }
-                tooltipCallback={(props) => {
-                  if (props.active) {
-                    setDatas((prev) => {
-                      if (prev?.label === props.label) return prev
-                      return props
-                    })
-                  } else {
-                    setDatas(null)
-                  }
-                  return null
-                }}
-              />
-            </TabsContent>
 
-            <TabsContent
-              value="tab2"
-              className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
-            >
-              <div className="flex gap-12">
-                <div>
-                  <div className="flex">
-                    <div className="flex flex-row gap-12">
-                      <BalanceSheetKPIv1
-                        title="Long-term debt"
-                        amount={parseFloat(longTermDebt.toFixed(2))}
-                        data={datas}
-                        dataSource={longTermDebtData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-orange-500"
-                        darkColor="bg-orange-500"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Operating lease liabilities"
-                        amount={parseFloat(
-                          operatingLeaseLiabilities.toFixed(2),
-                        )}
-                        data={datas}
-                        dataSource={operatingLeaseLiabilitiesData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-gray-900"
-                        darkColor="bg-gray-100"
-                      />
-                      <BalanceSheetKPIv1
-                        title="Deferred income taxes and other liabilities"
-                        amount={parseFloat(
-                          deferredIncomeTaxesAndOtherLiabilities.toFixed(2),
-                        )}
-                        data={datas}
-                        dataSource={deferredIncomeTaxesAndOtherLiabilitiesData}
-                        previousYear={previousYear}
-                        dataFunction={getYoYChange}
-                        lightColor="bg-gray-200"
-                        darkColor="bg-gray-700"
-                      />
-                    </div>
+          <div className="flex gap-14">
+            {/* NON-CURRENT ASSETS */}
+            <div className="flex-1">
+              <h3 className="mt-8 font-medium">Non-Current Assets</h3>
+              <div className="ml-2 mt-8">
+                {/* TOTAL NON-CURRENT ASSETS */}
+                <TabsContent
+                  value="tab1"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <LineChart
+                    data={assetsAndLiabilities}
+                    index="fiscal_year"
+                    categories={["Total non-current assets"]}
+                    showLegend={false}
+                    showYAxis={true}
+                    startEndOnly={false}
+                    colors={["darkOrange"]}
+                    className="mt-8 h-60 pb-4"
+                    valueTooltipFormatter={tooltipFormatter}
+                    valueFormatter={(value: number) =>
+                      `$${(value / 1000000).toFixed(1)}B`
+                    }
+                    tooltipCallback={(props) => {
+                      if (props.active) {
+                        setDatas((prev) => {
+                          if (prev?.label === props.label) return prev
+                          return props
+                        })
+                      } else {
+                        setDatas(null)
+                      }
+                      return null
+                    }}
+                  />
+                  <BalanceSheetKPIv1
+                    title="Total Non-Current Assets"
+                    amount={parseFloat(totalNonCurrentAssets.toFixed(2))}
+                    data={datas}
+                    dataSource={totalNonCurrentAssetsData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-500"
+                    darkColor="bg-orange-500"
+                    type="assets"
+                  />
+                </TabsContent>
+                {/* NON-CURRENT ASSETS CATEGORIES */}
+                <TabsContent
+                  value="tab2"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <LineChart
+                    data={assetsAndLiabilities}
+                    index="fiscal_year"
+                    categories={[
+                      "Property, plant and equipment, net",
+                      "Operating lease right-of-use assets, net",
+                      "Identifiable intangible assets, net",
+                      "Goodwill",
+                      "Deferred income taxes and other assets",
+                    ]}
+                    colors={[
+                      "darkOrange",
+                      "lightOrange",
+                      "darkGray",
+                      "mediumGray",
+                      "lightGray",
+                    ]}
+                    showLegend={false}
+                    showYAxis={true}
+                    startEndOnly={false}
+                    className="mt-8 h-60 pb-4"
+                    valueTooltipFormatter={tooltipFormatter}
+                    valueFormatter={(value: number) =>
+                      `$${(value / 1000000).toFixed(1)}B`
+                    }
+                    tooltipCallback={(props) => {
+                      if (props.active) {
+                        setDatas((prev) => {
+                          if (prev?.label === props.label) return prev
+                          return props
+                        })
+                      } else {
+                        setDatas(null)
+                      }
+                      return null
+                    }}
+                  />
+                  <div>
+                    <BalanceSheetKPIv1
+                      title="Property, plant and equipment, net"
+                      amount={parseFloat(propertyPlantEquipmnet.toFixed(2))}
+                      data={datas}
+                      dataSource={propertyPlantEquipmnetData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-orange-500"
+                      darkColor="bg-orange-500"
+                      type="assets"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Operating lease right-of-use assets, net"
+                      amount={parseFloat(operatingLeaseAssets.toFixed(2))}
+                      data={datas}
+                      dataSource={operatingLeaseAssetsData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-orange-300"
+                      darkColor="bg-orange-300"
+                      type="assets"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Identifiable intangible assets, net"
+                      amount={parseFloat(intangibleAsses.toFixed(2))}
+                      data={datas}
+                      dataSource={intangibleAssesData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-gray-900"
+                      darkColor="bg-gray-100"
+                      type="assets"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Goodwill"
+                      amount={parseFloat(goodwill.toFixed(2))}
+                      data={datas}
+                      dataSource={goodwillData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-gray-400"
+                      darkColor="bg-gray-500"
+                      type="assets"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Deferred income taxes and other assets"
+                      amount={parseFloat(
+                        deferredIncomeTaxesAndOtherAssets.toFixed(2),
+                      )}
+                      data={datas}
+                      dataSource={deferredIncomeTaxesAndOtherAssetsData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-gray-200"
+                      darkColor="bg-gray-700"
+                      type="assets"
+                    />
                   </div>
-                </div>
+                </TabsContent>
               </div>
-              <LineChart
-                data={assetsAndLiabilities}
-                index="fiscal_year"
-                categories={[
-                  "Long-term debt",
-                  "Operating lease liabilities",
-                  "Deferred income taxes and other liabilities",
-                ]}
-                colors={["darkOrange", "darkGray", "lightGray"]}
-                showLegend={false}
-                showYAxis={true}
-                startEndOnly={false}
-                className="-mb-2 mt-8 h-80"
-                valueTooltipFormatter={tooltipFormatter}
-                valueFormatter={(value: number) =>
-                  `$${(value / 1000000).toFixed(1)}B`
-                }
-                tooltipCallback={(props) => {
-                  if (props.active) {
-                    setDatas((prev) => {
-                      if (prev?.label === props.label) return prev
-                      return props
-                    })
-                  } else {
-                    setDatas(null)
-                  }
-                  return null
-                }}
-              />
-            </TabsContent>
+            </div>
+
+            {/* NON-CURRENT LIABILITIES */}
+            <div className="flex-1">
+              <h3 className="mt-8 font-medium">Non-Current Liabilities</h3>
+              <div className="ml-2 mt-8">
+                {/* TOTAL LIABILITIES */}
+                <TabsContent
+                  value="tab1"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <LineChart
+                    data={assetsAndLiabilities}
+                    index="fiscal_year"
+                    categories={["Total non-current liabilities"]}
+                    showLegend={false}
+                    showYAxis={true}
+                    startEndOnly={false}
+                    colors={["darkOrange"]}
+                    className="mt-8 h-60 pb-4"
+                    valueTooltipFormatter={tooltipFormatter}
+                    valueFormatter={(value: number) =>
+                      `$${(value / 1000000).toFixed(1)}B`
+                    }
+                    tooltipCallback={(props) => {
+                      if (props.active) {
+                        setDatas((prev) => {
+                          if (prev?.label === props.label) return prev
+                          return props
+                        })
+                      } else {
+                        setDatas(null)
+                      }
+                      return null
+                    }}
+                  />
+                  <BalanceSheetKPIv1
+                    title="Total Non-Current Liabilities"
+                    amount={parseFloat(totalNonCurrentLiabilities.toFixed(2))}
+                    data={datas}
+                    dataSource={totalNonCurrentLiabilitiesData}
+                    previousYear={previousYear}
+                    dataFunction={getYoYChange}
+                    lightColor="bg-orange-500"
+                    darkColor="bg-orange-500"
+                    type="liabilities"
+                  />
+                </TabsContent>
+                {/* LIABILITIES CATEGORIES */}
+                <TabsContent
+                  value="tab2"
+                  className="space-y-2 text-sm leading-7 text-gray-600 dark:text-gray-500"
+                >
+                  <LineChart
+                    data={assetsAndLiabilities}
+                    index="fiscal_year"
+                    categories={[
+                      "Long-term debt",
+                      "Operating lease liabilities",
+                      "Deferred income taxes and other liabilities",
+                    ]}
+                    colors={["darkOrange", "darkGray", "lightGray"]}
+                    showLegend={false}
+                    showYAxis={true}
+                    startEndOnly={false}
+                    className="mt-8 h-60 pb-4"
+                    valueTooltipFormatter={tooltipFormatter}
+                    valueFormatter={(value: number) =>
+                      `$${(value / 1000000).toFixed(1)}B`
+                    }
+                    tooltipCallback={(props) => {
+                      if (props.active) {
+                        setDatas((prev) => {
+                          if (prev?.label === props.label) return prev
+                          return props
+                        })
+                      } else {
+                        setDatas(null)
+                      }
+                      return null
+                    }}
+                  />
+                  <div>
+                    <BalanceSheetKPIv1
+                      title="Long-term debt"
+                      amount={parseFloat(longTermDebt.toFixed(2))}
+                      data={datas}
+                      dataSource={longTermDebtData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-orange-500"
+                      darkColor="bg-orange-500"
+                      type="liabilities"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Operating lease liabilities"
+                      amount={parseFloat(operatingLeaseLiabilities.toFixed(2))}
+                      data={datas}
+                      dataSource={operatingLeaseLiabilitiesData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-gray-900"
+                      darkColor="bg-gray-100"
+                      type="liabilities"
+                    />
+                    <Divider className="mb-1 mt-1" />
+                    <BalanceSheetKPIv1
+                      title="Deferred income taxes and other liabilities"
+                      amount={parseFloat(
+                        deferredIncomeTaxesAndOtherLiabilities.toFixed(2),
+                      )}
+                      data={datas}
+                      dataSource={deferredIncomeTaxesAndOtherLiabilitiesData}
+                      previousYear={previousYear}
+                      dataFunction={getYoYChange}
+                      lightColor="bg-gray-200"
+                      darkColor="bg-gray-700"
+                      type="liabilities"
+                    />
+                  </div>
+                </TabsContent>
+              </div>
+            </div>
           </div>
         </Tabs>
       </Card>
