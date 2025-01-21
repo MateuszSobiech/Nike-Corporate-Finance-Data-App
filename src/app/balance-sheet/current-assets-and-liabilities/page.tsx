@@ -23,6 +23,13 @@ const totalTabMaxValue = roundToNextSignificantDigit(
   assetsAndLiabilitiesMaxValue,
 )
 
+const assetsAndLiabilitiesCategoriesMaxValue = Math.max(
+  ...assetsAndLiabilities.map((item) => item["Cash and equivalents"]),
+)
+const categoriesTabMaxValue = roundToNextSignificantDigit(
+  assetsAndLiabilitiesCategoriesMaxValue,
+)
+
 const CurrentAssetsAndLiabilities: React.FC = () => {
   const [datas, setDatas] = React.useState<TooltipProps | null>(null)
 
@@ -261,6 +268,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     ]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={categoriesTabMaxValue}
                     startEndOnly={false}
                     className="mt-8 h-60 pb-4"
                     valueTooltipFormatter={tooltipFormatter}
@@ -420,6 +428,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     ]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={categoriesTabMaxValue}
                     startEndOnly={false}
                     className="mt-8 h-60 pb-4"
                     valueTooltipFormatter={tooltipFormatter}

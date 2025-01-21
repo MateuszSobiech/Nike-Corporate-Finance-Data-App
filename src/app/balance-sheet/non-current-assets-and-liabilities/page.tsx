@@ -8,6 +8,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import { assetsAndLiabilities } from "@/data/balance_sheet_data"
 import React from "react"
 
+// Round up values === nice in d3
+function roundToNextSignificantDigit(num: number) {
+  const orderOfMagnitude = Math.floor(Math.log10(num))
+  const base = 10 ** orderOfMagnitude
+  const remainder = num % base
+  return num + (base - remainder)
+}
+
+const assetsAndLiabilitiesMaxValue = Math.max(
+  ...assetsAndLiabilities.map((item) => item["Total non-current liabilities"]),
+)
+const totalTabMaxValue = roundToNextSignificantDigit(
+  assetsAndLiabilitiesMaxValue,
+)
+
+const assetsAndLiabilitiesCategoriesMaxValue = Math.max(
+  ...assetsAndLiabilities.map((item) => item["Long-term debt"]),
+)
+const categoriesTabMaxValue = roundToNextSignificantDigit(
+  assetsAndLiabilitiesCategoriesMaxValue,
+)
+
 const NonCurrentAssetsAndLiabilities: React.FC = () => {
   const [datas, setDatas] = React.useState<TooltipProps | null>(null)
 
@@ -170,6 +192,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
                     categories={["Total non-current assets"]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={totalTabMaxValue}
                     startEndOnly={false}
                     colors={["darkOrange"]}
                     className="mt-8 h-60 pb-4"
@@ -225,6 +248,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
                     ]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={categoriesTabMaxValue}
                     startEndOnly={false}
                     className="mt-8 h-60 pb-4"
                     valueTooltipFormatter={tooltipFormatter}
@@ -325,6 +349,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
                     categories={["Total non-current liabilities"]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={totalTabMaxValue}
                     startEndOnly={false}
                     colors={["lightOrange"]}
                     className="mt-8 h-60 pb-4"
@@ -372,6 +397,7 @@ const NonCurrentAssetsAndLiabilities: React.FC = () => {
                     colors={["darkOrange", "darkGray", "lightGray"]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={categoriesTabMaxValue}
                     startEndOnly={false}
                     className="mt-8 h-60 pb-4"
                     valueTooltipFormatter={tooltipFormatter}
