@@ -347,7 +347,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     showLegend={false}
                     showYAxis={true}
                     startEndOnly={false}
-                    colors={["darkOrange"]}
+                    colors={["lightOrange"]}
                     className="mt-8 h-60 pb-4"
                     valueTooltipFormatter={tooltipFormatter}
                     valueFormatter={(value: number) =>
@@ -372,8 +372,8 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     dataSource={totalCurrentLiabilitiesData}
                     previousYear={previousYear}
                     dataFunction={getYoYChange}
-                    lightColor="bg-orange-500"
-                    darkColor="bg-orange-500"
+                    lightColor="bg-orange-300"
+                    darkColor="bg-orange-300"
                     type="liabilities"
                   />
                 </TabsContent>
