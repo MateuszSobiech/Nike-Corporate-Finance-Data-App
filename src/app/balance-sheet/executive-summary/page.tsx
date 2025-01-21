@@ -145,7 +145,7 @@ export default function ExecutiveSummary() {
           </div>
         </div>
         <div className="mt-6 flex">
-          <Card className="flex gap-14">
+          <Card className="flex flex-wrap gap-14">
             <div className="flex-1">
               <h3 className="mb-2 text-left text-lg font-medium text-gray-900 dark:text-gray-100">
                 FY{selectedYear} Working Capital

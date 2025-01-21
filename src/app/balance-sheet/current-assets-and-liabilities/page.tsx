@@ -8,6 +8,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs"
 import { assetsAndLiabilities } from "@/data/balance_sheet_data"
 import React from "react"
 
+// Round up values === nice in d3
+function roundToNextSignificantDigit(num: number) {
+  const orderOfMagnitude = Math.floor(Math.log10(num))
+  const base = 10 ** orderOfMagnitude
+  const remainder = num % base
+  return num + (base - remainder)
+}
+
+const assetsAndLiabilitiesMaxValue = Math.max(
+  ...assetsAndLiabilities.map((item) => item["Total current assets"]),
+)
+const totalTabMaxValue = roundToNextSignificantDigit(
+  assetsAndLiabilitiesMaxValue,
+)
+
 const CurrentAssetsAndLiabilities: React.FC = () => {
   const [datas, setDatas] = React.useState<TooltipProps | null>(null)
 
@@ -190,6 +205,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     categories={["Total current assets"]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={totalTabMaxValue}
                     startEndOnly={false}
                     colors={["darkOrange"]}
                     className="mt-8 h-60 pb-4"
@@ -346,6 +362,7 @@ const CurrentAssetsAndLiabilities: React.FC = () => {
                     categories={["Total current liabilities"]}
                     showLegend={false}
                     showYAxis={true}
+                    maxValue={totalTabMaxValue}
                     startEndOnly={false}
                     colors={["lightOrange"]}
                     className="mt-8 h-60 pb-4"

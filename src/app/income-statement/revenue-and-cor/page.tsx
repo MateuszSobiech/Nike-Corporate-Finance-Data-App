@@ -569,7 +569,8 @@ export default function RevenueCoR() {
           </Card>
 
           {/* NIKE Brand Revenue Highlights */}
-          <div id="nike-revenue">
+          <div className="relative">
+            <div id="nike-revenue" className="absolute top-[-85px]"></div>
             <Card className="mt-6 px-0">
               <div className="px-6">
                 <h2 className="pb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
